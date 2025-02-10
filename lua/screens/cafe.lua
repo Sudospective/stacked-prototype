@@ -21,7 +21,8 @@ class "Cafe" : extends "Screen" {
     self:AddGizmo(bg)
 
     sign.x = stacked.scx
-    sign.y = stacked.scy * 0.5
+    sign.y = 32
+    sign.align.v = 0
     sign:LoadFont("assets/sport.otf", 64)
     sign.text = "HARD DROP CAFE"
     self:AddGizmo(sign)
