@@ -1,2 +1,6 @@
-.vscode
-[Bb]uild
+.vscode/
+[Bb]uild/
+lua/stacked
+lua/*.exe
+lua/*.pdb
+lua/*.dll
