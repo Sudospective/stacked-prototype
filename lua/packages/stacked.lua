@@ -34,7 +34,7 @@ stacked = {
       a = 1,
     },
     { -- T
-      r = 1,
+      r = 0.5,
       g = 0,
       b = 1,
       a = 1,
@@ -83,20 +83,20 @@ stacked = {
       a = 1,
     },
     t = {
-      r = 1,
+      r = 0.5,
       g = 0,
       b = 1,
       a = 1,
     },
     l = {
-      r = 0,
-      g = 0,
-      b = 1,
+      r = 1,
+      g = 0.5,
+      b = 0,
       a = 1,
     },
     j = {
-      r = 1,
-      g = 0.5,
+      r = 0,
+      g = 0,
       b = 1,
       a = 1,
     },
@@ -180,6 +180,48 @@ stacked = {
     level = 1,
     score = 0,
     cache = 0,
+    brews = {},
+    actions = {
+      -- per row dropped
+      -- multiply by drop distance
+      drop = {
+        soft = 1,
+        hard = 2,
+      },
+      -- per line cleared
+      -- multiply by level
+      single = 100,
+      double = 300,
+      triple = 500,
+      tetra = 800,
+      -- per line cleared
+      -- multiply by level
+      tspin = {
+        mini = {
+          none = 100,
+          single = 200,
+        },
+        full = {
+          none = 400,
+          single = 800,
+          double = 1200,
+          triple = 1600,
+        },
+      },
+    },
+    bonuses = {
+      -- based on action
+      -- multiply by action points
+      b2b = 0.5,
+      -- based on lines cleared
+      -- multiply by level
+      allclear = {
+        single = 800,
+        double = 1200,
+        triple = 1800,
+        tetra = 2000,
+      },
+    },
     stats = {
       lines = 0,
       single = 0,
@@ -203,7 +245,7 @@ stacked = {
       Hold = "Space",
     },
   },
-  coffee = loadfile("assets/coffees.lua")(),
+  brews = loadfile("assets/brews.lua")(),
 }
 
 function stacked.deepCopy(t)

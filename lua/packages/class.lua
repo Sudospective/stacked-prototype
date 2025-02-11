@@ -4,6 +4,21 @@
 -- Adapted again to work with Scarlet Engine
 -- Original class function for LOVE written by ishkabible
 
+local function deepCopy(t)
+  if type(t) ~= "table" then return t end
+    local meta = getmetatable(t)
+    local target = {}
+    for k, v in pairs(t) do
+        if type(v) == "table" then
+            target[k] = deepCopy(v)
+        else
+            target[k] = v
+        end
+    end
+    setmetatable(target, meta)
+    return target
+end
+
 function class(name)
   local newclass = {}
   _ENV[name] = newclass
@@ -32,7 +47,7 @@ function class(name)
     local class = _ENV[newclass.__class]
     local object = {}
     for k, v in pairs(class.__members) do
-      object[k] = v
+      object[k] = deepCopy(v)
     end
     setmetatable(object, {__index = class})
     if object.__init then

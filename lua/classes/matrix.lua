@@ -17,6 +17,8 @@ class "Matrix" {
   goal = 5000;
   combo = -1;
   actions = {};
+  bonuses = {};
+  brews = {};
   stats = {
     lines = 0,
     single = 0,
@@ -41,10 +43,15 @@ class "Matrix" {
     self.goal = stacked.goals[stacked.gamestate.level]
     self.combo = -1
     self.lineLength = self.w
-    self.stats = stacked.deepCopy(stacked.gamestate.stats)
-    self.actions = stacked.deepCopy(stacked.actions)
+    self:FillFromGamestate()
     self:ResetCells()
     self:ResetScore()
+  end;
+  FillFromGamestate = function(self)
+    self.stats = stacked.gamestate.stats
+    self.actions = stacked.gamestate.actions
+    self.bonuses = stacked.gamestate.bonuses
+    self.brews = stacked.gamestate.brews
   end;
   SetCriteria = function(self)
     self.goal = stacked.goals[stacked.gamestate.level]

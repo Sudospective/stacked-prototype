@@ -1,15 +1,19 @@
-class "Coffee" {
-  x = 0;
-  y = 0;
-  name = "";
-  description = "";
-  cost = 0;
+require "classes.item"
+
+class "Coffee" : extends "Item" {
   rarity = "Common";
-  image = "";
+  points = 0;
+  ability = function(self, game, action) end;
+  condition = function(self, game, action) end;
   Brew = function(self, params)
     for k, v in pairs(params) do
       self[k] = v
     end
+    self.label.text = self.name.." ("..self.rarity..")"
+    self.price.text = self.cost.." lines"
+  end;
+  Equip = function(self)
+    table.insert(stacked.gamestate.brews, self)
   end;
   UseAbility = function(self, game, action)
     if self.ability then
@@ -18,12 +22,12 @@ class "Coffee" {
   end;
   CheckCondition = function(self, game, action)
     if self.condition then
-      self:condition(game, action)
+      return self:condition(game, action)
     end
   end;
-  Draw = function(self)
-    if self.DrawPrimitives then
-      self:DrawPrimitives()
+  Sip = function(self, game, action)
+    if self:CheckCondition(game, action) then
+      self:UseAbility(game, action)
     end
   end;
 }

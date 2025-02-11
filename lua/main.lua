@@ -7,9 +7,11 @@ require "screens.cafe"
 
 stacked.screens = {
   __index = stacked.screens,
+
   title = Title.new(),
   gameplay = Gameplay.new(),
   cafe = Cafe.new(),
+
   current = nil,
   next = nil,
   goToNext = function(self)

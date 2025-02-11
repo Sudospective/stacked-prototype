@@ -86,6 +86,7 @@ class "Game" {
   NewRound = function(self)
     self.over = false
     math.randomseed(stacked.seed)
+    --self.matrix:FillFromGamestate()
     self.matrix:ResetCells()
     self.matrix:ResetScore()
     self.matrix:SetCriteria()
