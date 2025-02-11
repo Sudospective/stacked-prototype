@@ -16,6 +16,8 @@ local linesText = Label.new()
 local linesDivider = Quad.new()
 local linesLimit = Label.new()
 
+local clearLabel = Label.new()
+
 local game = Game.new()
 
 class "Gameplay" : extends "Screen" {

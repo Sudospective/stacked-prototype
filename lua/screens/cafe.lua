@@ -57,11 +57,13 @@ class "Cafe" : extends "Screen" {
     sodaShelf.y = stacked.scy - 16
     self:AddGizmo(sodaShelf)
 
+    local binds = stacked.controls[stacked.controls.active]
+
     prompt.x = stacked.scx
     prompt.y = stacked.sh - 32
     prompt.align.y = 1
     prompt:LoadFont("assets/sport.otf", 32)
-    prompt.text = "Press Space to Leave"
+    prompt.text = "Press "..binds.Cancel.." to Leave"
     self:AddGizmo(prompt)
   end;
   __update = function(self, dt)
@@ -72,25 +74,26 @@ class "Cafe" : extends "Screen" {
     cacheCounter.text = "Lines Available: "..stacked.gamestate.cache
   end;
   __input = function(self, event)
+    local binds = stacked.controls[stacked.controls.active]
     local b = event.button
     if event.type == "KeyDown" then
-      if b == "Left" then
+      if b == binds.Left then
         activeBorder.aux = (activeBorder.aux - 1) % #activeShelves
-      elseif b == "Right" then
+      elseif b == binds.Right then
         activeBorder.aux = (activeBorder.aux + 1) % #activeShelves
-      elseif b == "Up" then
+      elseif b == binds.Up then
         for _, shelf in ipairs(activeShelves) do
           if shelf.__enabled then
             shelf:Select(-1)
           end
         end
-      elseif b == "Down" then
+      elseif b == binds.Down then
         for _, shelf in ipairs(activeShelves) do
           if shelf.__enabled then
             shelf:Select(1)
           end
         end
-      elseif b == "Z" then
+      elseif b == binds.Confirm then
         for i, shelf in ipairs(activeShelves) do
           if shelf.__enabled then
             shelf:Purchase()
@@ -107,7 +110,7 @@ class "Cafe" : extends "Screen" {
             end
           end
         end
-      elseif b == "Space" then
+      elseif b == stacked.binds.HardDrop then
         stacked.screens.next = "gameplay"
         stacked.screens:goToNext()
       end

@@ -10,7 +10,9 @@ class "Game" {
   heldPiece = Tetromino.new();
   ghostPiece = Ghost.new();
   readyText = Label.new();
+  clearText = Label.new();
   callbacks = {};
+  tweenHandles = {};
   bag = {};
   hand = {};
   actions = {};
@@ -37,6 +39,11 @@ class "Game" {
     self.readyText.x = stacked.scx
     self.readyText.y = stacked.scy
     self.readyText:LoadFont("assets/sport.otf", 32)
+
+    self.clearText.x = stacked.scx
+    self.clearText.y = stacked.scy - 32
+    self.clearText:LoadFont("assets/sport.otf", 32)
+    self.clearText.color.a = 0
 
     self:Initialize();
   end;
@@ -82,11 +89,13 @@ class "Game" {
     self.lastRotTest = {0, 0}
     self.dropTime = (0.8 - ((stacked.gamestate.level - 1) * 0.007)) ^ (stacked.gamestate.level - 1)
     self.levelInProgress = false
+
+    self.tweenHandles.ready = stacked.timer.new()
+    self.tweenHandles.clear = stacked.timer.new()
   end;
   NewRound = function(self)
     self.over = false
     math.randomseed(stacked.seed)
-    --self.matrix:FillFromGamestate()
     self.matrix:ResetCells()
     self.matrix:ResetScore()
     self.matrix:SetCriteria()
@@ -111,18 +120,18 @@ class "Game" {
     if self.boss then
       self.readyText.text = self.boss.description
     end
-    self.callbacks.ready = stacked.timer.after(3, function()
+    self.tweenHandles.ready:after(3, function()
       self.readyText.text = "READY..."
     end)
-    self.callbacks.go = stacked.timer.after(4, function()
+    self.tweenHandles.ready:after(4, function()
       self.readyText.text = "GO!!"
       self.levelInProgress = true
+      self.tweenHandles.ready:during(1, function(dt)
+        self.readyText.color.a = self.readyText.color.a - dt
+      end)
     end)
-    self.callbacks.clear = stacked.timer.after(5, function()
+    self.tweenHandles.ready:after(5, function()
       self.readyText.text = ""
-      self.callbacks.ready = nil
-      self.callbacks.go = nil
-      self.callbacks.clear = nil
     end)
   end;
   EndRound = function(self)
@@ -420,7 +429,7 @@ class "Game" {
         corner.covered = true
       end
     end
-    if self.lastRotTest[1] == 5 then
+    if corners.n >= 2 and self.lastRotTest[1] == 5 then
       spin = "full"
     elseif corners.n >= 3 then
       local set = corners[self.curPiece.rotState]
@@ -535,6 +544,18 @@ class "Game" {
         self.lastAction = 1
       end
     end
+    
+    self.clearText.text = tostring(points)
+    self.clearText.color.a = 1
+    
+    self.tweenHandles.clear:clear()
+    self.tweenHandles.clear:during(1, function(dt)
+      self.clearText.color.a = self.clearText.color.a - dt
+      self.clearText.y = self.clearText.y - dt * 5
+    end, function()
+      self.clearText.color.a = 0
+      self.clearText.y = stacked.scy - 32
+    end)
 
     self.matrix.score = self.matrix.score + points
   end;
@@ -594,6 +615,10 @@ class "Game" {
     end
   end;
   Update = function(self, dt)
+    for _, handle in pairs(self.tweenHandles) do
+      handle:update(dt)
+    end
+
     self:PositionGhost()
 
     if not self.levelInProgress then return end
@@ -661,5 +686,6 @@ class "Game" {
     self.curPiece:Draw(offset.current.x, offset.current.y)
 
     self.readyText:Draw()
+    self.clearText:Draw()
   end;
 }

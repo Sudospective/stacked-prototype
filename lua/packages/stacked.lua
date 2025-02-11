@@ -235,7 +235,15 @@ stacked = {
     },
   },
   controls = {
+    active = "keyboard",
     keyboard = {
+      Left = "Left",
+      Right = "Right",
+      Up = "Up",
+      Down = "Down",
+      Confirm = "Return",
+      Cancel = "Escape",
+
       MoveLeft = "Left",
       MoveRight = "Right",
       SoftDrop = "Down",

@@ -30,6 +30,7 @@ class "Item" {
     end
   end;
   Purchase = function(self)
+    if stacked.gamestate.cache < self.cost then return end
     self.label.color = {
       r = self.label.color.r * 0.5,
       g = self.label.color.g * 0.5,
