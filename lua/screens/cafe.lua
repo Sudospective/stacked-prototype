@@ -110,7 +110,9 @@ class "Cafe" : extends "Screen" {
             end
           end
         end
-      elseif b == stacked.binds.HardDrop then
+      end
+    elseif event.type == "KeyUp" then
+      if b == binds.Cancel then
         stacked.screens.next = "gameplay"
         stacked.screens:goToNext()
       end
