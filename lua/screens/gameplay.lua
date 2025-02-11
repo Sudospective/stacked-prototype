@@ -16,7 +16,7 @@ local linesText = Label.new()
 local linesDivider = Quad.new()
 local linesLimit = Label.new()
 
-local clearLabel = Label.new()
+local levelLabel = Label.new()
 
 local game = Game.new()
 
@@ -56,58 +56,65 @@ class "Gameplay" : extends "Screen" {
     self:AddGizmo(holdLabel)
 
     scoreLabel.x = stacked.scx - xOffset
-    scoreLabel.y = stacked.scy
+    scoreLabel.y = stacked.scy - 16
     scoreLabel.align = {h = 1, v = 0.5}
     scoreLabel:LoadFont("assets/sport.otf", 32)
     scoreLabel.text = "SCORE"
     self:AddGizmo(scoreLabel)
 
     scoreText.x = stacked.scx - xOffset - 4
-    scoreText.y = stacked.scy + 32
+    scoreText.y = stacked.scy + 16
     scoreText.align = {h = 1, v = 1}
     scoreText:LoadFont("assets/sport.otf", 16)
     scoreText.text = "0"
     self:AddGizmo(scoreText)
 
     scoreDivider.x = stacked.scx - xOffset - 32
-    scoreDivider.y = stacked.scy + 32 + 2
+    scoreDivider.y = stacked.scy + 16 + 2
     scoreDivider.w = 64
     scoreDivider.h = 2
     self:AddGizmo(scoreDivider)
 
     scoreLimit.x = stacked.scx - xOffset - 4
-    scoreLimit.y = stacked.scy + 32
+    scoreLimit.y = stacked.scy + 16
     scoreLimit.align = {h = 1, v = 0}
     scoreLimit:LoadFont("assets/sport.otf", 16)
     scoreLimit.text = "0"
     self:AddGizmo(scoreLimit)
 
     linesLabel.x = stacked.scx - xOffset
-    linesLabel.y = stacked.scy + 80
+    linesLabel.y = stacked.scy + 64
     linesLabel.align = {h = 1, v = 0.5}
     linesLabel:LoadFont("assets/sport.otf", 32)
     linesLabel.text = "LINES"
     self:AddGizmo(linesLabel)
 
     linesText.x = stacked.scx - xOffset - 4
-    linesText.y = stacked.scy + 112
+    linesText.y = stacked.scy + 96
     linesText.align = {h = 1, v = 1}
     linesText:LoadFont("assets/sport.otf", 16)
     linesText.text = "0"
     self:AddGizmo(linesText)
 
     linesDivider.x = stacked.scx - xOffset - 32
-    linesDivider.y = stacked.scy + 112 + 2
+    linesDivider.y = stacked.scy + 96 + 2
     linesDivider.w = 64
     linesDivider.h = 2
     self:AddGizmo(linesDivider)
 
     linesLimit.x = stacked.scx - xOffset - 4
-    linesLimit.y = stacked.scy + 112
+    linesLimit.y = stacked.scy + 96
     linesLimit.align = {h = 1, v = 0}
     linesLimit:LoadFont("assets/sport.otf", 16)
     linesLimit.text = "0"
     self:AddGizmo(linesLimit)
+
+    levelLabel.x = stacked.scx - xOffset
+    levelLabel.y = stacked.scy + game.matrix.h * stacked.size * 0.5
+    levelLabel.align = {h = 1, v = 1}
+    levelLabel:LoadFont("assets/sport.otf", 32)
+    levelLabel.text = "LEVEL 0"
+    self:AddGizmo(levelLabel)
 
     game.x = stacked.scx
     game.y = stacked.scy
@@ -148,6 +155,7 @@ class "Gameplay" : extends "Screen" {
   end;
   __enter = function(self)
     stacked.seed = stacked.seed or math.floor(stacked.uptime * 1000)
+    levelLabel.text = "LEVEL "..stacked.gamestate.level
     game:NewRound()
   end;
   __exit = function(self)

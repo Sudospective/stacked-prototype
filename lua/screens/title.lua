@@ -2,6 +2,7 @@ require "classes.screen"
 
 local bg = Quad.new()
 local title = Label.new()
+local subtitle = Label.new()
 local help = Label.new()
 
 class "Title" : extends "Screen" {
@@ -20,10 +21,18 @@ class "Title" : extends "Screen" {
     self:AddGizmo(bg)
 
     title.x = stacked.scx
-    title.y = stacked.scy * 0.5
+    title.y = stacked.scy * 0.5 + 16
+    title.align.v = 1
     title:LoadFont("assets/sport.otf", 64)
     title.text = "STACKED"
     self:AddGizmo(title)
+
+    subtitle.x = stacked.scx
+    subtitle.y = stacked.scy * 0.5 + 16
+    subtitle.align.v = 0
+    subtitle:LoadFont("assets/sport.otf", 16)
+    subtitle.text = "A Tetromino Roguelike"
+    self:AddGizmo(subtitle)
 
     help.x = stacked.scx
     help.y = stacked.scy * 1.5

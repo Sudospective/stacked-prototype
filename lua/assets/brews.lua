@@ -34,10 +34,10 @@ return {
   {
     name = "Espresso",
     description = function(self)
-      return "Gains +20 points for each\ntetra clear ("..self.points..")"
+      return "Gains +20 points for each tetra clear\n(Currently"..self.points..")"
     end,
-    cost = 10,
-    rarity = "Uncommon",
+    cost = 8,
+    rarity = "Common",
     image = "assets/coffee/espresso.png",
     points = 0,
     ability = function(self, game, action)
@@ -48,6 +48,22 @@ return {
     end,
     condition = function(self, game, action)
       return true
+    end,
+  },
+  {
+    name = "Cappuccino",
+    description = function(self)
+      return "+"..self.points.." points when clearing\nwith an O tetromino"
+    end,
+    cost = 8,
+    rarity = "Common",
+    image = "assets/coffee/cappuccino.png",
+    points = 100,
+    ability = function(self, game, action)
+      return self.points
+    end,
+    condition = function(self, game, action)
+      return game.curPiece.id == 2
     end,
   },
 }

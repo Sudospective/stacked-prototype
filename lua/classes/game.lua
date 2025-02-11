@@ -11,8 +11,9 @@ class "Game" {
   ghostPiece = Ghost.new();
   readyText = Label.new();
   clearText = Label.new();
+  levelText = Label.new();
   callbacks = {};
-  tweenHandles = {};
+  timers = {};
   bag = {};
   hand = {};
   actions = {};
@@ -90,8 +91,8 @@ class "Game" {
     self.dropTime = (0.8 - ((stacked.gamestate.level - 1) * 0.007)) ^ (stacked.gamestate.level - 1)
     self.levelInProgress = false
 
-    self.tweenHandles.ready = stacked.timer.new()
-    self.tweenHandles.clear = stacked.timer.new()
+    self.timers.ready = stacked.timer.new()
+    self.timers.clear = stacked.timer.new()
   end;
   NewRound = function(self)
     self.over = false
@@ -120,17 +121,17 @@ class "Game" {
     if self.boss then
       self.readyText.text = self.boss.description
     end
-    self.tweenHandles.ready:after(3, function()
+    self.timers.ready:after(3, function()
       self.readyText.text = "READY..."
     end)
-    self.tweenHandles.ready:after(4, function()
+    self.timers.ready:after(4, function()
       self.readyText.text = "GO!!"
       self.levelInProgress = true
-      self.tweenHandles.ready:during(1, function(dt)
+      self.timers.ready:during(1, function(dt)
         self.readyText.color.a = self.readyText.color.a - dt
       end)
     end)
-    self.tweenHandles.ready:after(5, function()
+    self.timers.ready:after(5, function()
       self.readyText.text = ""
     end)
   end;
@@ -349,17 +350,16 @@ class "Game" {
     return false
   end;
   PrepareLock = function(self, dt, interval)
+    if self.curPiece.row.offset ~= self.ghostPiece.row.offset then
+      self.readyToLock = false
+      self.timeUntilLock = interval
+      return false
+    end
     self.timeUntilLock = self.timeUntilLock - dt
-    if self.timeUntilLock <= 0 or self.hardDropping then
-      if self.curPiece.row.offset ~= self.ghostPiece.row.offset then
-        self.readyToLock = false
-        self.timeUntilLock = interval
-        return false
-      else
-        self:LockToMatrix()
-        self.timeUntilLock = interval
-        return true
-      end
+    if self.timeUntilLock <= 0 then
+      self:LockToMatrix()
+      self.timeUntilLock = interval
+      return true
     end
     return false
   end;
@@ -548,8 +548,8 @@ class "Game" {
     self.clearText.text = tostring(points)
     self.clearText.color.a = 1
     
-    self.tweenHandles.clear:clear()
-    self.tweenHandles.clear:during(1, function(dt)
+    self.timers.clear:clear()
+    self.timers.clear:during(1, function(dt)
       self.clearText.color.a = self.clearText.color.a - dt
       self.clearText.y = self.clearText.y - dt * 5
     end, function()
@@ -615,7 +615,7 @@ class "Game" {
     end
   end;
   Update = function(self, dt)
-    for _, handle in pairs(self.tweenHandles) do
+    for _, handle in pairs(self.timers) do
       handle:update(dt)
     end
 
