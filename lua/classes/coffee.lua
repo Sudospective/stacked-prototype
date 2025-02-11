@@ -6,6 +6,11 @@ class "Coffee" {
   cost = 0;
   rarity = "Common";
   image = "";
+  Brew = function(self, params)
+    for k, v in pairs(params) do
+      self[k] = v
+    end
+  end;
   UseAbility = function(self, game, action)
     if self.ability then
       self:ability(game, action)

@@ -1,9 +1,11 @@
 require "classes.screen"
-require "classes.coffee"
-require "classes.soda"
+require "classes.shelf"
 
 local bg = Quad.new()
 local sign = Label.new()
+
+local coffeeShelf = CoffeeShelf.new()
+local sodaShelf = SodaShelf.new()
 
 class "Cafe" : extends "Screen" {
   title = "Cafe",
