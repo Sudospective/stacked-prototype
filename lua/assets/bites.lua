@@ -3,19 +3,20 @@ return {
     name = "Scone",
     description = function(self)
       return "+1 tetromino in next queue"
-    end;
-    image = "assets/food/scone.png";
+    end,
+    image = "assets/snacks/scone.png",
     effect = function(self)
-      stacked.gaemstate.queue = stacked.gamestate.queue + 1
-    end
+      stacked.gamestate.queue = stacked.gamestate.queue + 1
+    end,
   },
   {
     name = "Cakepop",
     description = function(self)
       return "+2 matrix height"
-    end;
+    end,
+    image = "assets/snacks/cakepop.png",
     effect = function(self)
-      stacked.gamestate.matrix.h = stacked.gamestate.matrix.h + 2
-    end;
+      stacked.gamestate.height = stacked.gamestate.height + 2
+    end,
   },
 }

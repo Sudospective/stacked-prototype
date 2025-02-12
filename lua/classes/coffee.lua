@@ -20,7 +20,8 @@ class "Coffee" : extends "Item" {
     for k, v in pairs(params) do
       self[k] = v
     end
-    self.label.text = self.name.." ("..self.rarity..")"
+    self.label.text = self.name
+    self.label.color = stacked.colors[self.rarity:lower()]
     self.price.text = self.cost.." lines"
   end;
   Equip = function(self)

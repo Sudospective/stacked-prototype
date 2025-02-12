@@ -53,6 +53,7 @@ class "Game" {
     self.matrix.x = stacked.scx
     self.matrix.y = stacked.scy
     self.matrix.h = stacked.gamestate.height
+    stacked.size = 32 * (20 / self.matrix.h)
 
     self.bag = {
       IPiece.new(),
@@ -98,10 +99,12 @@ class "Game" {
     self.over = false
     math.randomseed(stacked.seed)
 
+    self.matrix.h = stacked.gamestate.height
+    stacked.size = 16 * (20 / self.matrix.h)
+
     self.matrix:ResetCells()
     self.matrix:ResetScore()
     self.matrix:SetCriteria()
-    self.matrix.h = stacked.gamestate.height
 
     self.hand = {}
     self.curPiece = Tetromino.new()
@@ -398,10 +401,9 @@ class "Game" {
     end
   end;
   CheckSpin = function(self)
-    local dropDist = self.ghostPiece.column.offset - self.curPiece.column.offset
     local spin = nil
     if (
-      dropDist > 0
+      self.dropDistance > 0
       or self.curPiece.id ~= 3
       or self.lastMove ~= 2
     ) then
@@ -720,12 +722,12 @@ class "Game" {
         y = stacked.scy - self.matrix.h * stacked.size * 0.5,
       },
       next = {
-        x = stacked.scx + self.matrix.w * stacked.size * 0.3,
-        y = stacked.scy - self.matrix.h * stacked.size * 0.3,
+        x = stacked.scx + 10 * 16 * 0.3,
+        y = stacked.scy - 20 * 16 * 0.3,
       },
       held = {
-        x = stacked.scx - self.matrix.w * stacked.size * 1.3,
-        y = stacked.scy - self.matrix.h * stacked.size * 0.25,
+        x = stacked.scx - 10 * 16 * 1.3,
+        y = stacked.scy - 20 * 16 * 0.25,
       }
     }
     self.matrix:Draw()

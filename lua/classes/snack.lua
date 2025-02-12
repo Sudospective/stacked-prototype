@@ -2,7 +2,6 @@ require "classes.item"
 
 class "Snack" : extends "Item" {
   cost = 5;
-  effect = function(self, game) end;
   Bake = function(self, data)
     for k, v in pairs(data) do
       self[k] = v

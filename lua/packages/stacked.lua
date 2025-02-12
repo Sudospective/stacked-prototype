@@ -112,6 +112,30 @@ stacked = {
       b = 0,
       a = 1,
     },
+    common = {
+      r = 0.75,
+      g = 0.5,
+      b = 0.25,
+      a = 1,
+    },
+    uncommon = {
+      r = 0,
+      g = 1,
+      b = 0,
+      a = 1,
+    },
+    rare = {
+      r = 1,
+      g = 0,
+      b = 1,
+      a = 1,
+    },
+    exotic = {
+      r = 1,
+      g = 1,
+      b = 0,
+      a = 1,
+    },
   },
   flavors = {
     mystery = "none", -- upgrade all
@@ -124,7 +148,7 @@ stacked = {
     cherry = "z", -- upgrade all-clear
   },
   goals = {
-    5000,
+    50,
     10000,
     20000,
     40000,

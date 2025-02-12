@@ -42,17 +42,18 @@ class "Gameplay" : extends "Screen" {
     }
     self:AddGizmo(bg)
 
-    local xOffset = (game.matrix.w * stacked.size * 0.5) + 16
+    local xOffset = (10 * 16 * 0.5) + 16
+    local yOffset = (20 * 16 * 0.5) + 4
 
     nextLabel.x = stacked.scx + xOffset
-    nextLabel.y = stacked.scy - (game.matrix.h * stacked.size * 0.5) + 4
+    nextLabel.y = stacked.scy - yOffset
     nextLabel.align = {h = 0, v = 0}
     nextLabel:LoadFont("assets/sport.otf", 32)
     nextLabel.text = "NEXT"
     self:AddGizmo(nextLabel)
 
     holdLabel.x = stacked.scx - xOffset
-    holdLabel.y = stacked.scy - (game.matrix.h * stacked.size * 0.5) + 4
+    holdLabel.y = stacked.scy - yOffset
     holdLabel.align = {h = 1, v = 0}
     holdLabel:LoadFont("assets/sport.otf", 32)
     holdLabel.text = "HOLD"
@@ -113,21 +114,21 @@ class "Gameplay" : extends "Screen" {
     self:AddGizmo(linesLimit)
 
     levelLabel.x = stacked.scx - xOffset
-    levelLabel.y = stacked.scy + (game.matrix.h * stacked.size * 0.5) - 4
+    levelLabel.y = stacked.scy + yOffset - 8
     levelLabel.align = {h = 1, v = 1}
     levelLabel:LoadFont("assets/sport.otf", 32)
     levelLabel.text = "LEVEL 0"
     self:AddGizmo(levelLabel)
 
     brewsLabel.x = stacked.scx - xOffset * 2
-    brewsLabel.y = stacked.scy - (game.matrix.h * stacked.size * 0.5) + 4
+    brewsLabel.y = stacked.scy - yOffset + 8
     brewsLabel.align = {h = 1, v = 0}
     brewsLabel:LoadFont("assets/sport.otf", 32)
     brewsLabel.text = "COFFEE"
     self:AddGizmo(brewsLabel)
 
     brewsText.x = stacked.scx - (xOffset * 2) - 42
-    brewsText.y = stacked.scy - (game.matrix.h * stacked.size * 0.5) + 48
+    brewsText.y = stacked.scy - yOffset + 52
     brewsText.align.v = 0
     brewsText:LoadFont("assets/sport.otf", 16)
     self:AddGizmo(brewsText)
