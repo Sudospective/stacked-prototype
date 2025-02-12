@@ -18,9 +18,9 @@ class "Soda" : extends "Item" {
       action = "all"
     end
     self.description = function(self)
-      local desc = "+"..tostring(self.points).." base points for "..action.." clears"
+      local desc = "+"..tostring(self.points).." base points for\n"..action.." clears"
       if self.action == "b2b" then
-        desc = "+"..tostring(self.points).." bonus multiplier for "..action.." clears"
+        desc = "+"..tostring(self.points).." bonus multiplier for\n"..action.." clears"
       elseif action == "mystery" then
         desc = "Upgrade all clear types"
       end

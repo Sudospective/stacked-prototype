@@ -10,6 +10,7 @@ local activeShelves = {}
 local cacheCounter = Label.new()
 local coffeeShelf = CoffeeShelf.new()
 local sodaShelf = SodaShelf.new()
+local snackShelf = SnackShelf.new()
 
 local prompt = Label.new()
 
@@ -37,7 +38,7 @@ class "Cafe" : extends "Screen" {
 
     activeBorder.x = stacked.scx * 0.5
     activeBorder.y = stacked.scy - 32 + 128
-    activeBorder.w = stacked.sw * 0.5 - 32
+    activeBorder.w = 208
     activeBorder.h = 256
     activeBorder.color = {r = 0, g = 0, b = 0, a = 0.5}
     activeBorder.aux = 0
@@ -49,25 +50,29 @@ class "Cafe" : extends "Screen" {
     cacheCounter:LoadFont("assets/sport.otf", 32)
     self:AddGizmo(cacheCounter)
 
-    coffeeShelf.x = stacked.scx * 0.5
+    coffeeShelf.x = stacked.scx * 0.4
     coffeeShelf.y = stacked.scy - 16
     self:AddGizmo(coffeeShelf)
 
-    sodaShelf.x = stacked.scx * 1.5
+    sodaShelf.x = stacked.scx
     sodaShelf.y = stacked.scy - 16
     self:AddGizmo(sodaShelf)
+
+    snackShelf.x = stacked.scx * 1.6
+    snackShelf.y = stacked.scy - 16
+    self:AddGizmo(snackShelf)
 
     local binds = stacked.controls[stacked.controls.active]
 
     prompt.x = stacked.scx
-    prompt.y = stacked.sh - 32
-    prompt.align.y = 1
-    prompt:LoadFont("assets/sport.otf", 32)
+    prompt.y = cacheCounter.y + 48
+    prompt.align.y = 0
+    prompt:LoadFont("assets/sport.otf", 16)
     prompt.text = "Press "..binds.Cancel.." to Leave"
     self:AddGizmo(prompt)
   end;
   __update = function(self, dt)
-    activeBorder.x = stacked.scx * (0.5 + activeBorder.aux)
+    activeBorder.x = stacked.scx * 0.4 + (stacked.scx * 0.6 * activeBorder.aux)
     for i, shelf in ipairs(activeShelves) do
       shelf:Enable(not shelf.__closed and activeBorder.aux == i - 1)
     end
@@ -123,8 +128,10 @@ class "Cafe" : extends "Screen" {
     activeBorder.aux = 0
     coffeeShelf:Open()
     sodaShelf:Open()
+    snackShelf:Open()
     table.insert(activeShelves, coffeeShelf)
     table.insert(activeShelves, sodaShelf)
+    table.insert(activeShelves, snackShelf)
     coffeeShelf:Enable(true)
   end;
   __exit = function(self)

@@ -180,7 +180,8 @@ stacked = {
     level = 1,
     score = 0,
     cache = 0,
-    scone = nil,
+    queue = 3,
+    height = 20,
     brews = {},
     actions = {
       -- per row dropped
@@ -255,6 +256,7 @@ stacked = {
     },
   },
   brews = loadfile("assets/brews.lua")(),
+  bites = loadfile("assets/bites.lua")(),
 }
 
 function stacked.deepCopy(t)

@@ -52,6 +52,7 @@ class "Game" {
     self.matrix:Initialize();
     self.matrix.x = stacked.scx
     self.matrix.y = stacked.scy
+    self.matrix.h = stacked.gamestate.height
 
     self.bag = {
       IPiece.new(),
@@ -76,7 +77,7 @@ class "Game" {
       down = false,
     }
     self.curPiece = Tetromino:new()
-    self.nextPiece = { n = 3 }
+    self.nextPiece = { n = stacked.gamestate.queue }
     self.heldPiece = Tetromino:new()
     self.alreadyHeld = false
     self.lastMove = 0
@@ -96,18 +97,21 @@ class "Game" {
   NewRound = function(self)
     self.over = false
     math.randomseed(stacked.seed)
+
     self.matrix:ResetCells()
     self.matrix:ResetScore()
     self.matrix:SetCriteria()
+    self.matrix.h = stacked.gamestate.height
+
     self.hand = {}
     self.curPiece = Tetromino.new()
-    self.nextPiece = { n = self.nextPiece.n }
+    self.nextPiece = { n = stacked.gamestate.queue }
     self.heldPiece = Tetromino.new()
     self.alreadyHeld = false
     self.lastMove = 0
     self.lastRotTest = {0, 0}
-    self:PushNextPiece()
     self.dropTime = (0.8 - ((stacked.gamestate.level - 1) * 0.007)) ^ (stacked.gamestate.level - 1)
+    self:PushNextPiece()
     self:StartRound()
   end;
   StartRound = function(self)

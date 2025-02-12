@@ -5,6 +5,17 @@ class "Coffee" : extends "Item" {
   points = 0;
   ability = function(self, game, action) end;
   condition = function(self, game, action) end;
+  __ready = function(self)
+    if self.rarity == "Common" then
+      self.cost = 6
+    elseif self.rarity == "Uncommon" then
+      self.cost = 8
+    elseif self.rarity == "Rare" then
+      self.cost = 10
+    elseif self.rarity == "Exotic" then
+      self.cost = 12
+    end
+  end;
   Brew = function(self, params)
     for k, v in pairs(params) do
       self[k] = v

@@ -1,5 +1,6 @@
 require "classes.coffee"
 require "classes.soda"
+require "classes.snack"
 
 class "Shelf" {
   x = 0;
@@ -88,7 +89,7 @@ class "Shelf" {
 class "CoffeeShelf" : extends "Shelf" {
   heading = "COFFEE";
   __ready = function(self)
-    for i = 1, 2 do
+    for i = 1, 3 do
       local coffee = Coffee.new()
       local index = math.random(1, #stacked.brews)
       local data = stacked.brews[index]
@@ -121,6 +122,19 @@ class "SodaShelf" : extends "Shelf" {
       self:StockItem(soda)
       -- no repeats
       table.remove(sodas, index)
+    end
+  end;
+}
+
+class "SnackShelf" : extends "Shelf" {
+  heading = "SNACKS";
+  __ready = function(self)
+    for i = 1, 2 do
+      local snack = Snack.new()
+      local index = math.random(1, #stacked.bites)
+      local data = stacked.bites[index]
+      snack:Bake(data)
+      self:StockItem(snack)
     end
   end;
 }

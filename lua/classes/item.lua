@@ -6,20 +6,20 @@ class "Item" {
   label = Label.new();
   price = Label.new();
   cost = 0;
-  image = "";
   description = function(self)
     return ""
   end;
+  image = "";
   __init = function(self, ...)
     self.label = Label.new()
-    self.label.x = self.x - 128
+    self.label.x = self.x - 64
     self.label.y = self.y
     self.label.align.h = 0
     self.label:LoadFont("assets/sport.otf", 16)
     self.label.text = self.name
 
     self.price = Label.new()
-    self.price.x = self.x + 128
+    self.price.x = self.x + 64
     self.price.y = self.y
     self.price.align.h = 1
     self.price:LoadFont("assets/sport.otf", 16)
@@ -44,20 +44,22 @@ class "Item" {
       a = 1.0,
     }
     self.price.text = "SOLD OUT"
-    if self.__class == "Coffee" then
-      self:Equip()
-    elseif self.__class == "Soda" then
+    if self.__class == "Soda" then
       self:Drink()
+    elseif self.__class == "Coffee" then
+      self:Equip()
+    else
+      self:Eat()
     end
     stacked.gamestate.cache = stacked.gamestate.cache - self.cost
     self.__purchased = true
   end;
   Draw = function(self)
-    self.label.x = self.x - 128
+    self.label.x = self.x - 80
     self.label.y = self.y
     self.label:Draw()
 
-    self.price.x = self.x + 128
+    self.price.x = self.x + 80
     self.price.y = self.y
     self.price:Draw()
   end;

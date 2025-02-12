@@ -12,6 +12,7 @@ stacked.screens = {
   gameplay = Gameplay.new(),
   cafe = Cafe.new(),
 
+  first = "title",
   current = nil,
   next = nil,
   goToNext = function(self)
@@ -39,7 +40,7 @@ function init()
   fps.text = "FPS: 0"
 
   -- Final initialization
-  stacked.screens.next = "title"
+  stacked.screens.next = stacked.screens.first
   stacked.screens:goToNext()
 end
 

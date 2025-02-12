@@ -2,9 +2,8 @@ return {
   {
     name = "Joe",
     description = function(self)
-      return "+"..self.points.." points for each line cleared"
+      return "+"..self.points.." points for\neach line cleared"
     end,
-    cost = 8,
     rarity = "Common",
     image = "assets/coffee/joe.png",
     points = 100,
@@ -16,13 +15,12 @@ return {
     end,
   },
   {
-    name = "Latté",
+    name = "Mocha",
     description = function(self)
-      return "+"..self.points.." points per consecutive clear\nif combo is active"
+      return "+"..self.points.." points per\nconsecutive clear\nif combo is active"
     end,
-    cost = 8,
     rarity = "Common",
-    image = "assets/coffee/latte.png",
+    image = "assets/coffee/mocha.png",
     points = 25,
     ability = function(self, game, action)
       return self.points * game.matrix.combo
@@ -34,9 +32,8 @@ return {
   {
     name = "Espresso",
     description = function(self)
-      return "Gains +50 points for each tetra clear\n(Currently "..self.points..")"
+      return "Gains +50 points for\neach tetra clear\n(Currently "..self.points..")"
     end,
-    cost = 8,
     rarity = "Common",
     image = "assets/coffee/espresso.png",
     points = 0,
@@ -51,9 +48,8 @@ return {
   {
     name = "Cappuccino",
     description = function(self)
-      return "+"..self.points.." points when clearing with an\nO tetromino"
+      return "+"..self.points.." points when\nclearing with an\nO tetromino"
     end,
-    cost = 8,
     rarity = "Common",
     image = "assets/coffee/cappuccino.png",
     points = 150,
@@ -65,13 +61,12 @@ return {
     end,
   },
   {
-    name = "Mocha",
+    name = "Latté",
     description = function(self)
       return "+"..self.points.." points for each T-spin"
     end,
-    cost = 8,
     rarity = "Common",
-    image = "assets/coffee/mocha.png",
+    image = "assets/coffee/latte.png",
     points = 100,
     ability = function(self, game, action)
       return self.points
@@ -83,9 +78,8 @@ return {
   {
     name = "Americano",
     description = function(self)
-      return "+"..self.points.." points for each red or blue block cleared"
+      return "+"..self.points.." points for each\nred or blue block cleared"
     end,
-    cost = 8,
     rarity = "Common",
     image = "assets/coffee/americano.png",
     points = 25,
