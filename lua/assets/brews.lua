@@ -12,7 +12,7 @@ return {
       return self.points * action.rows
     end,
     condition = function(self, game, action)
-      return true
+      return not action.drop
     end,
   },
   {
@@ -34,26 +34,24 @@ return {
   {
     name = "Espresso",
     description = function(self)
-      return "Gains +20 points for each tetra clear\n(Currently"..self.points..")"
+      return "Gains +20 points for each tetra clear\n(Currently "..self.points..")"
     end,
     cost = 8,
     rarity = "Common",
     image = "assets/coffee/espresso.png",
     points = 0,
     ability = function(self, game, action)
-      if action.rows == 4 then
-        self.points = self.points + 20
-      end
+      self.points = self.points + 20
       return self.points
     end,
     condition = function(self, game, action)
-      return true
+      return action.rows == 4
     end,
   },
   {
     name = "Cappuccino",
     description = function(self)
-      return "+"..self.points.." points when clearing\nwith an O tetromino"
+      return "+"..self.points.." points when clearing with an\nO tetromino"
     end,
     cost = 8,
     rarity = "Common",
@@ -63,7 +61,7 @@ return {
       return self.points
     end,
     condition = function(self, game, action)
-      return game.curPiece.id == 2
+      return game.curPiece.id == 2 and action.rows > 0 and not action.drop
     end,
   },
 }

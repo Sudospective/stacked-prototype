@@ -17,7 +17,7 @@ class "Coffee" : extends "Item" {
   end;
   UseAbility = function(self, game, action)
     if self.ability then
-      self:ability(game, action)
+      return self:ability(game, action)
     end
   end;
   CheckCondition = function(self, game, action)
@@ -27,7 +27,7 @@ class "Coffee" : extends "Item" {
   end;
   Sip = function(self, game, action)
     if self:CheckCondition(game, action) then
-      self:UseAbility(game, action)
+      return self:UseAbility(game, action)
     end
   end;
 }

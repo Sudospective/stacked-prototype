@@ -544,6 +544,10 @@ class "Game" {
         self.lastAction = 1
       end
     end
+
+    for _, coffee in ipairs(self.matrix.brews) do
+      points = points + (coffee:Sip(self, action) or 0)
+    end
     
     self.clearText.text = tostring(points)
     self.clearText.color.a = 1
@@ -564,7 +568,7 @@ class "Game" {
     self.readyText.text = "CLEAR!"
     self:EndRound()
     stacked.seed = math.floor(stacked.uptime * 1000)
-    self.callbacks.cafe = stacked.timer.after(4, function()
+    self.callbacks.cafe = stacked.timer.after(3, function()
       self.callbacks.cafe = nil
       self:ToCafe()
     end)
