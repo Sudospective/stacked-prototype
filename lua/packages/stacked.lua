@@ -148,7 +148,7 @@ stacked = {
     cherry = "z", -- upgrade all-clear
   },
   goals = {
-    50,
+    5000,
     10000,
     20000,
     40000,
