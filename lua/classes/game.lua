@@ -119,6 +119,7 @@ class "Game" {
   end;
   StartRound = function(self)
     self.timers.ready:clear()
+    self.readyText.color.a = 1
     self.readyText.text = (
       "Score\n"..
       tostring(math.floor(self.matrix.goal)).." points\n"..
