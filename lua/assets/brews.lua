@@ -79,5 +79,40 @@ return {
     condition = function(self, game, action)
       return action.spin ~= nil
     end,
-  }
+  },
+  {
+    name = "Americano",
+    description = function(self)
+      return "+"..self.points.." points for each red or blue block cleared"
+    end,
+    cost = 8,
+    rarity = "Common",
+    image = "assets/coffee/americano.png",
+    points = 25,
+    ability = function(self, game, action)
+      local blocks = 0
+      local piece = game.curPiece
+      for j = -game.matrix.buffer, game.matrix.h - 1 do
+        local prevBlocks = blocks
+        local clearCount = 0
+        for i = 0, game.matrix.w - 1 do
+          local cell = game.matrix.cells[j][i]
+          if cell ~= 0 then
+            clearCount = clearCount + 1
+          end
+          if cell == 4 or cell == 7 then
+            blocks = blocks + 1
+          end
+        end
+        if clearCount < game.matrix.lineLength then
+          -- all that work for nothing...
+          blocks = prevBlocks
+        end
+      end
+      return self.points * blocks
+    end,
+    condition = function(self, game, action)
+      return not action.drop and action.rows > 0
+    end,
+  },
 }

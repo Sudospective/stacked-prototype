@@ -372,7 +372,7 @@ class "Game" {
       spin = self:CheckSpin(),
       b2b = self:CheckB2B(),
       allclear = self:CheckAllClear(),
-      rows = self.matrix:ClearFullRows(),
+      rows = self.matrix:CountFullRows(),
     }
     if action.rows == 0 then
       self.matrix.combo = -1
@@ -390,6 +390,7 @@ class "Game" {
     for name in pairs(self.clearTypes) do
       self.clearTypes[name] = false
     end
+    self.matrix:ClearFullRows()
     self:ResetLock()
     if self.matrix.score >= self.matrix.goal then
       self:RoundClear()

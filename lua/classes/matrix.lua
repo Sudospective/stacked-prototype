@@ -103,6 +103,15 @@ class "Matrix" {
       self.cells[row][column] = 0
     end
   end;
+  CountFullRows = function(self)
+    local completed = 0
+    for row = self.h - 1, -self.buffer, -1 do
+      if self:IsRowFull(row, self.lineLength) then
+        completed = completed + 1
+      end
+    end
+    return completed
+  end;
   ClearFullRows = function(self)
     local completed = 0
     for row = self.h - 1, -self.buffer, -1 do
