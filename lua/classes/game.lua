@@ -393,6 +393,8 @@ class "Game" {
     self:ResetLock()
     if self.matrix.score >= self.matrix.goal then
       self:RoundClear()
+    elseif self.matrix.lines >= self.matrix.limit then
+      self:GameOver()
     end
   end;
   CheckSpin = function(self)

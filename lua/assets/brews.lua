@@ -7,7 +7,7 @@ return {
     cost = 8,
     rarity = "Common",
     image = "assets/coffee/joe.png",
-    points = 20,
+    points = 200,
     ability = function(self, game, action)
       return self.points * action.rows
     end,
@@ -18,14 +18,14 @@ return {
   {
     name = "Latté",
     description = function(self)
-      return "+"..self.points.." points for each clear\nif combo is active"
+      return "+"..self.points.." points per consecutive clear\nif combo is active"
     end,
     cost = 8,
     rarity = "Common",
     image = "assets/coffee/latte.png",
     points = 50,
     ability = function(self, game, action)
-      return self.points
+      return self.points * game.matrix.combo
     end,
     condition = function(self, game, action)
       return game.matrix.combo > 0
@@ -34,14 +34,14 @@ return {
   {
     name = "Espresso",
     description = function(self)
-      return "Gains +20 points for each tetra clear\n(Currently "..self.points..")"
+      return "Gains +50 points for each tetra clear\n(Currently "..self.points..")"
     end,
     cost = 8,
     rarity = "Common",
     image = "assets/coffee/espresso.png",
     points = 0,
     ability = function(self, game, action)
-      self.points = self.points + 20
+      self.points = self.points + 50
       return self.points
     end,
     condition = function(self, game, action)
@@ -56,7 +56,7 @@ return {
     cost = 8,
     rarity = "Common",
     image = "assets/coffee/cappuccino.png",
-    points = 100,
+    points = 150,
     ability = function(self, game, action)
       return self.points
     end,
@@ -64,4 +64,20 @@ return {
       return game.curPiece.id == 2 and action.rows > 0 and not action.drop
     end,
   },
+  {
+    name = "Mocha",
+    description = function(self)
+      return "+"..self.points.." points for each T-spin"
+    end,
+    cost = 8,
+    rarity = "Common",
+    image = "assets/coffee/mocha.png",
+    points = 100,
+    ability = function(self, game, action)
+      return self.points
+    end,
+    condition = function(self, game, action)
+      return action.spin ~= nil
+    end,
+  }
 }
