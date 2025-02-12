@@ -7,7 +7,7 @@ return {
     cost = 8,
     rarity = "Common",
     image = "assets/coffee/joe.png",
-    points = 200,
+    points = 100,
     ability = function(self, game, action)
       return self.points * action.rows
     end,
@@ -23,7 +23,7 @@ return {
     cost = 8,
     rarity = "Common",
     image = "assets/coffee/latte.png",
-    points = 50,
+    points = 25,
     ability = function(self, game, action)
       return self.points * game.matrix.combo
     end,
@@ -91,7 +91,6 @@ return {
     points = 25,
     ability = function(self, game, action)
       local blocks = 0
-      local piece = game.curPiece
       for j = -game.matrix.buffer, game.matrix.h - 1 do
         local prevBlocks = blocks
         local clearCount = 0

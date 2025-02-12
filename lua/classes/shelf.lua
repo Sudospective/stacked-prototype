@@ -119,6 +119,7 @@ class "SodaShelf" : extends "Shelf" {
         hasMystery = true
       end
       self:StockItem(soda)
+      -- no repeats
       table.remove(sodas, index)
     end
   end;

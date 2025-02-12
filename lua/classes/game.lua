@@ -19,12 +19,12 @@ class "Game" {
   actions = {};
   bonuses = {};
   timings = {};
-  coffees = {};
   controlStates = {};
   alreadyHeld = false;
   hardDropping = false;
   dropDistance = 0;
   lastMove = 0;
+  lastKick = 0;
   lastAction = 0;
   repeatingAction = false;
   lastRotTest = {0, 0};
@@ -70,12 +70,6 @@ class "Game" {
       arr = 0.033,
       are = 0.100,
     }
-    self.clearTypes = {
-      normal = false,
-      tspin = false,
-      mini = false,
-      allclear = false,
-    }
     self.controlStates = {
       left = false,
       right = false,
@@ -90,6 +84,11 @@ class "Game" {
     self.lastRotTest = {0, 0}
     self.dropTime = (0.8 - ((stacked.gamestate.level - 1) * 0.007)) ^ (stacked.gamestate.level - 1)
     self.levelInProgress = false
+    
+    -- fill gamestate
+    stacked.gamestate.stats = self.matrix.stats
+    stacked.gamestate.brews = self.matrix.brews
+    stacked.gamestate.actions = self.matrix.actions
 
     self.timers.ready = stacked.timer.new()
     self.timers.clear = stacked.timer.new()
@@ -112,6 +111,7 @@ class "Game" {
     self:StartRound()
   end;
   StartRound = function(self)
+    self.timers.ready:clear()
     self.readyText.text = (
       "Score\n"..
       tostring(math.floor(self.matrix.goal)).." points\n"..
@@ -136,12 +136,12 @@ class "Game" {
     end)
   end;
   EndRound = function(self)
+    self.timers.ready:clear()
     if stacked.gamestate.level > 10 then
       self.readyText.text = "YOU\nWIN!"
     end
 
     self.levelInProgress = false
-    stacked.gamestate.stats = stacked.deepCopy(self.matrix.stats)
     local deposit = self.matrix.limit - self.matrix.lines
     stacked.gamestate.cache = stacked.gamestate.cache + deposit
   end;
@@ -232,7 +232,7 @@ class "Game" {
   Rotate = function(self, ccw)
     self.curPiece:Rotate(ccw)
     local fits = false
-    for _, offset in ipairs(self.curPiece.kicks[self.curPiece.rotState][self.curPiece.lastRot]) do
+    for i, offset in ipairs(self.curPiece.kicks[self.curPiece.rotState][self.curPiece.lastRot]) do
       self.lastRotTest[1] = self.curPiece.rotState
       self.lastRotTest[2] = self.curPiece.lastRot
       self.curPiece:Move(-offset[2], offset[1])
@@ -240,6 +240,7 @@ class "Game" {
         self.curPiece:Move(offset[2], -offset[1])
       else
         fits = true
+        self.lastKick = i
         break
       end
     end
@@ -271,14 +272,12 @@ class "Game" {
     end
   end;
   HardDrop = function(self)
-    self.hardDropping = true
     self.dropDistance = self.ghostPiece.row.offset - self.curPiece.row.offset
     local action = {
       drop = "hard",
       rows = self.dropDistance
     }
     if action.rows > 0 then self:AwardPoints(action) end
-    local piece = self.curPiece
     self.curPiece.row.offset = self.ghostPiece.row.offset
     -- just in case
     self.curPiece.column.offset = self.ghostPiece.column.offset
@@ -308,7 +307,7 @@ class "Game" {
       self.ghostPiece:Move(1, 0)
       if self:IsGhostOutside() or self:IsGhostColliding() then
         self.ghostPiece:Move(-1, 0)
-        self.dropDistance = self.ghostPiece.column.offset - self.curPiece.column.offset
+        self.dropDistance = self.ghostPiece.row.offset - self.curPiece.row.offset
         break
       end
     end
@@ -383,25 +382,22 @@ class "Game" {
       self:AwardPoints(action)
     end
     self:PushNextPiece()
-    if self:IsPieceColliding() then
-      self:GameOver()
-    end
+
     self.alreadyHeld = false
-    for name in pairs(self.clearTypes) do
-      self.clearTypes[name] = false
-    end
     self.matrix:ClearFullRows()
     self:ResetLock()
+
     if self.matrix.score >= self.matrix.goal then
       self:RoundClear()
-    elseif self.matrix.lines >= self.matrix.limit then
+    elseif self.matrix.lines >= self.matrix.limit or self:IsPieceColliding() then
       self:GameOver()
     end
   end;
   CheckSpin = function(self)
+    local dropDist = self.ghostPiece.column.offset - self.curPiece.column.offset
     local spin = nil
     if (
-      self.dropDistance > 0
+      dropDist > 0
       or self.curPiece.id ~= 3
       or self.lastMove ~= 2
     ) then
@@ -432,9 +428,9 @@ class "Game" {
         corner.covered = true
       end
     end
-    if corners.n >= 2 and self.lastRotTest[1] == 5 then
+    if self.lastKick == 5 then
       spin = "full"
-    elseif corners.n >= 3 then
+    elseif corners.n > 2 then
       local set = corners[self.curPiece.rotState]
       if set[1].covered and set[2].covered then
         if set[3].covered or set[4].covered then
@@ -548,21 +544,51 @@ class "Game" {
       end
     end
 
-    for _, coffee in ipairs(self.matrix.brews) do
+    for _, coffee in ipairs(stacked.gamestate.brews) do
       points = points + (coffee:Sip(self, action) or 0)
     end
+
+    points = math.floor(points)
+
+    local allclear = action.allclear and "PERFECT CLEAR\n" or ""
+    local b2b = action.b2b and "BACK-TO-BACK\n" or ""
+    local spinType = ""
+    local lineType = ""
+
+    if action.spin == "full" then
+      spinType = "T-SPIN\n"
+    elseif action.spin == "mini" then
+      spinType = "MINI T-SPIN\n"
+    end
+
+    if action.rows == 1 then
+      lineType = "SINGLE\n"
+    elseif action.rows == 2 then
+      lineType = "DOUBLE\n"
+    elseif action.rows == 3 then
+      lineType = "TRIPLE\n"
+    elseif action.rows == 4 then
+      lineType = "TETRA\n"
+    end
     
-    self.clearText.text = tostring(points)
-    self.clearText.color.a = 1
-    
-    self.timers.clear:clear()
-    self.timers.clear:during(1, function(dt)
-      self.clearText.color.a = self.clearText.color.a - dt
-      self.clearText.y = self.clearText.y - dt * 5
-    end, function()
-      self.clearText.color.a = 0
-      self.clearText.y = stacked.scy - 32
-    end)
+    if not action.drop then
+      self.clearText.text = (
+        allclear
+        ..b2b
+        ..spinType
+        ..lineType
+        ..tostring(points)
+      )
+      self.clearText.color.a = 1
+      self.timers.clear:clear()
+      self.timers.clear:during(1, function(dt)
+        self.clearText.color.a = self.clearText.color.a - dt
+        self.clearText.y = self.clearText.y - dt * 5
+      end, function()
+        self.clearText.color.a = 0
+        self.clearText.y = stacked.scy - 32
+      end)
+    end
 
     self.matrix.score = self.matrix.score + points
   end;
@@ -588,7 +614,20 @@ class "Game" {
     self.over = true
     self.readyText.text = "GAME\nOVER"
     self:EndRound()
-    stacked.seed = math.floor(stacked.uptime * 1000)
+    stacked.timer.after(4, function()
+      self.matrix:Initialize()
+      stacked.gamestate.level = 1
+      stacked.gamestate.score = 0
+      stacked.gamestate.cache = 0
+      stacked.gamestate.brews = {}
+      stacked.gamestate.actions = stacked.deepCopy(stacked.actions)
+      stacked.gamestate.bonuses = stacked.deepCopy(stacked.bonuses)
+      stacked.gamestate.stats = stacked.deepCopy(self.matrix.stats)
+      stacked.seed = math.floor(stacked.uptime * 1000)
+
+      stacked.screens.next = "title"
+      stacked.screens:goToNext()
+    end)
   end;
   GameInput = function(self, event)
     local b = event.button
@@ -642,6 +681,9 @@ class "Game" {
     ) then
       self:SoftDrop()
     elseif self.levelInProgress and self.readyToLock then
+      if self.dropDistance > 0 then
+        self.readyToLock = false
+      end
       if self:EventTriggered(dt, self.lockTime) then
         self:LockToMatrix()
       end

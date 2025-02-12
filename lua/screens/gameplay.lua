@@ -18,6 +18,9 @@ local linesLimit = Label.new()
 
 local levelLabel = Label.new()
 
+local brewsLabel = Label.new()
+local brewsText = Label.new()
+
 local game = Game.new()
 
 class "Gameplay" : extends "Screen" {
@@ -110,11 +113,24 @@ class "Gameplay" : extends "Screen" {
     self:AddGizmo(linesLimit)
 
     levelLabel.x = stacked.scx - xOffset
-    levelLabel.y = stacked.scy + game.matrix.h * stacked.size * 0.5
+    levelLabel.y = stacked.scy + (game.matrix.h * stacked.size * 0.5) - 4
     levelLabel.align = {h = 1, v = 1}
     levelLabel:LoadFont("assets/sport.otf", 32)
     levelLabel.text = "LEVEL 0"
     self:AddGizmo(levelLabel)
+
+    brewsLabel.x = stacked.scx - xOffset * 2
+    brewsLabel.y = stacked.scy - (game.matrix.h * stacked.size * 0.5) + 4
+    brewsLabel.align = {h = 1, v = 0}
+    brewsLabel:LoadFont("assets/sport.otf", 32)
+    brewsLabel.text = "COFFEE"
+    self:AddGizmo(brewsLabel)
+
+    brewsText.x = stacked.scx - (xOffset * 2) - 42
+    brewsText.y = stacked.scy - (game.matrix.h * stacked.size * 0.5) + 48
+    brewsText.align.v = 0
+    brewsText:LoadFont("assets/sport.otf", 16)
+    self:AddGizmo(brewsText)
 
     game.x = stacked.scx
     game.y = stacked.scy
@@ -156,6 +172,20 @@ class "Gameplay" : extends "Screen" {
   __enter = function(self)
     stacked.seed = stacked.seed or math.floor(stacked.uptime * 1000)
     levelLabel.text = "LEVEL "..stacked.gamestate.level
+    brewsText.text = ""
+    local counts = {}
+    for _, brew in ipairs(stacked.gamestate.brews) do
+      counts[brew.name] = counts[brew.name] or 0
+      counts[brew.name] = counts[brew.name] + 1
+    end
+
+    for name, count in pairs(counts) do
+      brewsText.text = brewsText.text..tostring(name).." x "..tostring(count).."\n"
+    end
+
+    if #stacked.gamestate.brews == 0 then
+      brewsText.text = "No brews"
+    end
     game:NewRound()
   end;
   __exit = function(self)

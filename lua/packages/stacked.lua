@@ -180,6 +180,7 @@ stacked = {
     level = 1,
     score = 0,
     cache = 0,
+    scone = nil,
     brews = {},
     actions = {
       -- per row dropped
