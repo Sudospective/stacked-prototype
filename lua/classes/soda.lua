@@ -11,18 +11,18 @@ class "Soda" : extends "Item" {
     if action == "tspin" then
       action = "T-spin"
     elseif action == "b2b" then
-      action = "back-to-back"
+      action = "Back-to-Back"
     elseif action == "allclear" then
-      action = "perfect"
+      action = "Perfect Clear"
     elseif action == "mystery" then
       action = "all"
     end
     self.description = function(self)
-      local desc = "+"..tostring(self.points).." base points for\n"..action.." clears"
+      local desc = "+"..tostring(self.points).." base points for\nevery "..action
       if self.action == "b2b" then
-        desc = "+"..tostring(self.points).." bonus multiplier for\n"..action.." clears"
+        desc = "+"..tostring(self.points).." bonus multiplier for\nevery "..action
       elseif action == "mystery" then
-        desc = "Upgrade all clear types"
+        desc = "Upgrade all actions"
       end
       return desc
     end
