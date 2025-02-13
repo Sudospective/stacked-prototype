@@ -284,7 +284,7 @@ namespace Scarlet {
       Log::Info("Initializing graphics component...");
 
       if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-        Log::Error("Unable to initialize SDL.");
+        Log::Error("Unable to initialize SDL: " + std::string(SDL_GetError()));
         return false;
       }
 
@@ -294,7 +294,7 @@ namespace Scarlet {
         0
       );
       if (!window) {
-        Log::Error("Unable to create SDL window.");
+        Log::Error("Unable to create SDL window: " + std::string(SDL_GetError()));
         return false;
       }
 
@@ -314,7 +314,7 @@ namespace Scarlet {
 
       renderer = SDL_CreateRenderer(window, rendererIndex, SDL_RENDERER_ACCELERATED);
       if (!renderer) {
-        Log::Error("Unable to create SDL renderer.");
+        Log::Error("Unable to create SDL renderer: " + std::string(SDL_GetError()));
         return false;
       }
 
