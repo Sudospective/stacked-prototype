@@ -160,13 +160,13 @@ namespace Scarlet {
         case SDL_CONTROLLERBUTTONDOWN: {
           luaEvent["type"] = "GamepadDown";
           luaEvent["id"] = event->cdevice.which;
-          luaEvent["button"] = event->cbutton.button;
+          luaEvent["button"] = SDL_GameControllerGetStringForButton(static_cast<SDL_GameControllerButton>(event->cbutton.button));
           break;
         }
         case SDL_CONTROLLERBUTTONUP: {
           luaEvent["type"] = "GamepadUp";
           luaEvent["id"] = event->cdevice.which;
-          luaEvent["button"] = event->cbutton.button;
+          luaEvent["button"] = SDL_GameControllerGetStringForButton(static_cast<SDL_GameControllerButton>(event->cbutton.button));
           break;
         }
         case SDL_CONTROLLERAXISMOTION: {

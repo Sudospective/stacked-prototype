@@ -707,9 +707,9 @@ class "Game" {
   end;
   GameInput = function(self, event)
     local b = event.button
+    local binds = stacked.controls[stacked.controls.active]
     -- Keyboard
-    if event.type == "KeyDown" then
-      local binds = stacked.controls.keyboard
+    if event.type == "KeyDown" or event.type == "GamepadDown" then
       if b == binds.MoveLeft then
         self:MoveLeft()
       elseif b == binds.MoveRight then
@@ -725,15 +725,10 @@ class "Game" {
       elseif b == binds.Hold then
         self:Hold()
       end
-    elseif event.type == "KeyUp" then
-      local binds = stacked.controls.keyboard
+    elseif event.type == "KeyUp" or event.type == "GamepadUp" then
       if b == binds.SoftDrop then
         self.controlStates.down = false
       end
-    end
-  end;
-  MenuInput = function(self, event)
-    if event.type == "KeyUp" then
     end
   end;
   Update = function(self, dt)

@@ -62,16 +62,15 @@ class "Cafe" : extends "Screen" {
     sodaShelf.y = stacked.scy - 16
     self:AddGizmo(sodaShelf)
 
-    local binds = stacked.controls[stacked.controls.active]
-
     prompt.x = stacked.scx
     prompt.y = cacheCounter.y + 48
     prompt.align.y = 0
     prompt:LoadFont("assets/sport.otf", 16)
-    prompt.text = "Press "..binds.Cancel.." to Leave"
     self:AddGizmo(prompt)
   end;
   __update = function(self, dt)
+    local localization = stacked.localization[stacked.controls.active]
+    prompt.text = "Press "..localization.Cancel.." to Leave"
     --activeBorder.x = stacked.scx * 0.4 + (stacked.scx * 0.6 * activeBorder.aux)
     for i, shelf in ipairs(activeShelves) do
       shelf:Enable(not shelf.__closed and activeBorder.aux == i - 1)

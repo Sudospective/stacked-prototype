@@ -147,27 +147,25 @@ class "Gameplay" : extends "Screen" {
   end;
   __input = function(self, event)
     local b = event.button
-    local binds = stacked.controls.keyboard
-    if event.type == "KeyDown" then
+    local binds = stacked.controls[stacked.controls.active]
+    if event.type == "KeyDown" or event.type == "GamepadDown" then
       if b == binds.MoveLeft then
         game.controlStates.left = true
       elseif b == binds.MoveRight then
         game.controlStates.right = true
       end
-    elseif event.type == "KeyUp" then
+    elseif event.type == "KeyUp" or event.type == "GamepadUp" then
       if b == binds.MoveLeft then
         game.controlStates.left = false
       elseif b == binds.MoveRight then
         game.controlStates.right = false
-      elseif b == "Escape" then
+      elseif b == binds.Pause then
         game:Initialize()
         game:ToTitle()
       end
     end
     if game.levelInProgress then
       game:GameInput(event)
-    else
-      game:MenuInput(event)
     end
   end;
   __enter = function(self)

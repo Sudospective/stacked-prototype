@@ -45,7 +45,13 @@ function init()
 end
 
 function input(event)
-  if event.type == "KeyDown" then
+  if event.type:find("Key") then
+    stacked.controls.active = "keyboard"
+  elseif event.type:find("Gamepad") then
+    stacked.controls.active = "controller"
+  end
+
+  if event.type == "KeyUp" then
     if event.button == "F4" then
       scarlet.window.fullscreen(not scarlet.window.fullscreen())
     end

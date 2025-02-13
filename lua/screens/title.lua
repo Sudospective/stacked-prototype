@@ -37,16 +37,18 @@ class "Title" : extends "Screen" {
     help.x = stacked.scx
     help.y = stacked.scy * 1.5
     help:LoadFont("assets/sport.otf", 32)
-    help.text = "Press Enter or Start"
     self:AddGizmo(help)
   end;
   __update = function(self, dt)
+    local localization = stacked.localization[stacked.controls.active]
+    help.text = "Press "..localization.Confirm.." to Play"
   end;
   __input = function(self, event)
-    if event.type == "KeyUp" then
-      if event.button == "Escape" then
+    local binds = stacked.controls[stacked.controls.active]
+    if event.type == "KeyUp" or event.type == "GamepadUp" then
+      if event.button == binds.Cancel or event.button == binds.Pause then
         scarlet.exit()
-      elseif event.button == "Return" then
+      elseif event.button == binds.Confirm then
         stacked.screens.next = "gameplay"
         stacked.screens:goToNext()
       end
