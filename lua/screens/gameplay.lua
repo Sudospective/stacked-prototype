@@ -187,7 +187,11 @@ class "Gameplay" : extends "Screen" {
     if #stacked.gamestate.brews == 0 then
       brewsText.text = "No brews"
     end
-    game:NewRound()
+    if game.over then
+      game:NewGame()
+    else
+      game:NewRound()
+    end
   end;
   __exit = function(self)
     stacked.timer.clear()

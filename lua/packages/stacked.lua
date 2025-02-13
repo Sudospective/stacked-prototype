@@ -206,6 +206,68 @@ stacked = {
     cache = 0,
     queue = 3,
     height = 20,
+    hold = 1,
+    brews = {},
+    actions = {
+      -- per row dropped
+      -- multiply by drop distance
+      drop = {
+        soft = 1,
+        hard = 2,
+      },
+      -- per line cleared
+      -- multiply by level
+      single = 100,
+      double = 300,
+      triple = 500,
+      tetra = 800,
+      -- per line cleared
+      -- multiply by level
+      tspin = {
+        mini = {
+          none = 100,
+          single = 200,
+        },
+        full = {
+          none = 400,
+          single = 800,
+          double = 1200,
+          triple = 1600,
+        },
+      },
+    },
+    bonuses = {
+      -- based on action
+      -- multiply by action points
+      b2b = 0.5,
+      -- based on lines cleared
+      -- multiply by level
+      allclear = {
+        single = 800,
+        double = 1200,
+        triple = 1800,
+        tetra = 2000,
+      },
+    },
+    stats = {
+      lines = 0,
+      single = 0,
+      double = 0,
+      triple = 0,
+      tetra = 0,
+      mini = 0,
+      tspin = 0,
+      b2b = 0,
+      allclear = 0,
+    },
+  },
+  default = {
+    level = 1,
+    score = 0,
+    cache = 0,
+    queue = 3,
+    height = 20,
+    hold = 1,
     brews = {},
     actions = {
       -- per row dropped

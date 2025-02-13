@@ -1,7 +1,6 @@
 require "classes.ghost"
 require "classes.matrix"
 require "classes.tetromino"
-require "classes.coffee"
 
 class "Game" {
   matrix = Matrix.new();
@@ -12,6 +11,7 @@ class "Game" {
   readyText = Label.new();
   clearText = Label.new();
   levelText = Label.new();
+  sounds = {};
   callbacks = {};
   timers = {};
   bag = {};
@@ -20,7 +20,7 @@ class "Game" {
   bonuses = {};
   timings = {};
   controlStates = {};
-  alreadyHeld = false;
+  timesHeld = 0;
   hardDropping = false;
   dropDistance = 0;
   lastMove = 0;
@@ -46,6 +46,19 @@ class "Game" {
     self.clearText:LoadFont("assets/sport.otf", 32)
     self.clearText.color.a = 0
 
+    self.sounds = {
+      rotate = "assets/sounds/rotate.ogg",
+      lock = "assets/sounds/lock.ogg",
+      clear = "assets/sounds/clear.ogg",
+      tspin = "assets/sounds/tspin.ogg",
+    }
+
+    for name, path in pairs(self.sounds) do
+      self.sounds[name] = Sound.new()
+      self.sounds[name]:LoadSource(path)
+      self.sounds[name].volume = 0.5
+    end
+
     self:Initialize();
   end;
   Initialize = function(self)
@@ -53,7 +66,7 @@ class "Game" {
     self.matrix.x = stacked.scx
     self.matrix.y = stacked.scy
     self.matrix.h = stacked.gamestate.height
-    stacked.size = 32 * (20 / self.matrix.h)
+    stacked.size = 16 * (20 / self.matrix.h)
 
     self.bag = {
       IPiece.new(),
@@ -80,7 +93,7 @@ class "Game" {
     self.curPiece = Tetromino:new()
     self.nextPiece = { n = stacked.gamestate.queue }
     self.heldPiece = Tetromino:new()
-    self.alreadyHeld = false
+    self.timesHeld = 0
     self.lastMove = 0
     self.repeatingAction = false
     self.lastRotTest = {0, 0}
@@ -95,6 +108,12 @@ class "Game" {
     self.timers.ready = stacked.timer.new()
     self.timers.clear = stacked.timer.new()
   end;
+  NewGame = function(self)
+    -- restore defaults
+    stacked.gamestate = stacked.deepCopy(stacked.default)
+    self:Initialize()
+    self:NewRound()
+  end;
   NewRound = function(self)
     self.over = false
     math.randomseed(stacked.seed)
@@ -102,6 +121,7 @@ class "Game" {
     self.matrix.h = stacked.gamestate.height
     stacked.size = 16 * (20 / self.matrix.h)
 
+    self.matrix:FillFromGamestate()
     self.matrix:ResetCells()
     self.matrix:ResetScore()
     self.matrix:SetCriteria()
@@ -110,7 +130,7 @@ class "Game" {
     self.curPiece = Tetromino.new()
     self.nextPiece = { n = stacked.gamestate.queue }
     self.heldPiece = Tetromino.new()
-    self.alreadyHeld = false
+    self.timesHeld = 0
     self.lastMove = 0
     self.lastRotTest = {0, 0}
     self.dropTime = (0.8 - ((stacked.gamestate.level - 1) * 0.007)) ^ (stacked.gamestate.level - 1)
@@ -145,6 +165,7 @@ class "Game" {
   end;
   EndRound = function(self)
     self.timers.ready:clear()
+    self.readyText.color.a = 1
     if stacked.gamestate.level > 10 then
       self.readyText.text = "YOU\nWIN!"
     end
@@ -152,6 +173,8 @@ class "Game" {
     self.levelInProgress = false
     local deposit = self.matrix.limit - self.matrix.lines
     stacked.gamestate.cache = stacked.gamestate.cache + deposit
+
+    self.matrix:FillToGamestate()
   end;
   GetRandomPiece = function(self)
     if #self.hand < 1 then
@@ -256,6 +279,8 @@ class "Game" {
       self.curPiece:Rotate(not ccw)
     else
       self.lastMove = 2
+      self.sounds.rotate:Play()
+      self:CheckSpin(true)
       self:ResetLock()
     end
   end;
@@ -292,7 +317,7 @@ class "Game" {
     self:LockToMatrix()
   end;
   Hold = function(self)
-    if self.alreadyHeld then return end
+    if self.timesHeld >= stacked.gamestate.hold then return end
     local curPiece = self.curPiece
     if self.heldPiece.id ~= 0 then
       self.curPiece = self.heldPiece
@@ -306,8 +331,9 @@ class "Game" {
     self.heldPiece.row.offset = 0
     self.heldPiece.column.offset = 0
     self.heldPiece.rotState = 1
-    self.alreadyHeld = true
     self.readyToLock = false
+    
+    self.timesHeld = self.timesHeld + 1
   end;
   PositionGhost = function(self)
     self.ghostPiece:Copy(self.curPiece)
@@ -375,6 +401,7 @@ class "Game" {
     for _, cell in pairs(cells) do
       self.matrix.cells[cell[1]][cell[2]] = self.curPiece.id
     end
+    self.sounds.lock:Play()
     local action = {
       spin = self:CheckSpin(),
       b2b = self:CheckB2B(),
@@ -384,6 +411,7 @@ class "Game" {
     if action.rows == 0 then
       self.matrix.combo = -1
     else
+      self.sounds.clear:Play()
       self.matrix.combo = self.matrix.combo + 1
     end
     if action.rows > 0 or action.spin then
@@ -391,7 +419,7 @@ class "Game" {
     end
     self:PushNextPiece()
 
-    self.alreadyHeld = false
+    self.timesHeld = 0
     self.matrix:ClearFullRows()
     self:ResetLock()
 
@@ -401,8 +429,7 @@ class "Game" {
       self:GameOver()
     end
   end;
-  CheckSpin = function(self)
-    local spin = nil
+  CheckSpin = function(self, play)
     if (
       self.dropDistance > 0
       or self.curPiece.id ~= 3
@@ -411,24 +438,30 @@ class "Game" {
       return nil
     end
 
+    play = play or false
+
+    local spin = nil
+
     local corners = {
       n = 0,
       -- O
-      { {0, 0}, {0, 2}, {2, 0}, {2, 2}, covered = false },
+      { {0, 0}, {0, 2}, {2, 0}, {2, 2} },
       -- R
-      { {0, 2}, {2, 2}, {0, 0}, {2, 0}, covered = false },
+      { {0, 2}, {2, 2}, {0, 0}, {2, 0} },
       -- 2
-      { {2, 2}, {2, 0}, {0, 2}, {0, 0}, covered = false },
+      { {2, 2}, {2, 0}, {0, 2}, {0, 0} },
       -- L
-      { {2, 0}, {0, 0}, {2, 2}, {0, 2}, covered = false },
+      { {2, 0}, {0, 0}, {2, 2}, {0, 2} },
     }
     for _, corner in ipairs(corners[self.curPiece.rotState]) do
       local cell = {
-        corner[1] + self.curPiece.row.start + self.curPiece.row.offset - 1,
+        corner[1] + self.curPiece.row.start + self.curPiece.row.offset,
         corner[2] + self.curPiece.column.start + self.curPiece.column.offset,
       }
+
       if (
         cell[1] >= self.matrix.h
+        or (cell[2] < 0 or cell[2] >= self.matrix.w)
         or not self.matrix:IsCellEmpty(cell[1], cell[2])
       ) then
         corners.n = corners.n + 1
@@ -449,22 +482,15 @@ class "Game" {
         end
       end
     end
-    if spin then
-      local stats = self.matrix.stats
-      if spin == "full" then
-        stats.tspin = stats.tspin + 1
-      elseif spin == "mini" then
-        stats.mini = stats.mini + 1
-      end
+
+    if spin ~= nil and play then
+      self.sounds.tspin:Play()
     end
+
     return spin
   end;
   CheckB2B = function(self)
-    local b2b = self.lastAction == 2
-    if b2b then
-      self.matrix.stats.b2b = self.matrix.stats.b2b + 1
-    end
-    return b2b
+    return self.lastAction == 2
   end;
   CheckAllClear = function(self)
     local allclear = true
@@ -476,24 +502,24 @@ class "Game" {
         end
       end
     end
-    if allclear then
-      self.matrix.stats.allclear = self.matrix.stats.allclear + 1
-    end
     return allclear
   end;
   AwardPoints = function(self, action)
-    local points = 0
     action.rows = action.rows or 0
+
+    local points = 0
+    local actions = stacked.gamestate.actions
+    local bonuses = stacked.gamestate.bonuses
     local lvl = stacked.gamestate.level
 
     if action.drop then
-      points = self.actions.drop[action.drop] * action.rows * lvl
+      points = actions.drop[action.drop] * action.rows * lvl
     else
       local base
       if action.spin then
-        base = self.actions.tspin[action.spin]
+        base = actions.tspin[action.spin]
       else
-        base = self.actions
+        base = actions
       end
       if action.spin and action.rows == 0 then
         points = base.none * lvl
@@ -508,7 +534,7 @@ class "Game" {
       end
 
       if self.matrix.combo > 0 then
-        points = points + (50 * self.matrix.combo * lvl)
+        points = points + 50 * self.matrix.combo * lvl
       end
 
       if not (action.spin or action.rows == 4) then
@@ -518,41 +544,45 @@ class "Game" {
       if action.b2b then
         if action.spin then
           if action.rows == 1 then
-            points = points + (base.single * lvl * self.bonuses.b2b)
+            points = points + base.single * lvl * bonuses.b2b
           elseif action.rows == 2 then
-            points = points + (base.double * lvl * self.bonuses.b2b)
+            points = points + base.double * lvl * bonuses.b2b
           elseif action.rows == 3 then
-            points = points + (base.triple * lvl * self.bonuses.b2b)
+            points = points + base.triple * lvl * bonuses.b2b
           end
         elseif action.rows == 4 then
-          points = points + (base.tetra * lvl * self.bonuses.b2b)
+          points = points + base.tetra * lvl * bonuses.b2b
         end
       end
 
       if action.allclear then
+        base = bonuses.allclear
         if action.rows == 1 then
-          points = points + (800 * lvl)
+          points = points + base.single * lvl
         elseif action.rows == 2 then
-          points = points + (1200 * lvl)
+          points = points + base.double * lvl
         elseif action.rows == 3 then
-          points = points + (1800 * lvl)
+          points = points + base.triple * lvl
         elseif action.rows == 4 then
-          points = points + ((action.b2b and 3200 or 2000) * lvl)
+          points = points + base.tetra * (action.b2b and 1.6 or 1) * lvl
         end
       end
 
       if (
         action.rows == 4
-        or action.spin and action.rows > 0
+        or (action.spin and action.rows > 0)
       ) then
         self.lastAction = 2
-      else
+      elseif not action.spin then
         self.lastAction = 1
       end
     end
 
+    -- store points so far
+    action.points = points
+
     for _, coffee in ipairs(stacked.gamestate.brews) do
-      points = points + (coffee:Sip(self, action) or 0)
+      points = (coffee:Sip(self, action) or points) * lvl
     end
 
     points = math.floor(points)
@@ -597,17 +627,57 @@ class "Game" {
       end)
     end
 
+    local stats = {
+      tspin = spinType:lower():gsub("%s+", ""),
+      line = lineType:lower():gsub("%s+", ""),
+      b2b = action.b2b and "b2b" or "",
+      allclear = action.allclear and "allclear" or "",
+    }
+
+    for _, stat in ipairs(stats) do
+      self:IncrementStat(stat)
+    end
+
     self.matrix.score = self.matrix.score + points
+  end;
+  IncrementStat = function(self, stat)
+    local base = self.matrix.stats
+    local realStat = ""
+    if stat:find("mini") then
+      realStat = "mini"
+    elseif stat:find("spin") then
+      realStat = "tspin"
+    elseif stat:find("b2b") then
+      realStat = "b2b"
+    elseif stat:find("allclear") then
+      realStat = "allclear"
+    end
+    base[realStat] = base[realStat] + 1
   end;
   RoundClear = function(self)
     stacked.gamestate.level = stacked.gamestate.level + 1
     self.readyText.text = "CLEAR!"
     self:EndRound()
     stacked.seed = math.floor(stacked.uptime * 1000)
-    self.callbacks.cafe = stacked.timer.after(3, function()
-      self.callbacks.cafe = nil
-      self:ToCafe()
-    end)
+    if stacked.gamestate.level <= 10 then
+      self.callbacks.cafe = stacked.timer.after(3, function()
+        self.callbacks.cafe = nil
+        self:ToCafe()
+      end)
+    else
+      self.callbacks.title = stacked.timer.after(4, function()
+        self.callbacks.title = nil
+        self.matrix:Initialize()
+        stacked.gamestate.level = 1
+        stacked.gamestate.score = 0
+        stacked.gamestate.cache = 0
+        stacked.gamestate.brews = {}
+        stacked.gamestate.actions = stacked.deepCopy(stacked.actions)
+        stacked.gamestate.bonuses = stacked.deepCopy(stacked.bonuses)
+        stacked.gamestate.stats = stacked.deepCopy(self.matrix.stats)
+        self:ToTitle()
+      end)
+    end
   end;
   ToCafe = function(self)
     stacked.screens.next = "cafe"
@@ -621,7 +691,9 @@ class "Game" {
     self.over = true
     self.readyText.text = "GAME\nOVER"
     self:EndRound()
-    stacked.timer.after(4, function()
+    stacked.seed = math.floor(stacked.uptime * 1000)
+    self.callbacks.title = stacked.timer.after(4, function()
+      self.callbacks.title = nil
       self.matrix:Initialize()
       stacked.gamestate.level = 1
       stacked.gamestate.score = 0
@@ -630,10 +702,7 @@ class "Game" {
       stacked.gamestate.actions = stacked.deepCopy(stacked.actions)
       stacked.gamestate.bonuses = stacked.deepCopy(stacked.bonuses)
       stacked.gamestate.stats = stacked.deepCopy(self.matrix.stats)
-      stacked.seed = math.floor(stacked.uptime * 1000)
-
-      stacked.screens.next = "title"
-      stacked.screens:goToNext()
+      self:ToTitle()
     end)
   end;
   GameInput = function(self, event)

@@ -8,6 +8,7 @@ class "Shelf" {
   name = "";
   items = {index = 1};
   label = Label.new();
+  sublabel = Label.new();
   description = Label.new();
   __closed = false;
   __enabled = false;
@@ -18,6 +19,11 @@ class "Shelf" {
     self.label.x = self.x
     self.label.y = self.y
     self.label:LoadFont("assets/sport.otf", 32)
+
+    self.sublabel = Label.new()
+    self.sublabel.x = self.x
+    self.sublabel.y = self.y + 24
+    self.sublabel:LoadFont("assets/sport.otf", 16)
 
     self.description = Label.new()
     self.description.x = self.x
@@ -69,9 +75,15 @@ class "Shelf" {
     self.label.y = self.y
     self.label.text = self.heading
     self.label:Draw()
+
+    self.sublabel.x = self.x
+    self.sublabel.y = self.y + 24
+    self.sublabel.text = self.subheading
+    self.sublabel:Draw()
+
     for i, item in ipairs(self.items) do
       item.x = self.x
-      item.y = self.y + 16 + i * 16
+      item.y = self.y + 32 + i * 16
       if self.items.index == i and self.__enabled then
         item.x = item.x + 6
         item.y = item.y + math.sin(stacked.uptime * 4) * 0.5
@@ -88,11 +100,19 @@ class "Shelf" {
 
 class "CoffeeShelf" : extends "Shelf" {
   heading = "COFFEE";
+  subheading = "Upgrade Your Actions!";
   __ready = function(self)
     for i = 1, 3 do
       local coffee = Coffee.new()
       local index = math.random(1, #stacked.brews)
       local data = stacked.brews[index]
+      -- no repeats
+      for _, brew in ipairs(self.items) do
+        while data.name == brew.name do
+          index = math.random(1, #stacked.brews)
+          data = stacked.brews[index]
+        end
+      end
       coffee:Brew(data)
       self:StockItem(coffee)
     end
@@ -101,6 +121,7 @@ class "CoffeeShelf" : extends "Shelf" {
 
 class "SodaShelf" : extends "Shelf" {
   heading = "SODA";
+  subheading = "Upgrade Your Clears!";
   __ready = function(self)
     local hasMystery = false
     local sodas = {
@@ -128,11 +149,19 @@ class "SodaShelf" : extends "Shelf" {
 
 class "SnackShelf" : extends "Shelf" {
   heading = "SNACKS";
+  subheading = "Upgrade Your Matrix!";
   __ready = function(self)
     for i = 1, 2 do
       local snack = Snack.new()
       local index = math.random(1, #stacked.bites)
       local data = stacked.bites[index]
+      -- no repeats
+      for _, bite in ipairs(self.items) do
+        while data.name == bite.name do
+          index = math.random(1, #stacked.bites)
+          data = stacked.bites[index]
+        end
+      end
       snack:Bake(data)
       self:StockItem(snack)
     end

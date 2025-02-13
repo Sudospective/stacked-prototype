@@ -9,8 +9,8 @@ local activeShelves = {}
 
 local cacheCounter = Label.new()
 local coffeeShelf = CoffeeShelf.new()
-local sodaShelf = SodaShelf.new()
 local snackShelf = SnackShelf.new()
+local sodaShelf = SodaShelf.new()
 
 local prompt = Label.new()
 
@@ -38,7 +38,7 @@ class "Cafe" : extends "Screen" {
 
     activeBorder.x = stacked.scx * 0.5
     activeBorder.y = stacked.scy - 32 + 128
-    activeBorder.w = 208
+    activeBorder.w = 192
     activeBorder.h = 256
     activeBorder.color = {r = 0, g = 0, b = 0, a = 0.5}
     activeBorder.aux = 0
@@ -54,13 +54,13 @@ class "Cafe" : extends "Screen" {
     coffeeShelf.y = stacked.scy - 16
     self:AddGizmo(coffeeShelf)
 
-    sodaShelf.x = stacked.scx
-    sodaShelf.y = stacked.scy - 16
-    self:AddGizmo(sodaShelf)
-
-    snackShelf.x = stacked.scx * 1.6
+    snackShelf.x = stacked.scx
     snackShelf.y = stacked.scy - 16
     self:AddGizmo(snackShelf)
+
+    sodaShelf.x = stacked.scx * 1.6
+    sodaShelf.y = stacked.scy - 16
+    self:AddGizmo(sodaShelf)
 
     local binds = stacked.controls[stacked.controls.active]
 
@@ -72,9 +72,12 @@ class "Cafe" : extends "Screen" {
     self:AddGizmo(prompt)
   end;
   __update = function(self, dt)
-    activeBorder.x = stacked.scx * 0.4 + (stacked.scx * 0.6 * activeBorder.aux)
+    --activeBorder.x = stacked.scx * 0.4 + (stacked.scx * 0.6 * activeBorder.aux)
     for i, shelf in ipairs(activeShelves) do
       shelf:Enable(not shelf.__closed and activeBorder.aux == i - 1)
+      if shelf.__enabled then
+        activeBorder.x = shelf.x
+      end
     end
     cacheCounter.text = "Lines Available: "..stacked.gamestate.cache
   end;
@@ -127,15 +130,16 @@ class "Cafe" : extends "Screen" {
     activeShelves = {}
     activeBorder.aux = 0
     coffeeShelf:Open()
-    sodaShelf:Open()
     snackShelf:Open()
+    sodaShelf:Open()
     table.insert(activeShelves, coffeeShelf)
-    table.insert(activeShelves, sodaShelf)
     table.insert(activeShelves, snackShelf)
+    table.insert(activeShelves, sodaShelf)
     coffeeShelf:Enable(true)
   end;
   __exit = function(self)
     coffeeShelf:Enable(false)
+    snackShelf:Enable(false)
     sodaShelf:Enable(false)
   end;
 }

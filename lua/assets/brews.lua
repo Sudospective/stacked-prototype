@@ -6,43 +6,12 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/joe.png",
-    points = 100,
+    points = 50,
     ability = function(self, game, action)
-      return self.points * action.rows
+      return action.points + self.points * action.rows
     end,
     condition = function(self, game, action)
-      return not action.drop
-    end,
-  },
-  {
-    name = "Mocha",
-    description = function(self)
-      return "+"..self.points.." points per\nconsecutive clear\nif combo is active"
-    end,
-    rarity = "Common",
-    image = "assets/coffee/mocha.png",
-    points = 25,
-    ability = function(self, game, action)
-      return self.points * game.matrix.combo
-    end,
-    condition = function(self, game, action)
-      return game.matrix.combo > 0
-    end,
-  },
-  {
-    name = "Espresso",
-    description = function(self)
-      return "Gains +50 points for\neach tetra clear\n(Currently "..self.points..")"
-    end,
-    rarity = "Common",
-    image = "assets/coffee/espresso.png",
-    points = 0,
-    ability = function(self, game, action)
-      self.points = self.points + 50
-      return self.points
-    end,
-    condition = function(self, game, action)
-      return action.rows == 4
+      return not action.drop and action.rows > 0
     end,
   },
   {
@@ -54,10 +23,51 @@ return {
     image = "assets/coffee/cappuccino.png",
     points = 150,
     ability = function(self, game, action)
-      return self.points
+      return action.points + self.points
     end,
     condition = function(self, game, action)
       return game.curPiece.id == 2 and action.rows > 0 and not action.drop
+    end,
+  },
+  {
+    name = "Frappé",
+    description = function(self)
+      return "Gains +2 points for\neach hard drop,\nresets on soft drop"
+    end,
+    rarity = "Common",
+    image = "assets/coffee/frappe.png",
+    points = 0,
+    ability = function(self, game, action)
+      if action.drop == "soft" then
+        self.points = 0
+      elseif action.drop == "hard" then
+        self.points = self.points + 2
+      end
+      return action.points + self.points
+    end,
+    condition = function(self, game, action)
+      return action.drop ~= nil
+    end
+  },
+  {
+    name = "Ristretto",
+    description = function(self)
+      return "+"..self.points.." points for\neach brew triggered"
+    end,
+    rarity = "Common",
+    image = "assets/coffee/ristretto.png",
+    points = 10,
+    ability = function(self, game, action)
+      local mult = 0
+      for _, brew in ipairs(game.matrix.brews) do
+        if brew:CheckCondition(game, action) then
+          mult = mult + 1
+        end
+      end
+      return action.points + self.points * mult
+    end,
+    condition = function(self, game, action)
+      return true
     end,
   },
   {
@@ -69,7 +79,7 @@ return {
     image = "assets/coffee/latte.png",
     points = 100,
     ability = function(self, game, action)
-      return self.points
+      return action.points + self.points
     end,
     condition = function(self, game, action)
       return action.spin ~= nil
@@ -106,6 +116,126 @@ return {
     end,
     condition = function(self, game, action)
       return not action.drop and action.rows > 0
+    end,
+  },
+  {
+    name = "Doppio",
+    description = function(self)
+      return "+"..self.points.." points if\nclear is a double"
+    end,
+    rarity = "Common",
+    image = "assets/coffee/doppio.png",
+    points = 200,
+    ability = function(self, game, action)
+      return action.points + self.points
+    end,
+    condition = function(self, game, action)
+      return not action.drop and action.rows == 2
+    end,
+  },
+  {
+    name = "Mocha",
+    description = function(self)
+      return "x"..self.points.." points if\nclearing no more\nthan two lines"
+    end,
+    rarity = "Common",
+    image = "assets/coffee/mocha.png",
+    points = 1.25,
+    ability = function(self, game, action)
+      return action.points * self.points
+    end,
+    condition = function(self, game, action)
+      return not action.drop and action.rows <= 2
+    end,
+  },
+  {
+    name = "Cortado",
+    description = function(self)
+      return "+"..self.points.." points for\neach consecutive clear\nif combo is active"
+    end,
+    rarity = "Uncommon",
+    image = "assets/coffee/cortado.png",
+    points = 25,
+    ability = function(self, game, action)
+      return action.points + self.points * game.matrix.combo
+    end,
+    condition = function(self, game, action)
+      return not action.drop and game.matrix.combo > 0
+    end,
+  },
+  {
+    name = "Decaf",
+    description = function(self)
+      return "+"..self.points.." points on clear\nfor each single cleared\nin the run"
+    end,
+    rarity = "Uncommon",
+    image = "assets/coffee/decaf.png",
+    points = 5,
+    ability = function(self, game, action)
+      return action.points + self.points * game.matrix.actions.single
+    end,
+    condition = function(self, game, action)
+      return not action.drop and action.rows > 0
+    end,
+  },
+  {
+    name = "Espresso",
+    description = function(self)
+      return "Gains +50 points for\neach tetra clear"
+    end,
+    rarity = "Uncommon",
+    image = "assets/coffee/espresso.png",
+    points = 0,
+    ability = function(self, game, action)
+      self.points = self.points + 50
+      return action.points + self.points
+    end,
+    condition = function(self, game, action)
+      return not action.drop and action.rows == 4
+    end,
+  },
+  {
+    name = "Triple Sec",
+    description = function(self)
+      return "x"..self.points.." points if\nclear contains triple"
+    end,
+    rarity = "Rare",
+    image = "assets/coffee/cortado.png",
+    points = 1.5,
+    ability = function(self, game, action)
+      return action.points
+    end,
+    condition = function(self, game, action)
+      return not action.drop and action.rows >= 2
+    end,
+  },
+  {
+    name = "Nitro Brew",
+    description = function(self)
+      return "x"..self.points.." points"
+    end,
+    rarity = "Exotic",
+    image = "assets/coffee/nitro.png",
+    points = 2,
+    ability = function(self, game, action)
+      return action.points * self.points
+    end,
+    condition = function(self, game, action)
+      return true
+    end,
+  },
+  {
+    name = "Affogato",
+    description = function(self)
+      return "Multiply points by combo\nif combo is active"
+    end,
+    rarity = "Exotic",
+    image = "assets/coffee/affogato.png",
+    ability = function(self, game, action)
+      return action.points * game.matrix.combo
+    end,
+    condition = function(self, game, action)
+      return game.matrix.combo > 0
     end,
   },
 }

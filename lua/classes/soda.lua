@@ -1,7 +1,7 @@
 require "classes.item"
 
 class "Soda" : extends "Item" {
-  cost = 5;
+  cost = 8;
   action = "";
   points = 0;
   flavor = "";

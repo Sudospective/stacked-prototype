@@ -46,12 +46,19 @@ class "Matrix" {
     self:FillFromGamestate()
     self:ResetCells()
     self:ResetScore()
+    self:SetCriteria()
   end;
   FillFromGamestate = function(self)
     self.stats = stacked.gamestate.stats
     self.actions = stacked.gamestate.actions
     self.bonuses = stacked.gamestate.bonuses
     self.brews = stacked.gamestate.brews
+  end;
+  FillToGamestate = function(self)
+    stacked.gamestate.stats = self.stats
+    stacked.gamestate.actions = self.actions
+    stacked.gamestate.bonuses = self.bonuses
+    stacked.gamestate.brews = self.brews
   end;
   SetCriteria = function(self)
     self.goal = stacked.goals[stacked.gamestate.level]

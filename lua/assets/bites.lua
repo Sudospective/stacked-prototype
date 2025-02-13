@@ -19,4 +19,14 @@ return {
       stacked.gamestate.height = stacked.gamestate.height + 2
     end,
   },
+  {
+    name = "Muffin",
+    description = function(self)
+      return "Allow +1 Hold action"
+    end,
+    image = "assets/snacks/muffin.png",
+    effect = function(self)
+      stacked.gamestate.hold = stacked.gamestate.hold + 1
+    end,
+  },
 }
