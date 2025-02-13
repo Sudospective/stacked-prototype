@@ -104,7 +104,7 @@ return {
     points = 25,
     ability = function(self, game, action)
       local blocks = 0
-      for j = -game.matrix.buffer, game.matrix.h - 1 do
+      for j = game.matrix.h - 1, -game.matrix.buffer, -1 do
         local prevBlocks = blocks
         local clearCount = 0
         for i = 0, game.matrix.w - 1 do
@@ -116,7 +116,7 @@ return {
             blocks = blocks + 1
           end
         end
-        if clearCount < game.matrix.lineLength then
+        if clearCount < stacked.gamestate.lineLength then
           -- all that work for nothing...
           blocks = prevBlocks
         end

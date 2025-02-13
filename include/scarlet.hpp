@@ -172,7 +172,7 @@ namespace Scarlet {
         case SDL_CONTROLLERAXISMOTION: {
           luaEvent["type"] = "GamepadAxis";
           luaEvent["id"] = event->cdevice.which;
-          luaEvent["axis"] = event->caxis.axis;
+          luaEvent["axis"] = SDL_GameControllerGetStringForAxis(static_cast<SDL_GameControllerAxis>(event->caxis.axis));
           luaEvent["value"] = event->caxis.value;
           break;
         }

@@ -100,7 +100,7 @@ class "Shelf" {
 
 class "CoffeeShelf" : extends "Shelf" {
   heading = "COFFEE";
-  subheading = "Upgrade Your Actions!";
+  subheading = "Upgrade Your Score!";
   __ready = function(self)
     for i = 1, #stacked.brews > 3 and 3 or #stacked.brews do
       local coffee = Coffee.new()
@@ -143,7 +143,7 @@ class "PastryShelf" : extends "Shelf" {
 
 class "SodaShelf" : extends "Shelf" {
   heading = "SODA";
-  subheading = "Upgrade Your Clears!";
+  subheading = "Upgrade Your Actions!";
   __ready = function(self)
     local hasMystery = false
     local sodas = {
