@@ -83,7 +83,7 @@ class "Cafe" : extends "Screen" {
   __input = function(self, event)
     local binds = stacked.controls[stacked.controls.active]
     local b = event.button
-    if event.type == "KeyDown" then
+    if event.type == "KeyDown" or event.type == "GamepadDown" then
       if b == binds.Left then
         activeBorder.aux = (activeBorder.aux - 1) % #activeShelves
       elseif b == binds.Right then
@@ -118,7 +118,7 @@ class "Cafe" : extends "Screen" {
           end
         end
       end
-    elseif event.type == "KeyUp" then
+    elseif event.type == "KeyUp" or event.type == "GamepadUp" then
       if b == binds.Cancel then
         stacked.screens.next = "gameplay"
         stacked.screens:goToNext()
