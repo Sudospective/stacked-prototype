@@ -30,7 +30,6 @@ class "Matrix" {
     b2b = 0,
     allclear = 0,
   };
-  lineLength = 0;
   cells = {};
   __init = function(self)
     self:Initialize()
@@ -42,7 +41,6 @@ class "Matrix" {
     self.score = 0
     self.goal = stacked.goals[stacked.gamestate.level]
     self.combo = -1
-    self.lineLength = self.w
     self:FillFromGamestate()
     self:ResetCells()
     self:ResetScore()
@@ -90,7 +88,7 @@ class "Matrix" {
     return self.cells[row][column] == 0
   end;
   IsRowFull = function(self, row, numToClear)
-    numToClear = numToClear or self.w
+    numToClear = numToClear or stacked.gamestate.lineLength
     local count = 0
     for column = 0, self.w - 1 do
       if self.cells[row][column] ~= 0 then
@@ -113,7 +111,7 @@ class "Matrix" {
   CountFullRows = function(self)
     local completed = 0
     for row = self.h - 1, -self.buffer, -1 do
-      if self:IsRowFull(row, self.lineLength) then
+      if self:IsRowFull(row) then
         completed = completed + 1
       end
     end
@@ -122,7 +120,7 @@ class "Matrix" {
   ClearFullRows = function(self)
     local completed = 0
     for row = self.h - 1, -self.buffer, -1 do
-      if self:IsRowFull(row, self.lineLength) then
+      if self:IsRowFull(row) then
         self:ClearRow(row)
         completed = completed + 1
       elseif completed > 0 then

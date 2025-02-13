@@ -120,15 +120,15 @@ class "Gameplay" : extends "Screen" {
     levelLabel.text = "LEVEL 0"
     self:AddGizmo(levelLabel)
 
-    brewsLabel.x = stacked.scx - xOffset * 2
-    brewsLabel.y = stacked.scy - yOffset + 8
+    brewsLabel.x = stacked.scx - xOffset * 2 - 16
+    brewsLabel.y = stacked.scy - yOffset
     brewsLabel.align = {h = 1, v = 0}
     brewsLabel:LoadFont("assets/sport.otf", 32)
     brewsLabel.text = "COFFEE"
     self:AddGizmo(brewsLabel)
 
-    brewsText.x = stacked.scx - (xOffset * 2) - 42
-    brewsText.y = stacked.scy - yOffset + 52
+    brewsText.x = stacked.scx - (xOffset * 2) - 58
+    brewsText.y = stacked.scy - yOffset + 32
     brewsText.align.v = 0
     brewsText:LoadFont("assets/sport.otf", 16)
     self:AddGizmo(brewsText)

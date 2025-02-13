@@ -13,5 +13,11 @@ class "Pastry" : extends "Item" {
     if self.effect then
       self:effect(game)
     end
+    for i, pastry in ipairs(stacked.bites) do
+      if pastry.name == self.name then
+        table.remove(stacked.bites, i)
+        break
+      end
+    end
   end;
 }

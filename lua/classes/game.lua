@@ -111,6 +111,7 @@ class "Game" {
   NewGame = function(self)
     -- restore defaults
     stacked.gamestate = stacked.deepCopy(stacked.default)
+    stacked.bites = loadfile("assets/bites.lua")()
     self:Initialize()
     self:NewRound()
   end;

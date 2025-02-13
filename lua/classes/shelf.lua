@@ -102,7 +102,7 @@ class "CoffeeShelf" : extends "Shelf" {
   heading = "COFFEE";
   subheading = "Upgrade Your Actions!";
   __ready = function(self)
-    for i = 1, 3 do
+    for i = 1, #stacked.brews > 3 and 3 or #stacked.brews do
       local coffee = Coffee.new()
       local index = math.random(1, #stacked.brews)
       local data = stacked.brews[index]
@@ -123,7 +123,8 @@ class "PastryShelf" : extends "Shelf" {
   heading = "PASTRIES";
   subheading = "Upgrade Your Matrix!";
   __ready = function(self)
-    for i = 1, 2 do
+    if #stacked.bites < 1 then return end
+    for i = 1, #stacked.bites > 2 and 2 or #stacked.bites do
       local pastry = Pastry.new()
       local index = math.random(1, #stacked.bites)
       local data = stacked.bites[index]

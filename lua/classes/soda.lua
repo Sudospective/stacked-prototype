@@ -21,7 +21,7 @@ class "Soda" : extends "Item" {
       local desc = "+"..tostring(self.points).." base points for\nevery "..action
       if self.action == "b2b" then
         desc = "+"..tostring(self.points).." bonus multiplier for\nevery "..action
-      elseif action == "mystery" then
+      elseif self.action == "mystery" then
         desc = "Upgrade all actions"
       end
       return desc

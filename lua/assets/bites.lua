@@ -2,7 +2,7 @@ return {
   {
     name = "Scone",
     description = function(self)
-      return "+1 tetromino in next queue"
+      return "+2 tetromino in next queue"
     end,
     image = "assets/pastries/scone.png",
     effect = function(self)
@@ -12,7 +12,7 @@ return {
   {
     name = "Cakepop",
     description = function(self)
-      return "+2 matrix height"
+      return "+5 matrix height"
     end,
     image = "assets/pastries/cakepop.png",
     effect = function(self)
