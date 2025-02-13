@@ -203,7 +203,7 @@ return {
     end,
   },
   {
-    name = "Triple Sec",
+    name = "Tripplo",
     description = function(self)
       return "x"..self.points.." points if clear\ncontains a triple"
     end,
