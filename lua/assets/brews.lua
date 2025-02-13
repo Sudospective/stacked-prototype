@@ -2,7 +2,7 @@ return {
   {
     name = "Joe",
     description = function(self)
-      return "+"..self.points.." points for\neach line cleared"
+      return "+"..self.points.." points on clear\nfor each line in clear"
     end,
     rarity = "Common",
     image = "assets/coffee/joe.png",
@@ -73,7 +73,7 @@ return {
   {
     name = "Latté",
     description = function(self)
-      return "+"..self.points.." points for each T-spin"
+      return "+"..self.points.." points on T-Spin"
     end,
     rarity = "Common",
     image = "assets/coffee/latte.png",
@@ -136,7 +136,7 @@ return {
   {
     name = "Mocha",
     description = function(self)
-      return "x"..self.points.." points if\nclearing no more\nthan two lines"
+      return "x"..self.points.." points if\nlines cleared is\ntwo or less"
     end,
     rarity = "Common",
     image = "assets/coffee/mocha.png",
@@ -197,7 +197,7 @@ return {
   {
     name = "Triple Sec",
     description = function(self)
-      return "x"..self.points.." points if\nclear contains triple"
+      return "x"..self.points.." points if clear\ncontains a triple"
     end,
     rarity = "Rare",
     image = "assets/coffee/cortado.png",
