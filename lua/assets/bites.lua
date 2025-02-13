@@ -6,7 +6,7 @@ return {
     end,
     image = "assets/pastries/scone.png",
     effect = function(self)
-      stacked.gamestate.queue = stacked.gamestate.queue + 1
+      stacked.gamestate.queue = stacked.gamestate.queue + 2
     end,
   },
   {
@@ -16,7 +16,7 @@ return {
     end,
     image = "assets/pastries/cakepop.png",
     effect = function(self)
-      stacked.gamestate.height = stacked.gamestate.height + 2
+      stacked.gamestate.height = stacked.gamestate.height + 5
     end,
   },
   {
