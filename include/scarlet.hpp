@@ -177,7 +177,8 @@ namespace Scarlet {
           break;
         }
       }
-      (*lua)["input"](luaEvent);
+      if (luaEvent["type"])
+        (*lua)["input"](luaEvent);
     }
 
    public:
