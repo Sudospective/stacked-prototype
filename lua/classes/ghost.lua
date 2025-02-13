@@ -14,6 +14,7 @@ class "Ghost" : extends "Tetromino" {
     self.column.offset = tetromino.column.offset
   end;
   Draw = function(self, x, y)
+    if not self.visible then return end
     local cells = self:GetCellPositions()
     local color = {
       r = stacked.colors[self.id].r,

@@ -397,6 +397,7 @@ class "Game" {
     return false
   end;
   LockToMatrix = function(self)
+    if self.callbacks.lock then return end
     local cells = self.curPiece:GetCellPositions()
     for _, cell in pairs(cells) do
       self.matrix.cells[cell[1]][cell[2]] = self.curPiece.id
@@ -417,17 +418,33 @@ class "Game" {
     if action.rows > 0 or action.spin then
       self:AwardPoints(action)
     end
-    self:PushNextPiece()
 
-    self.timesHeld = 0
-    self.matrix:ClearFullRows()
-    self:ResetLock()
-
-    if self.matrix.score >= self.matrix.goal then
-      self:RoundClear()
-    elseif self.matrix.lines >= self.matrix.limit or self:IsPieceColliding() then
-      self:GameOver()
+    for row = self.matrix.h - 1, -self.matrix.buffer, -1 do
+      if self.matrix:IsRowFull(row) then
+        for column = 0, self.matrix.w - 1 do
+          self.matrix.cells[row][column] = 8
+        end
+      end
     end
+
+    self.curPiece.visible = false
+    self.ghostPiece.visible = false
+
+    self.callbacks.lock = stacked.timer.after(action.rows > 0 and 1 or 0, function()
+      self.curPiece.visible = true
+      self.ghostPiece.visible = true
+      self:PushNextPiece()
+      self.timesHeld = 0
+      self.matrix:ClearFullRows()
+      self:ResetLock()
+      if self.matrix.score >= self.matrix.goal then
+        self:RoundClear()
+      elseif self.matrix.lines >= self.matrix.limit or self:IsPieceColliding() then
+        self:GameOver()
+      end
+      self.callbacks.lock = nil
+    end)
+
   end;
   CheckSpin = function(self, play)
     if (

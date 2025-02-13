@@ -48,7 +48,7 @@ class "Item" {
       self:Drink()
     elseif self.__class == "Coffee" then
       self:Equip()
-    elseif self.__class == "Snack" then
+    elseif self.__class == "Pastry" then
       self:Eat()
     end
     stacked.gamestate.cache = stacked.gamestate.cache - self.cost

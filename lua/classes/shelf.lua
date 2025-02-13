@@ -1,6 +1,6 @@
 require "classes.coffee"
 require "classes.soda"
-require "classes.snack"
+require "classes.pastry"
 
 class "Shelf" {
   x = 0;
@@ -119,6 +119,27 @@ class "CoffeeShelf" : extends "Shelf" {
   end;
 }
 
+class "PastryShelf" : extends "Shelf" {
+  heading = "PASTRIES";
+  subheading = "Upgrade Your Matrix!";
+  __ready = function(self)
+    for i = 1, 2 do
+      local pastry = Pastry.new()
+      local index = math.random(1, #stacked.bites)
+      local data = stacked.bites[index]
+      -- no repeats
+      for _, bite in ipairs(self.items) do
+        while data.name == bite.name do
+          index = math.random(1, #stacked.bites)
+          data = stacked.bites[index]
+        end
+      end
+      pastry:Bake(data)
+      self:StockItem(pastry)
+    end
+  end;
+}
+
 class "SodaShelf" : extends "Shelf" {
   heading = "SODA";
   subheading = "Upgrade Your Clears!";
@@ -143,27 +164,6 @@ class "SodaShelf" : extends "Shelf" {
       self:StockItem(soda)
       -- no repeats
       table.remove(sodas, index)
-    end
-  end;
-}
-
-class "SnackShelf" : extends "Shelf" {
-  heading = "SNACKS";
-  subheading = "Upgrade Your Matrix!";
-  __ready = function(self)
-    for i = 1, 2 do
-      local snack = Snack.new()
-      local index = math.random(1, #stacked.bites)
-      local data = stacked.bites[index]
-      -- no repeats
-      for _, bite in ipairs(self.items) do
-        while data.name == bite.name do
-          index = math.random(1, #stacked.bites)
-          data = stacked.bites[index]
-        end
-      end
-      snack:Bake(data)
-      self:StockItem(snack)
     end
   end;
 }

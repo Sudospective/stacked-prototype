@@ -73,16 +73,24 @@ return {
   {
     name = "Latté",
     description = function(self)
-      return "+"..self.points.." points on T-Spin"
+      return "+"..self.points.." points on clear\nif 10 or less blocks\nremain in matrix"
     end,
     rarity = "Common",
     image = "assets/coffee/latte.png",
-    points = 100,
+    points = 250,
     ability = function(self, game, action)
       return action.points + self.points
     end,
     condition = function(self, game, action)
-      return action.spin ~= nil
+      local blocks = 0
+      for row = game.matrix.h - 1, -self.buffer, -1 do
+        for column = 0, game.matrix.w - 1 do
+          if game.matrix.cells[row][column] ~= 0 then
+            blocks = blocks + 1
+          end
+        end
+      end
+      return blocks <= 10
     end,
   },
   {

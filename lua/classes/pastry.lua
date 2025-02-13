@@ -1,6 +1,6 @@
 require "classes.item"
 
-class "Snack" : extends "Item" {
+class "Pastry" : extends "Item" {
   cost = 5;
   Bake = function(self, data)
     for k, v in pairs(data) do
