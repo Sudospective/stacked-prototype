@@ -101,9 +101,7 @@ class "Game" {
     self.levelInProgress = false
     
     -- fill gamestate
-    stacked.gamestate.stats = self.matrix.stats
-    stacked.gamestate.brews = self.matrix.brews
-    stacked.gamestate.actions = self.matrix.actions
+    self.matrix:FillToGamestate()
 
     self.timers.ready = stacked.timer.new()
     self.timers.clear = stacked.timer.new()
@@ -120,6 +118,7 @@ class "Game" {
     math.randomseed(stacked.seed)
 
     self.matrix.h = stacked.gamestate.height
+    self.matrix.w = stacked.gamestate.width
     stacked.size = 16 * (20 / self.matrix.h)
 
     self.matrix:FillFromGamestate()
