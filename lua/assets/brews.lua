@@ -82,8 +82,9 @@ return {
       return action.points + self.points
     end,
     condition = function(self, game, action)
+      if action.drop then return false end
       local blocks = 0
-      for row = game.matrix.h - 1, -self.buffer, -1 do
+      for row = game.matrix.h - 1, -game.matrix.buffer, -1 do
         for column = 0, game.matrix.w - 1 do
           if game.matrix.cells[row][column] ~= 0 then
             blocks = blocks + 1
@@ -211,7 +212,7 @@ return {
     image = "assets/coffee/cortado.png",
     points = 1.5,
     ability = function(self, game, action)
-      return action.points
+      return action.points * self.points
     end,
     condition = function(self, game, action)
       return not action.drop and action.rows >= 2

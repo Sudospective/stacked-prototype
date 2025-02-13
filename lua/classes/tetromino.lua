@@ -20,6 +20,7 @@ class "Tetromino" {
   rotState = 1;
   lastRot = 0;
   visible = true;
+  next = false;
   Move = function(self, rows, columns)
     self.row.offset = self.row.offset + rows
     self.column.offset = self.column.offset + columns
@@ -44,6 +45,7 @@ class "Tetromino" {
   Draw = function(self, x, y)
     if not self.visible then return end
     local cells = self:GetCellPositions()
+    local size = self.next and 16 or stacked.size
     for _, cell in pairs(cells) do
       scarlet.graphics.drawQuad(
         self.x + cell[2] * stacked.size + x,

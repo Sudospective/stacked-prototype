@@ -202,6 +202,10 @@ class "Game" {
       end
       self.nextPiece[self.nextPiece.n] = self:GetRandomPiece()
     end
+    self.curPiece.next = false
+    for i = 1, self.nextPiece.n do
+      self.nextPiece[i].next = true
+    end
   end;
   RefillHand = function(self)
     self.hand = stacked.deepCopy(self.bag)
