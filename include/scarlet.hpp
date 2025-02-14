@@ -69,7 +69,7 @@ namespace Scarlet {
    public:
     static Lua& GetInstance() {
       if (!instance)
-        instance = new Lua;
+        instance = std::unique_ptr<Lua>(new Lua);
       return *instance;
     }
     Lua(const Lua&) = delete;
@@ -87,13 +87,15 @@ namespace Scarlet {
         sol::lib::table
       );
     }
+
+   public:
     ~Lua() {
       delete state;
     }
 
    private:
     sol::state* state;
-    inline static Lua* instance = nullptr;
+    inline static std::unique_ptr<Lua> instance = nullptr;
   };
 
   class Input {
@@ -187,7 +189,7 @@ namespace Scarlet {
    public:
     static Input& GetInstance() {
       if (!instance) {
-        instance = new Input;
+        instance = std::unique_ptr<Input>(new Input);
       }
       return *instance;
     }
@@ -196,6 +198,8 @@ namespace Scarlet {
 
    private:
     Input() {}
+
+   public:
     ~Input() {
       for (int i = 0; i < controllers.size(); i++) {
         Controller& c = controllers[i + 1];
@@ -211,7 +215,7 @@ namespace Scarlet {
     };
     sol::usertype<Controller> luaController;
     sol::table controllers;
-    inline static Input* instance = nullptr;
+    inline static std::unique_ptr<Input> instance = nullptr;
   };
 
   class Audio {
@@ -264,7 +268,7 @@ namespace Scarlet {
    public:
     static Audio& GetInstance() {
       if (!instance) {
-        instance = new Audio;
+        instance = std::unique_ptr<Audio>(new Audio);
       }
       return *instance;
     }
@@ -273,13 +277,15 @@ namespace Scarlet {
 
    private:
     Audio() { music = nullptr; }
+
+   public:
     ~Audio() {
       StopMusic();
       Mix_CloseAudio();
     }
     float volume;
     Mix_Music* music;
-    inline static Audio* instance = nullptr;
+    inline static std::unique_ptr<Audio> instance = nullptr;
   };
 
   class Graphics {
@@ -524,7 +530,7 @@ namespace Scarlet {
    public:
     static Engine& GetInstance() {
       if (instance == nullptr)
-        instance = new Engine;
+        instance = std::unique_ptr<Engine>(new Engine);
       return *instance;
     }
     Engine(const Engine&) = delete;
@@ -537,6 +543,8 @@ namespace Scarlet {
       now = SDL_GetPerformanceCounter();
       last = 0;
     }
+
+   public:
     ~Engine() { if (running) Stop(); }
 
    private:
@@ -544,7 +552,7 @@ namespace Scarlet {
     sol::state* lua;
     Uint64 last;
     Uint64 now;
-    inline static Engine* instance = nullptr;
+    inline static std::unique_ptr<Engine> instance = nullptr;
   };
 };
 
