@@ -376,7 +376,7 @@ stacked = {
       Up = "Up",
       Down = "Down",
       Confirm = "Return",
-      Cancel = "Escape",
+      Cancel = "Backspace",
 
       MoveLeft = "Left",
       MoveRight = "Right",

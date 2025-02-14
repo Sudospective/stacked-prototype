@@ -2,7 +2,7 @@ return {
   {
     name = "Scone",
     description = function(self)
-      return "+2 tetromino in next queue"
+      return "+2 tetrominos in next queue"
     end,
     image = "assets/pastries/scone.png",
     effect = function(self)
@@ -22,7 +22,7 @@ return {
   {
     name = "Muffin",
     description = function(self)
-      return "Allow +1 Hold action"
+      return "Allow one re-hold\nper tetromino"
     end,
     image = "assets/pastries/muffin.png",
     effect = function(self)
@@ -36,7 +36,17 @@ return {
     end,
     image = "assets/pastries/donut.png",
     effect = function(self)
-      stacked.gamestate.lineLength = 9
+      stacked.gamestate.lineLength = stacked.gamestate.width - 1
+    end,
+  },
+  {
+    name = "Danish",
+    description = function(self)
+      return "-1 level"
+    end,
+    image = "assets/pastries/danish.png",
+    effect = function(self)
+      stacked.gamestate.level = stacked.gamestate.level - 1
     end,
   },
 }
