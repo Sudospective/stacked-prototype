@@ -33,6 +33,8 @@ class Label : public Gizmo {
     );
   }
   ~Label() {
+    if (texture)
+      SDL_DestroyTexture(texture);
     TTF_CloseFont(font);
     TTF_Quit();
   }
@@ -45,6 +47,8 @@ class Label : public Gizmo {
     }
   }
   void SetText(const char* newText) {
+    if (texture)
+      SDL_DestroyTexture(texture);
     text = newText;
     if (broken || !font) return;
     SDL_Color c = {255u, 255u, 255u, 255u};
