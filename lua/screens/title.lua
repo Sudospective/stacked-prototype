@@ -67,13 +67,16 @@ class "Title" : extends "Screen" {
       "Hold "..localization.Extra.." for controls"
     )
 
-    controls.text = "CONTROLS\n--------\n"
-    
-    for name in pairs(stacked.controls[stacked.controls.active]) do
-      controls.text = controls.text..(
-        name..": "..localization[name].."\n"
-      )
-    end
+    controls.text = "CONTROLS\n--------\n"..(
+      "Move Left: "..localization.MoveLeft.."\n"..
+      "Move Right: "..localization.MoveRight.."\n"..
+      "Soft Drop: "..localization.SoftDrop.."\n"..
+      "Hard Drop: "..localization.HardDrop.."\n"..
+      "Rotate Left: "..localization.RotateCCW.."\n"..
+      "Rotate Right: "..localization.RotateCW.."\n"..
+      "Hold: "..localization.Hold.."\n"..
+      "Extra Action: "..localization.Extra.."\n"
+    )
   end;
   __input = function(self, event)
     local binds = stacked.controls[stacked.controls.active]
