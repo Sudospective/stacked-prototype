@@ -55,7 +55,7 @@ class "Title" : extends "Screen" {
     self:AddGizmo(fader)
 
     controls.x = stacked.scx
-    controls.y = stacked.scy + 8
+    controls.y = stacked.scy
     controls:LoadFont("assets/sport.otf", 16)
     controls.color.a = 0
     self:AddGizmo(controls)
@@ -67,7 +67,7 @@ class "Title" : extends "Screen" {
       "Press "..localization.Extra.." for controls"
     )
 
-    controls.text = ""
+    controls.text = "CONTROLS\n--------\n"
     
     for name, control in pairs(stacked.controls[stacked.controls.active]) do
       controls.text = controls.text..(
