@@ -123,7 +123,10 @@ class "PastryShelf" : extends "Shelf" {
   heading = "PASTRIES";
   subheading = "Upgrade Your Matrix!";
   __ready = function(self)
-    if #stacked.bites < 1 then return end
+    if #stacked.bites < 1 then
+      self:Close()
+      return
+    end
     for i = 1, #stacked.bites > 2 and 2 or #stacked.bites do
       local pastry = Pastry.new()
       local index = math.random(1, #stacked.bites)

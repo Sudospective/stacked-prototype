@@ -71,11 +71,12 @@ class "Cafe" : extends "Screen" {
   __update = function(self, dt)
     local localization = stacked.localization[stacked.controls.active]
     prompt.text = "Press "..localization.Cancel.." to Leave"
-    --activeBorder.x = stacked.scx * 0.4 + (stacked.scx * 0.6 * activeBorder.aux)
     for i, shelf in ipairs(activeShelves) do
-      shelf:Enable(not shelf.__closed and activeBorder.aux == i - 1)
-      if shelf.__enabled then
-        activeBorder.x = shelf.x
+      if not shelf.__closed then
+        shelf:Enable(not shelf.__closed and activeBorder.aux == i - 1)
+        if shelf.__enabled then
+          activeBorder.x = shelf.x
+        end
       end
     end
     cacheCounter.text = "Lines Available: "..stacked.gamestate.cache
@@ -86,8 +87,14 @@ class "Cafe" : extends "Screen" {
     if event.type == "KeyDown" or event.type == "GamepadDown" then
       if b == binds.Left then
         activeBorder.aux = (activeBorder.aux - 1) % #activeShelves
+        while activeShelves[activeBorder.aux + 1].__closed do
+          activeBorder.aux = (activeBorder.aux - 1) % #activeShelves
+        end
       elseif b == binds.Right then
         activeBorder.aux = (activeBorder.aux + 1) % #activeShelves
+        while activeShelves[activeBorder.aux + 1].__closed do
+          activeBorder.aux = (activeBorder.aux + 1) % #activeShelves
+        end
       elseif b == binds.Up then
         for _, shelf in ipairs(activeShelves) do
           if shelf.__enabled then
@@ -113,6 +120,7 @@ class "Cafe" : extends "Screen" {
             if enabledItems < 1 then
               shelf:Close()
               table.remove(activeShelves, i)
+              i = i - 1
               activeBorder.aux = activeBorder.aux % #activeShelves
             end
           end

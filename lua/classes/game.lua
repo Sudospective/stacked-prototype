@@ -599,11 +599,10 @@ class "Game" {
       end
     end
 
-    -- store points so far
-    action.points = points
-
     for _, coffee in ipairs(stacked.gamestate.brews) do
-      points = (coffee:Sip(self, action) or points) * lvl
+      -- store points so far
+      action.points = points
+      points = (coffee:Sip(self, action) or points)
     end
 
     points = math.floor(points)
