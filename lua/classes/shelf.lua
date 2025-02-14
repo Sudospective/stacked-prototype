@@ -15,17 +15,17 @@ class "Shelf" {
   __init = function(self)
     self.items = {index = 1}
 
-    self.label = Label.new()
+    --self.label = Label.new()
     self.label.x = self.x
     self.label.y = self.y
     self.label:LoadFont("assets/sport.otf", 32)
 
-    self.sublabel = Label.new()
+    --self.sublabel = Label.new()
     self.sublabel.x = self.x
     self.sublabel.y = self.y + 24
     self.sublabel:LoadFont("assets/sport.otf", 16)
 
-    self.description = Label.new()
+    --self.description = Label.new()
     self.description.x = self.x
     self.description.y = stacked.sh - 96
     self.description:LoadFont("assets/sport.otf", 16)
