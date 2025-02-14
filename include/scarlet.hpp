@@ -131,6 +131,9 @@ namespace Scarlet {
       Log::Info("Controllers enumerated.");
       Log::Info(std::to_string(controllers.size()) + " controller(s) connected.");
     }
+    sol::table GetControllers() const {
+      return controllers;
+    }
     void HandleEvent(SDL_Event* event) {
       sol::state* lua = Lua::GetInstance().GetState();
       sol::table luaEvent = lua->create_table();
@@ -320,7 +323,7 @@ namespace Scarlet {
       }
 
       SDL_RenderSetLogicalSize(renderer, width, height);
-      SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
+      //SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
       SDL_RenderSetVSync(renderer, 1);
 
       SDL_Surface* surface = SDL_CreateRGBSurfaceWithFormat(
@@ -328,6 +331,12 @@ namespace Scarlet {
         1, 1,
         32, SDL_PIXELFORMAT_RGB888
       );
+
+      if (!surface) {
+        Log::Error("Unable to create SDL surface: " + std::string(SDL_GetError()));
+        return false
+      }
+
       SDL_FillRect(surface, nullptr, SDL_MapRGB(
         surface->format,
         255u, 255u, 255u
