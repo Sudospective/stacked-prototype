@@ -5,6 +5,9 @@ local title = Label.new()
 local subtitle = Label.new()
 local help = Label.new()
 
+local fader = Quad.new()
+local controls = Label.new()
+
 class "Title" : extends "Screen" {
   title = "Title";
   __init = function(self)
@@ -38,16 +41,53 @@ class "Title" : extends "Screen" {
     help.y = stacked.scy * 1.5
     help:LoadFont("assets/sport.otf", 32)
     self:AddGizmo(help)
+
+    fader.x = stacked.scx
+    fader.y = stacked.scy
+    fader.w = stacked.sw
+    fader.h = stacked.sh
+    fader.color = {
+      r = 0,
+      g = 0,
+      b = 0,
+      a = 0,
+    }
+    self:AddGizmo(fader)
+
+    controls.x = stacked.scx
+    controls.y = stacked.scy + 8
+    controls:LoadFont("assets/sport.otf", 16)
+    controls.color.a = 0
+    self:AddGizmo(controls)
   end;
   __update = function(self, dt)
     local localization = stacked.localization[stacked.controls.active]
-    help.text = "Press "..localization.Confirm.." to Play"
+    help.text = (
+      "Press "..localization.Confirm.." to Play\n"..
+      "Press "..localization.Extra.." for controls"
+    )
+
+    controls.text = ""
+    
+    for name, control in pairs(stacked.controls[stacked.controls.active]) do
+      controls.text = controls.text..(
+        name..": "..control.."\n"
+      )
+    end
   end;
   __input = function(self, event)
     local binds = stacked.controls[stacked.controls.active]
-    if event.type == "KeyUp" or event.type == "GamepadUp" then
-      if event.button == binds.Cancel or event.button == binds.Pause then
+    if event.type:find("Down") then
+      if event.button == binds.Extra then
+        fader.color.a = 0.75
+        controls.color.a = 1
+      end
+    elseif event.type:find("Up") then
+      if event.button == binds.Pause then
         scarlet.exit()
+      elseif event.button == binds.Extra then
+        fader.color.a = 0
+        controls.color.a = 0
       elseif event.button == binds.Confirm then
         stacked.screens.next = "gameplay"
         stacked.screens:goToNext()
