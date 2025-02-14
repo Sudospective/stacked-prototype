@@ -49,4 +49,13 @@ return {
       stacked.gamestate.level = stacked.gamestate.level - 1
     end,
   },
+  --[[
+  {
+    name = "Fruit Cake",
+    description = function(self)
+      local button = stacked.controls[stacked.controls.active]
+      return "Allow undoing a drop\n()"
+    end,
+  },
+  --]]
 }

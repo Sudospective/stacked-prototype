@@ -17,7 +17,7 @@ int handleUpdate(void*) {
     Engine::GetInstance().Update();
     Engine::GetInstance().Draw();
     SDL_UnlockMutex(mutex);
-    SDL_Delay(1);
+    //SDL_Delay(1);
   }
   return 0;
 }
