@@ -64,14 +64,14 @@ class "Title" : extends "Screen" {
     local localization = stacked.localization[stacked.controls.active]
     help.text = (
       "Press "..localization.Confirm.." to Play\n"..
-      "Press "..localization.Extra.." for controls"
+      "Hold "..localization.Extra.." for controls"
     )
 
     controls.text = "CONTROLS\n--------\n"
     
-    for name, control in pairs(stacked.controls[stacked.controls.active]) do
+    for name in pairs(stacked.controls[stacked.controls.active]) do
       controls.text = controls.text..(
-        name..": "..control.."\n"
+        name..": "..localization[name].."\n"
       )
     end
   end;
