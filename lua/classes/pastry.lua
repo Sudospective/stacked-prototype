@@ -1,7 +1,7 @@
 require "classes.item"
 
 class "Pastry" : extends "Item" {
-  cost = 5;
+  cost = 6;
   Bake = function(self, data)
     for k, v in pairs(data) do
       self[k] = v

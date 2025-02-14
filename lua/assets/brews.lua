@@ -15,6 +15,22 @@ return {
     end,
   },
   {
+    name = "Manilo",
+    description = function(self)
+      return "+"..self.points.." lines in cache\non tetra clear"
+    end,
+    rarity = "Common",
+    image = "assets/coffee/manilo.png",
+    points = 1,
+    ability = function(self, game, action)
+      stacked.gamestate.cache = stacked.gamestate.cache + self.points
+      return action.points
+    end,
+    condition = function(self, game, action)
+      return not action.drop and action.rows == 4
+    end,
+  },
+  {
     name = "Cappuccino",
     description = function(self)
       return "+"..self.points.." points when\nclearing with an\nO tetromino"
@@ -203,6 +219,23 @@ return {
       return not action.drop and action.rows == 4
     end,
   },
+  --[[
+  {
+    name = "???",
+    description = function(self)
+      return "???"
+    end,
+    rarity = "Rare",
+    image = "assets/coffee/missing.png",
+    points = 0,
+    ability = function(self, game, action)
+      return action.points
+    end,
+    condition = function(self, game, action)
+      return false
+    end,
+  },
+  --]]
   {
     name = "Tripplo",
     description = function(self)

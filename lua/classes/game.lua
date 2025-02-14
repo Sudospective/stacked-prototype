@@ -36,6 +36,7 @@ class "Game" {
   timeSinceEvent = 0;
   timeUntilARR = 0;
   over = false;
+  won = false;
   __init = function(self)
     self.readyText.x = stacked.scx
     self.readyText.y = stacked.scy
@@ -166,7 +167,8 @@ class "Game" {
   EndRound = function(self)
     self.timers.ready:clear()
     self.readyText.color.a = 1
-    if stacked.gamestate.level > 10 then
+    if stacked.gamestate.level > 10 and not self.won then
+      self.won = true
       self.readyText.text = "YOU\nWIN!"
     end
 
@@ -680,12 +682,16 @@ class "Game" {
     self:EndRound()
     stacked.seed = math.floor(stacked.uptime * 1000)
     if stacked.gamestate.level <= 10 then
-      self.callbacks.cafe = stacked.timer.after(3, function()
+      self.callbacks.lines = stacked.timer.after(3, function()
+        self.callbacks.lines = nil
+        self.readyText.text = tostring(self.matrix.limit - self.matrix.lines).." LINES\nAWARDED"
+      end)
+      self.callbacks.cafe = stacked.timer.after(6, function()
         self.callbacks.cafe = nil
         self:ToCafe()
       end)
     else
-      self.callbacks.title = stacked.timer.after(4, function()
+      self.callbacks.title = stacked.timer.after(3, function()
         self.callbacks.title = nil
         self.matrix:Initialize()
         stacked.gamestate.level = 1

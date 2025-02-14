@@ -348,6 +348,7 @@ stacked = {
       RotateCW = "X",
       RotateCCW = "Z",
       Hold = "Space",
+      Extra = "Backspace",
       Pause = "Escape",
     },
     controller = {
@@ -365,6 +366,7 @@ stacked = {
       RotateCW = "B",
       RotateCCW = "A",
       Hold = "RB",
+      Extra = "X",
       Pause = "Start",
     },
   },
@@ -385,6 +387,7 @@ stacked = {
       RotateCW = "X",
       RotateCCW = "Z",
       Hold = "Space",
+      Extra = "Backspace",
       Pause = "Escape",
     },
     -- these strings are from sdl not me
@@ -403,6 +406,7 @@ stacked = {
       RotateCW = "b",
       RotateCCW = "a",
       Hold = "rightshoulder",
+      Extra = "x",
       Pause = "start",
     },
   },

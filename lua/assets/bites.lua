@@ -53,8 +53,8 @@ return {
   {
     name = "Fruit Cake",
     description = function(self)
-      local button = stacked.controls[stacked.controls.active]
-      return "Allow undoing a drop\n()"
+      local binds = stacked.controls[stacked.controls.active]
+      return "Allow undoing a drop\n(Press "..binds.Extra.." to activate)"
     end,
   },
   --]]
