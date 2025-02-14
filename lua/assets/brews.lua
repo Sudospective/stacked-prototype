@@ -121,7 +121,7 @@ return {
           blocks = prevBlocks
         end
       end
-      return self.points * blocks
+      return action.points + self.points * blocks
     end,
     condition = function(self, game, action)
       return not action.drop and action.rows > 0
@@ -181,7 +181,7 @@ return {
     image = "assets/coffee/decaf.png",
     points = 5,
     ability = function(self, game, action)
-      return action.points + self.points * game.matrix.actions.single
+      return action.points + self.points * stacked.gamestate.actions.single
     end,
     condition = function(self, game, action)
       return not action.drop and action.rows > 0
