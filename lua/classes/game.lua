@@ -4,6 +4,7 @@ require "classes.tetromino"
 
 class "Game" {
   matrix = Matrix.new();
+  fader = Quad.new();
   curPiece = Tetromino.new();
   nextPiece = {};
   heldPiece = Tetromino.new();
@@ -52,6 +53,8 @@ class "Game" {
       lock = "assets/sounds/lock.ogg",
       clear = "assets/sounds/clear.ogg",
       tspin = "assets/sounds/tspin.ogg",
+      complete = "assets/sounds/complete.ogg",
+      lines = "assets/sounds/lines.ogg",
     }
 
     for name, path in pairs(self.sounds) do
@@ -59,6 +62,8 @@ class "Game" {
       self.sounds[name]:LoadSource(path)
       self.sounds[name].volume = 0.5
     end
+
+    self.sounds.lines.volume = 1
 
     self:Initialize();
   end;
@@ -68,6 +73,13 @@ class "Game" {
     self.matrix.y = stacked.scy
     self.matrix.h = stacked.gamestate.height
     stacked.size = 16 * (20 / self.matrix.h)
+
+    self.fader.color = {
+      r = 0,
+      g = 0,
+      b = 0,
+      a = 0,
+    }
 
     self.bag = {
       IPiece.new(),
@@ -140,6 +152,7 @@ class "Game" {
   end;
   StartRound = function(self)
     self.timers.ready:clear()
+    self.fader.color.a = 0.5
     self.readyText.color.a = 1
     self.readyText.text = (
       "Score\n"..
@@ -154,6 +167,7 @@ class "Game" {
       self.readyText.text = "READY..."
     end)
     self.timers.ready:after(4, function()
+      self.fader.color.a = 0
       self.readyText.text = "GO!!"
       self.levelInProgress = true
       self.timers.ready:during(1, function(dt)
@@ -166,6 +180,7 @@ class "Game" {
   end;
   EndRound = function(self)
     self.timers.ready:clear()
+    self.fader.color.a = 0.5
     self.readyText.color.a = 1
     if stacked.gamestate.level > 10 and not self.won then
       self.won = true
@@ -436,7 +451,20 @@ class "Game" {
     self.curPiece.visible = false
     self.ghostPiece.visible = false
 
+    stacked.timer.clear()
+
+    self.fader.color.a = 0.5
+
+    self.callbacks.fade = stacked.timer.after(
+      action.rows > 0 and 1 or 0,
+      function()
+        self.callbacks.fade = nil
+        self.fader.color.a = 0
+      end
+    )
+
     self.callbacks.lock = stacked.timer.after(action.rows > 0 and 1 or 0, function()
+      self.callbacks.lock = nil
       self.curPiece.visible = true
       self.ghostPiece.visible = true
       self:PushNextPiece()
@@ -448,7 +476,6 @@ class "Game" {
       elseif self.matrix.lines >= self.matrix.limit or self:IsPieceColliding() then
         self:GameOver()
       end
-      self.callbacks.lock = nil
     end)
 
   end;
@@ -678,12 +705,14 @@ class "Game" {
   end;
   RoundClear = function(self)
     stacked.gamestate.level = stacked.gamestate.level + 1
-    self.readyText.text = "CLEAR!"
+    self.readyText.text = "CLEAR!!"
     self:EndRound()
     stacked.seed = math.floor(stacked.uptime * 1000)
-    if stacked.gamestate.level <= 10 then
+    if stacked.gamestate.level <= 10 and not self.over then
+      self.sounds.complete:Play()
       self.callbacks.lines = stacked.timer.after(3, function()
         self.callbacks.lines = nil
+        self.sounds.lines:Play()
         self.readyText.text = tostring(self.matrix.limit - self.matrix.lines).." LINES\nAWARDED"
       end)
       self.callbacks.cafe = stacked.timer.after(6, function()
@@ -761,6 +790,11 @@ class "Game" {
     for _, handle in pairs(self.timers) do
       handle:update(dt)
     end
+    
+    self.fader.x = self.matrix.x
+    self.fader.y = self.matrix.y
+    self.fader.w = self.matrix.w * stacked.size
+    self.fader.h = self.matrix.h * stacked.size
 
     self:PositionGhost()
 
@@ -822,6 +856,7 @@ class "Game" {
       }
     }
     self.matrix:Draw()
+    self.fader:Draw()
     for i = self.nextPiece.n, 1, -1 do
       local nextOffset = stacked.deepCopy(offset.next)
       nextOffset.y = nextOffset.y + (i - 1) * ((self.matrix.h * (stacked.size - 3) / self.nextPiece.n)) + stacked.size * 1.5
