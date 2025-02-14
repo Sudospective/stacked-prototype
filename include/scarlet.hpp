@@ -334,7 +334,7 @@ namespace Scarlet {
 
       if (!surface) {
         Log::Error("Unable to create SDL surface: " + std::string(SDL_GetError()));
-        return false
+        return false;
       }
 
       SDL_FillRect(surface, nullptr, SDL_MapRGB(
