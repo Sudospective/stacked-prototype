@@ -81,7 +81,7 @@ class "Title" : extends "Screen" {
   __input = function(self, event)
     local binds = stacked.controls[stacked.controls.active]
     if event.type:find("Down") then
-      if event.button == binds.Extra then
+      if event.button == binds.Hold then
         fader.color.a = 0.75
         controls.color.a = 1
       end
