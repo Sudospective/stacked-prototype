@@ -739,12 +739,12 @@ class "Game" {
     stacked.seed = math.floor(stacked.uptime * 1000)
     if stacked.gamestate.level <= 10 and not self.over then
       self.sounds.complete:Play()
-      self.callbacks.lines = stacked.timer.after(3, function()
+      self.callbacks.lines = stacked.timer.after(2, function()
         self.callbacks.lines = nil
         self.sounds.lines:Play()
         self.readyText.text = tostring(self.matrix.limit - self.matrix.lines).." LINES\nAWARDED"
       end)
-      self.callbacks.cafe = stacked.timer.after(6, function()
+      self.callbacks.cafe = stacked.timer.after(5, function()
         self.callbacks.cafe = nil
         self:ToCafe()
       end)
