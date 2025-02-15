@@ -13,7 +13,7 @@ class Label : public Gizmo {
     broken = false;
 
     if (TTF_Init() < 0) {
-      Log::Error("Unable to initialize TTF: " + std::string(TTF_GetError()));
+      Scarlet::Log::Error("Unable to initialize TTF: " + std::string(TTF_GetError()));
       broken = true;
     }
 
