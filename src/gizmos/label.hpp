@@ -72,6 +72,8 @@ class Label : public Gizmo {
 
     SDL_Renderer* renderer = Scarlet::Graphics::GetMainRenderer();
 
+    if (!renderer) return;
+
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     if (!texture) {
       Scarlet::Log::Error("Unable to create texture: " + std::string(SDL_GetError()));
