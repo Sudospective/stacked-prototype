@@ -64,7 +64,7 @@ class "Title" : extends "Screen" {
     local localization = stacked.localization[stacked.controls.active]
     help.text = (
       "Press "..localization.Confirm.." to Play\n"..
-      "Hold "..localization.Extra.." for controls"
+      "Hold "..localization.Hold.." for controls"
     )
 
     controls.text = "CONTROLS\n--------\n"..(
@@ -88,9 +88,11 @@ class "Title" : extends "Screen" {
     elseif event.type:find("Up") then
       if event.button == binds.Pause then
         scarlet.exit()
-      elseif event.button == binds.Extra then
+      elseif event.button == binds.Hold then
         fader.color.a = 0
         controls.color.a = 0
+      elseif event.button == binds.Extra then
+        -- this is ideally where the play can input a seed
       elseif event.button == binds.Confirm then
         stacked.screens.next = "gameplay"
         stacked.screens:goToNext()

@@ -157,14 +157,14 @@ class "Gameplay" : extends "Screen" {
 
     pause.title.x = stacked.scx
     pause.title.y = stacked.scy - 16
-    pause.title.align.v = 0
+    pause.title.align.v = 1
     pause.title:LoadFont("assets/sport.otf", 32)
     pause.title.text = "PAUSED"
     self:AddGizmo(pause.title)
 
     pause.quit.x = stacked.scx
     pause.quit.y = stacked.scy + 16
-    pause.quit.align.v = 1
+    pause.quit.align.v = 0
     pause.quit:LoadFont("assets/sport.otf", 16)
     self:AddGizmo(pause.quit)
   end;
@@ -180,7 +180,7 @@ class "Gameplay" : extends "Screen" {
     pause.title.color.a = game.paused and 1 or 0
     pause.quit.color.a = game.paused and 1 or 0
 
-    pause.quit.text = "Press "..stacked.localization[stacked.controls.active].Extra.." to\nquit to title"
+    pause.quit.text = "Press "..stacked.localization[stacked.controls.active].Extra.." to quit to Title"
   end;
   __input = function(self, event)
     local b = event.button
