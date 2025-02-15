@@ -324,15 +324,6 @@ namespace Scarlet {
         return false;
       }
 
-      /*
-      context = SDL_GL_CreateContext(window);
-      if (!context) {
-        Log::Error("Unable to create GL context: " + std::string(SDL_GetError()));
-      }
-
-      SDL_GL_MakeCurrent(window, nullptr);
-      */
-
       renderer = SDL_CreateRenderer(window, rendererIndex, SDL_RENDERER_ACCELERATED);
       if (!renderer) {
         Log::Error("Unable to create SDL renderer: " + std::string(SDL_GetError()));
@@ -340,7 +331,6 @@ namespace Scarlet {
       }
 
       SDL_RenderSetLogicalSize(renderer, width, height);
-      //SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
       SDL_RenderSetVSync(renderer, 1);
 
       SDL_Surface* surface = SDL_CreateRGBSurfaceWithFormat(
@@ -444,7 +434,6 @@ namespace Scarlet {
     static SDL_Renderer* GetMainRenderer() { return renderer; }
     static SDL_Texture* GetDefaultTexture() { return texture; }
     static SDL_Window* GetMainWindow() { return window; }
-    static SDL_GLContext& GetGLContext() { return context; }
 
    private:
     Graphics();
@@ -454,7 +443,6 @@ namespace Scarlet {
     inline static SDL_Renderer* renderer = nullptr;
     inline static SDL_Texture* texture = nullptr;
     inline static SDL_Window* window = nullptr;
-    inline static SDL_GLContext context;
   };
 
   class Engine {

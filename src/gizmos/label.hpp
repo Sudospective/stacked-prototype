@@ -17,7 +17,6 @@ class Label : public Gizmo {
       broken = true;
     }
 
-
     font = nullptr;
     texture = nullptr;
 
