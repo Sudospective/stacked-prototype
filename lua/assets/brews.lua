@@ -247,7 +247,7 @@ return {
       return action.points * self.points
     end,
     condition = function(self, game, action)
-      return false
+      return not action.drop and game.curPiece.id == 1 and action.rows == 1
     end,
   },
   {
