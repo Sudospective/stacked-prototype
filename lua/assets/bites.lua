@@ -2,7 +2,7 @@ return {
   {
     name = "Scone",
     description = function(self)
-      return "+2 tetrominos in next queue"
+      return "+2 tetrominos in\nnext queue"
     end,
     image = "assets/pastries/scone.png",
     effect = function(self)
