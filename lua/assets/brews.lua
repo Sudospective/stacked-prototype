@@ -113,7 +113,7 @@ return {
   {
     name = "Americano",
     description = function(self)
-      return "+"..self.points.." points for each\nred or blue block cleared"
+      return "+"..self.points.." points for each\nred or blue\nblock cleared"
     end,
     rarity = "Common",
     image = "assets/coffee/americano.png",

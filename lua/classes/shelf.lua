@@ -1,6 +1,7 @@
 require "classes.coffee"
 require "classes.soda"
 require "classes.pastry"
+require "classes.sticker"
 
 class "Shelf" {
   x = 0;
@@ -174,7 +175,12 @@ class "SodaShelf" : extends "Shelf" {
 
 class "StickerShelf" : extends "Shelf" {
   heading = "STICKERS";
-  description = "Upgrade your Bag!";
+  subheading = "Upgrade your Bag!";
   __ready = function(self)
+    local stickers = {"I", "O", "T", "L", "J", "S", "Z"}
+    for i = 1, 5 do
+      local index = math.random(1, #stickers)
+      self:StockItem(Sticker.new(stickers[index]))
+    end
   end;
 }

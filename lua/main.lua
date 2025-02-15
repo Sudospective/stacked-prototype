@@ -12,7 +12,7 @@ stacked.screens = {
   gameplay = Gameplay.new(),
   cafe = Cafe.new(),
 
-  first = "cafe",
+  first = "title",
   current = nil,
   next = nil,
   goToNext = function(self)

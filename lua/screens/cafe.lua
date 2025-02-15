@@ -11,7 +11,7 @@ local cacheCounter = Label.new()
 local coffeeShelf = CoffeeShelf.new()
 local pastryShelf = PastryShelf.new()
 local sodaShelf = SodaShelf.new()
-local packShelf = SodaShelf.new()
+local stickerShelf = StickerShelf.new()
 
 local prompt = Label.new()
 
@@ -63,9 +63,9 @@ class "Cafe" : extends "Screen" {
     sodaShelf.y = stacked.scy - 16
     self:AddGizmo(sodaShelf)
 
-    packShelf.x = stacked.scx * 1.75
-    packShelf.y = stacked.scy - 16
-    self:AddGizmo(packShelf)
+    stickerShelf.x = stacked.scx * 1.75
+    stickerShelf.y = stacked.scy - 16
+    self:AddGizmo(stickerShelf)
 
     prompt.x = stacked.scx
     prompt.y = cacheCounter.y + 48
@@ -146,14 +146,17 @@ class "Cafe" : extends "Screen" {
     coffeeShelf:Open()
     pastryShelf:Open()
     sodaShelf:Open()
+    stickerShelf:Open()
     table.insert(activeShelves, coffeeShelf)
     table.insert(activeShelves, pastryShelf)
     table.insert(activeShelves, sodaShelf)
+    table.insert(activeShelves, stickerShelf)
     coffeeShelf:Enable(true)
   end;
   __exit = function(self)
-    coffeeShelf:Enable(false)
-    pastryShelf:Enable(false)
-    sodaShelf:Enable(false)
+    coffeeShelf:Close()
+    pastryShelf:Close()
+    sodaShelf:Close()
+    stickerShelf:Close()
   end;
 }
