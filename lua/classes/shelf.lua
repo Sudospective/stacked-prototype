@@ -171,3 +171,10 @@ class "SodaShelf" : extends "Shelf" {
     end
   end;
 }
+
+class "StickerShelf" : extends "Shelf" {
+  heading = "STICKERS";
+  description = "Upgrade your Bag!";
+  __ready = function(self)
+  end;
+}

@@ -11,6 +11,7 @@ local cacheCounter = Label.new()
 local coffeeShelf = CoffeeShelf.new()
 local pastryShelf = PastryShelf.new()
 local sodaShelf = SodaShelf.new()
+local packShelf = SodaShelf.new()
 
 local prompt = Label.new()
 
@@ -36,9 +37,9 @@ class "Cafe" : extends "Screen" {
     sign.text = "HARD DROP CAFE"
     self:AddGizmo(sign)
 
-    activeBorder.x = stacked.scx * 0.5
+    activeBorder.x = stacked.scx * 0.4
     activeBorder.y = stacked.scy - 32 + 128
-    activeBorder.w = 192
+    activeBorder.w = 160
     activeBorder.h = 256
     activeBorder.color = {r = 0, g = 0, b = 0, a = 0.5}
     activeBorder.aux = 0
@@ -50,17 +51,21 @@ class "Cafe" : extends "Screen" {
     cacheCounter:LoadFont("assets/sport.otf", 32)
     self:AddGizmo(cacheCounter)
 
-    coffeeShelf.x = stacked.scx * 0.4
+    coffeeShelf.x = stacked.scx * 0.25
     coffeeShelf.y = stacked.scy - 16
     self:AddGizmo(coffeeShelf)
 
-    pastryShelf.x = stacked.scx
+    pastryShelf.x = stacked.scx * 0.75
     pastryShelf.y = stacked.scy - 16
     self:AddGizmo(pastryShelf)
 
-    sodaShelf.x = stacked.scx * 1.6
+    sodaShelf.x = stacked.scx * 1.25
     sodaShelf.y = stacked.scy - 16
     self:AddGizmo(sodaShelf)
+
+    packShelf.x = stacked.scx * 1.75
+    packShelf.y = stacked.scy - 16
+    self:AddGizmo(packShelf)
 
     prompt.x = stacked.scx
     prompt.y = cacheCounter.y + 48

@@ -12,15 +12,11 @@ class "Item" {
   image = "";
   __init = function(self, ...)
     self.label = Label.new()
-    self.label.x = self.x - 64
-    self.label.y = self.y
     self.label.align.h = 0
     self.label:LoadFont("assets/sport.otf", 16)
     self.label.text = self.name
 
     self.price = Label.new()
-    self.price.x = self.x + 64
-    self.price.y = self.y
     self.price.align.h = 1
     self.price:LoadFont("assets/sport.otf", 16)
     self.price.text = self.cost.." lines"
@@ -50,16 +46,18 @@ class "Item" {
       self:Equip()
     elseif self.__class == "Pastry" then
       self:Eat()
+    elseif self.__class == "StickerPack" then
+      self:Collect()
     end
     stacked.gamestate.cache = stacked.gamestate.cache - self.cost
     self.__purchased = true
   end;
   Draw = function(self)
-    self.label.x = self.x - 80
+    self.label.x = self.x - 64
     self.label.y = self.y
     self.label:Draw()
 
-    self.price.x = self.x + 80
+    self.price.x = self.x + 64
     self.price.y = self.y
     self.price:Draw()
   end;

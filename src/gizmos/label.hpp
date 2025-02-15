@@ -10,15 +10,15 @@
 class Label : public Gizmo {
  public:
   Label() : Gizmo() {
+    font = nullptr;
+    texture = nullptr;
+
     broken = false;
 
     if (TTF_Init() < 0) {
       Scarlet::Log::Error("Unable to initialize TTF: " + std::string(TTF_GetError()));
       broken = true;
     }
-
-    font = nullptr;
-    texture = nullptr;
 
     sol::state* lua = Scarlet::Lua::GetInstance().GetState();
     color = lua->create_table_with(
@@ -49,11 +49,17 @@ class Label : public Gizmo {
     }
   }
   void SetText(const char* newText) {
+    if (std::string(newText).empty()) return;
+
     if (texture)
       SDL_DestroyTexture(texture);
-    text = newText;
-    if (broken || !font) return;
+
+    text = std::string(newText);
+
+    if (!font) return;
+
     SDL_Color c = {255u, 255u, 255u, 255u};
+
     float alignH = align["h"];
     TTF_SetFontWrappedAlign(
       font,
@@ -67,7 +73,7 @@ class Label : public Gizmo {
     SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped(font, text.c_str(), c, 0);
     if (!surface) {
       Scarlet::Log::Error("Unable to create surface: " + std::string(TTF_GetError()));
-      return;
+      broken = true;
     }
 
     SDL_Renderer* renderer = Scarlet::Graphics::GetMainRenderer();
@@ -78,7 +84,6 @@ class Label : public Gizmo {
     if (!texture) {
       Scarlet::Log::Error("Unable to create texture: " + std::string(SDL_GetError()));
       broken = true;
-      return;
     }
 
     w = surface->w;
@@ -93,11 +98,7 @@ class Label : public Gizmo {
   void Draw() {
     if (broken || !texture || text.empty())
       return;
-
-    if (w == 0.0f || h == 0.0f)
-      return;
-
-    SDL_FRect rect;
+    
     float alignH = align["h"];
     float alignV = align["v"];
     rect.x = x - w * alignH;
@@ -146,6 +147,7 @@ class Label : public Gizmo {
   bool broken;
   SDL_Texture* texture;
   TTF_Font* font;
+  SDL_FRect rect;
 };
 
 #endif // GIZMO_LABEL_HPP
