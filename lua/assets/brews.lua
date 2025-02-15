@@ -174,6 +174,23 @@ return {
     end,
   },
   {
+    name = "Dalgona",
+    description = function(self)
+      return "Upgrade singles and doubles\non tetra clear"
+    end,
+    rarity = "Common",
+    image = "assets/coffee/dalgona.png",
+    points = 0,
+    ability = function(self, game, action)
+      game.matrix.actions.single = game.matrix.actions.single + 10
+      game.matrix.actions.double = game.matrix.actions.double + 20
+      return action.points
+    end,
+    condition = function(self, game, action)
+      return not action.drop and action.rows == 4
+    end,
+  },
+  {
     name = "Cortado",
     description = function(self)
       return "+"..self.points.." points for\neach consecutive clear\nif combo is active"
@@ -191,7 +208,7 @@ return {
   {
     name = "Decaf",
     description = function(self)
-      return "+"..self.points.." points on clear\nfor each single cleared\nin the run"
+      return "+"..self.points.." points on clear\nfor each single cleared\nin this run"
     end,
     rarity = "Uncommon",
     image = "assets/coffee/decaf.png",
