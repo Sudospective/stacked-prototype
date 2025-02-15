@@ -62,6 +62,7 @@ class "Game" {
       tspin = "assets/sounds/tspin.ogg",
       complete = "assets/sounds/complete.ogg",
       lines = "assets/sounds/lines.ogg",
+      countdown = "assets/sounds/countdown.ogg"
     }
 
     for name, path in pairs(self.sounds) do
@@ -170,6 +171,9 @@ class "Game" {
     if self.boss then
       self.readyText.text = self.boss.description
     end
+    self.timers.ready:after(1, function()
+      self.sounds.countdown:Play()
+    end)
     self.timers.ready:after(3, function()
       self.readyText.text = "READY..."
     end)

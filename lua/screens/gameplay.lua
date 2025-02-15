@@ -24,6 +24,7 @@ local brewsText = Label.new()
 local pause = {
   bg = Quad.new(),
   title = Label.new(),
+  quit = Label.new(),
 }
 
 local game = Game.new()
@@ -155,10 +156,17 @@ class "Gameplay" : extends "Screen" {
     self:AddGizmo(pause.bg)
 
     pause.title.x = stacked.scx
-    pause.title.y = stacked.scy
+    pause.title.y = stacked.scy - 16
+    pause.title.align.v = 0
     pause.title:LoadFont("assets/sport.otf", 32)
     pause.title.text = "PAUSED"
     self:AddGizmo(pause.title)
+
+    pause.quit.x = stacked.scx
+    pause.quit.y = stacked.scy + 16
+    pause.quit.align.v = 1
+    pause.quit:LoadFont("assets/sport.otf", 16)
+    self:AddGizmo(pause.quit)
   end;
   __update = function(self, dt)
     game:Update(dt)
@@ -170,6 +178,9 @@ class "Gameplay" : extends "Screen" {
 
     pause.bg.color.a = game.paused and 1 or 0
     pause.title.color.a = game.paused and 1 or 0
+    pause.quit.color.a = game.paused and 1 or 0
+
+    pause.quit.text = "Press "..stacked.localization[stacked.controls.active].Extra.." to\nquit to title"
   end;
   __input = function(self, event)
     local b = event.button

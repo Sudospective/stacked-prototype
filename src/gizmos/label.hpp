@@ -77,18 +77,21 @@ class Label : public Gizmo {
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     if (!texture) {
       Scarlet::Log::Error("Unable to create texture: " + std::string(SDL_GetError()));
+      broken = true;
       return;
     }
 
     w = surface->w;
     h = surface->h;
     SDL_FreeSurface(surface);
+
+    broken = false;
   }
   std::string GetText() const {
     return text;
   }
   void Draw() {
-    if (broken || !font || text.empty())
+    if (broken || !texture || text.empty())
       return;
 
     if (w == 0.0f || h == 0.0f)
