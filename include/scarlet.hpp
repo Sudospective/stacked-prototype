@@ -100,7 +100,7 @@ namespace Scarlet {
 
   class Input {
    public:
-    void Init() {
+    bool Init() {
       Log::Info("Initializing input component...");
 
       sol::state* lua = Lua::GetInstance().GetState();
@@ -112,6 +112,7 @@ namespace Scarlet {
       controllers = lua->create_table();
 
       Log::Info("Input component initialized.");
+      return true;
     }
     void FindControllers() {
       Log::Info("Enumerating controllers...");
@@ -298,16 +299,6 @@ namespace Scarlet {
         return false;
       }
 
-      window = SDL_CreateWindow(title,
-        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        width, height,
-        0
-      );
-      if (!window) {
-        Log::Error("Unable to create SDL window: " + std::string(SDL_GetError()));
-        return false;
-      }
-
       int rendererIndex = -1;
       for (int i = 0; i < SDL_GetNumRenderDrivers(); i++) {
         SDL_RendererInfo info;
@@ -322,7 +313,26 @@ namespace Scarlet {
         return false;
       }
 
-      renderer = SDL_CreateRenderer(window, rendererIndex, SDL_RENDERER_ACCELERATED);
+      window = SDL_CreateWindow(title,
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        width, height,
+        SDL_WINDOW_OPENGL
+      );
+      if (!window) {
+        Log::Error("Unable to create SDL window: " + std::string(SDL_GetError()));
+        return false;
+      }
+
+      /*
+      context = SDL_GL_CreateContext(window);
+      if (!context) {
+        Log::Error("Unable to create GL context: " + std::string(SDL_GetError()));
+      }
+
+      SDL_GL_MakeCurrent(window, nullptr);
+      */
+
+      renderer = SDL_CreateRenderer(window, rendererIndex, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
       if (!renderer) {
         Log::Error("Unable to create SDL renderer: " + std::string(SDL_GetError()));
         return false;
@@ -381,12 +391,13 @@ namespace Scarlet {
       SDL_Quit();
     }
     static void PreDraw() {
-      SDL_SetRenderDrawColor(renderer, 0u, 0u, 0u, 255u);
-      SDL_RenderClear(renderer);
+      if (SDL_SetRenderDrawColor(renderer, 0u, 0u, 0u, 255u) < 0)
+        Log::Error("Unable to set draw color: " + std::string(SDL_GetError()));
+      if (SDL_RenderClear(renderer) < 0)
+        Log::Error("Unable to clear renderer: " + std::string(SDL_GetError()));
     }
     static void PostDraw() {
       SDL_RenderPresent(renderer);
-      SDL_UpdateWindowSurface(window);
     }
     static void DrawQuad(float x, float y, float w, float h, float rot, sol::table color) {
       SDL_FRect rect;
@@ -432,6 +443,7 @@ namespace Scarlet {
     static SDL_Renderer* GetMainRenderer() { return renderer; }
     static SDL_Texture* GetDefaultTexture() { return texture; }
     static SDL_Window* GetMainWindow() { return window; }
+    static SDL_GLContext& GetGLContext() { return context; }
 
    private:
     Graphics();
@@ -441,6 +453,7 @@ namespace Scarlet {
     inline static SDL_Renderer* renderer = nullptr;
     inline static SDL_Texture* texture = nullptr;
     inline static SDL_Window* window = nullptr;
+    inline static SDL_GLContext context;
   };
 
   class Engine {
@@ -457,6 +470,10 @@ namespace Scarlet {
         Log::Error("Failed to initialize engine.");
         return false;
       }
+      if (!Input::GetInstance().Init()) {
+        Log::Error("Failed to initialize engine.");
+        return false;
+      }
 
       (*lua)["scarlet"]["exit"] = [&]() { this->Stop(); };
 
@@ -467,7 +484,6 @@ namespace Scarlet {
     void Start() {
       Log::Info("Starting engine...");
 
-      Input::GetInstance().Init();
       Input::GetInstance().FindControllers();
 
       running = true;

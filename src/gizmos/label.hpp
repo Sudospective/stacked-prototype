@@ -61,6 +61,7 @@ class Label : public Gizmo {
           ? TTF_WRAPPED_ALIGN_RIGHT
           : TTF_WRAPPED_ALIGN_CENTER
     );
+
     SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped(font, text.c_str(), c, 0);
     if (!surface) {
       Scarlet::Log::Error("Unable to create surface: " + std::string(TTF_GetError()));

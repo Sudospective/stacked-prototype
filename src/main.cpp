@@ -8,6 +8,11 @@ using namespace Scarlet;
 SDL_mutex* mutex = nullptr;
 
 int handleUpdate(void*) {
+  /*
+  SDL_LockMutex(mutex);
+  SDL_GL_MakeCurrent(Graphics::GetMainWindow(), Graphics::GetGLContext());
+  SDL_UnlockMutex(mutex);
+  */
   while (true) {
     SDL_LockMutex(mutex);
     if (!Engine::GetInstance().IsRunning()) {
@@ -15,9 +20,8 @@ int handleUpdate(void*) {
       break;
     }
     Engine::GetInstance().Update();
-    Engine::GetInstance().Draw();
     SDL_UnlockMutex(mutex);
-    SDL_Delay(1);
+    SDL_Delay(0);
   }
   return 0;
 }
@@ -46,8 +50,9 @@ int main(int argc, char* argv[]) {
       break;
     }
     Engine::GetInstance().HandleEvents();
+    Engine::GetInstance().Draw();
     SDL_UnlockMutex(mutex);
-    SDL_Delay(1);
+    SDL_Delay(0);
   }
 
   SDL_WaitThread(updateThread, nullptr);
