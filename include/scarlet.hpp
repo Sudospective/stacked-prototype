@@ -300,11 +300,6 @@ namespace Scarlet {
         return false;
       }
 
-      if (TTF_Init() < 0) {
-        Log::Error("Unable to initialize TTF: " + std::string(TTF_GetError()));
-        return false;
-      }
-
       int rendererIndex = -1;
       for (int i = 0; i < SDL_GetNumRenderDrivers(); i++) {
         SDL_RendererInfo info;
@@ -391,7 +386,6 @@ namespace Scarlet {
     }
     static void Destroy() {
       Log::Info("Destroying graphics related objects...");
-      TTF_Quit();
       SDL_DestroyTexture(texture);
       SDL_DestroyRenderer(renderer);
       SDL_DestroyWindow(window);

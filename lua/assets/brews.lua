@@ -236,23 +236,21 @@ return {
       return not action.drop and action.rows == 4
     end,
   },
-  --[[
   {
-    name = "???",
+    name = "Vienna",
     description = function(self)
-      return "???"
+      return "x"..self.points.." points when\n clearing a single\nwith an I tetromino"
     end,
     rarity = "Rare",
-    image = "assets/coffee/missing.png",
-    points = 0,
+    image = "assets/coffee/vienna.png",
+    points = 3,
     ability = function(self, game, action)
-      return action.points
+      return action.points * self.points
     end,
     condition = function(self, game, action)
       return false
     end,
   },
-  --]]
   {
     name = "Tripplo",
     description = function(self)

@@ -12,6 +12,12 @@ class Label : public Gizmo {
   Label() : Gizmo() {
     broken = false;
 
+    if (TTF_Init() < 0) {
+      Log::Error("Unable to initialize TTF: " + std::string(TTF_GetError()));
+      broken = true;
+    }
+
+
     font = nullptr;
     texture = nullptr;
 
@@ -31,6 +37,7 @@ class Label : public Gizmo {
     if (texture)
       SDL_DestroyTexture(texture);
     TTF_CloseFont(font);
+    TTF_Quit();
   }
   void LoadFont(const char* path, int size = 12) {
     if (font)
