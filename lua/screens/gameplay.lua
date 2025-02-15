@@ -185,6 +185,9 @@ class "Gameplay" : extends "Screen" {
         game.controlStates.left = false
       elseif b == binds.MoveRight then
         game.controlStates.right = false
+      elseif b == binds.Extra and game.paused then
+        game:Initialize()
+        game:ToTitle()
       elseif b == binds.Pause then
         if not game.paused then
           game:Pause()
