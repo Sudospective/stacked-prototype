@@ -35,7 +35,8 @@ class Label : public Gizmo {
   ~Label() {
     if (texture)
       SDL_DestroyTexture(texture);
-    TTF_CloseFont(font);
+    if (font)
+      TTF_CloseFont(font);
     TTF_Quit();
   }
   void LoadFont(const char* path, int size = 12) {
@@ -70,6 +71,7 @@ class Label : public Gizmo {
     }
 
     SDL_Renderer* renderer = Scarlet::Graphics::GetMainRenderer();
+
     texture = SDL_CreateTextureFromSurface(renderer, surface);
     if (!texture) {
       Scarlet::Log::Error("Unable to create texture: " + std::string(SDL_GetError()));

@@ -351,7 +351,7 @@ class "Game" {
     self.curPiece.row.offset = self.ghostPiece.row.offset
     -- just in case
     self.curPiece.column.offset = self.ghostPiece.column.offset
-    
+
     self:LockToMatrix()
   end;
   Hold = function(self)
@@ -471,7 +471,9 @@ class "Game" {
 
     stacked.timer.clear()
 
-    self.fader.color.a = 0.5
+    if action.rows > 0 then
+      self.fader.color.a = 0.5
+    end
 
     self.callbacks.fade = stacked.timer.after(
       action.rows > 0 and 1 or 0,

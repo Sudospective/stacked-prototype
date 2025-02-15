@@ -133,7 +133,6 @@ return {
           end
         end
         if clearCount < stacked.gamestate.lineLength then
-          -- all that work for nothing...
           blocks = prevBlocks
         end
       end
@@ -176,14 +175,14 @@ return {
   {
     name = "Dalgona",
     description = function(self)
-      return "Upgrade singles and doubles\non tetra clear"
+      return "+"..self.points.." base points\nfor singles and doubles\non tetra clear"
     end,
     rarity = "Common",
     image = "assets/coffee/dalgona.png",
-    points = 0,
+    points = 20,
     ability = function(self, game, action)
-      game.matrix.actions.single = game.matrix.actions.single + 10
-      game.matrix.actions.double = game.matrix.actions.double + 20
+      game.matrix.actions.single = game.matrix.actions.single + self.points
+      game.matrix.actions.double = game.matrix.actions.double + self.points
       return action.points
     end,
     condition = function(self, game, action)

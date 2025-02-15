@@ -530,9 +530,11 @@ namespace Scarlet {
       (*lua)["update"](dt);
     }
     void Draw() {
-      Graphics::PreDraw();
-      (*lua)["draw"]();
-      Graphics::PostDraw();
+      if (running) {
+        Graphics::PreDraw();
+        (*lua)["draw"]();
+        Graphics::PostDraw();
+      }
     }
 
    public:
