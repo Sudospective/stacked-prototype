@@ -98,7 +98,12 @@ class "Title" : extends "Screen" {
     end
   end;
   __enter = function(self)
+    stacked.seeds.main = nil
+    stacked.seeds.game = nil
+    stacked.seeds.cafe = nil
   end;
   __exit = function(self)
+    stacked.seeds.main = stacked.seeds.main or math.floor(stacked.uptime * 1000)
+    math.randomseed(stacked.seeds.main)
   end;
 }

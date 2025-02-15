@@ -21,6 +21,11 @@ local levelLabel = Label.new()
 local brewsLabel = Label.new()
 local brewsText = Label.new()
 
+local pause = {
+  bg = Quad.new(),
+  title = Label.new(),
+}
+
 local game = Game.new()
 
 class "Gameplay" : extends "Screen" {
@@ -136,6 +141,24 @@ class "Gameplay" : extends "Screen" {
     game.x = stacked.scx
     game.y = stacked.scy
     self:AddGizmo(game)
+
+    pause.bg.x = stacked.scx
+    pause.bg.y = stacked.scy
+    pause.bg.w = stacked.sw
+    pause.bg.h = stacked.sh
+    pause.bg.color = {
+      r = 0,
+      g = 0,
+      b = 0,
+      a = 0,
+    }
+    self:AddGizmo(pause.bg)
+
+    pause.title.x = stacked.scx
+    pause.title.y = stacked.scy
+    pause.title:LoadFont("assets/sport.otf", 32)
+    pause.title.text = "PAUSED"
+    self:AddGizmo(pause.title)
   end;
   __update = function(self, dt)
     game:Update(dt)
@@ -144,6 +167,9 @@ class "Gameplay" : extends "Screen" {
     scoreLimit.text = tostring(game.matrix.goal)
     linesText.text = tostring(game.matrix.lines)
     linesLimit.text = tostring(game.matrix.limit)
+
+    pause.bg.color.a = game.paused and 1 or 0
+    pause.title.color.a = game.paused and 1 or 0
   end;
   __input = function(self, event)
     local b = event.button
@@ -160,8 +186,11 @@ class "Gameplay" : extends "Screen" {
       elseif b == binds.MoveRight then
         game.controlStates.right = false
       elseif b == binds.Pause then
-        game:Initialize()
-        game:ToTitle()
+        if not game.paused then
+          game:Pause()
+        else
+          game:Unpause()
+        end
       end
     end
     if game.levelInProgress then
@@ -169,7 +198,8 @@ class "Gameplay" : extends "Screen" {
     end
   end;
   __enter = function(self)
-    stacked.seed = stacked.seed or math.floor(stacked.uptime * 1000)
+    stacked.seeds.game = math.random(1, 9e9)
+    math.randomseed(stacked.seeds.game)
     levelLabel.text = "LEVEL "..stacked.gamestate.level
     brewsText.text = ""
     local counts = {}

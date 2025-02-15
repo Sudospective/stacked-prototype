@@ -48,7 +48,7 @@ return {
   {
     name = "Frappé",
     description = function(self)
-      return "Gains +2 points for\neach hard drop,\nresets on soft drop"
+      return "Gains +5 points for\neach hard drop,\nresets on soft drop"
     end,
     rarity = "Common",
     image = "assets/coffee/frappe.png",
@@ -57,7 +57,7 @@ return {
       if action.drop == "soft" then
         self.points = 0
       elseif action.drop == "hard" then
-        self.points = self.points + 2
+        self.points = self.points + 5
       end
       return action.points + self.points
     end,

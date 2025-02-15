@@ -44,6 +44,7 @@ class "Game" {
   timeUntilLock = 0;
   over = false;
   won = false;
+  paused = false;
   __init = function(self)
     self.readyText.x = stacked.scx
     self.readyText.y = stacked.scy
@@ -134,7 +135,6 @@ class "Game" {
   end;
   NewRound = function(self)
     self.over = false
-    math.randomseed(stacked.seed)
 
     self.matrix.h = stacked.gamestate.height
     self.matrix.w = stacked.gamestate.width
@@ -782,6 +782,14 @@ class "Game" {
       self:ToTitle()
     end)
   end;
+  Pause = function(self)
+    self.paused = true
+    self.freezeInput = true
+  end;
+  Unpause = function(self)
+    self.paused = false
+    self.freezeInput = false
+  end;
   GameInput = function(self, event)
     if self.freezeInput then return end
     local b = event.button
@@ -810,6 +818,7 @@ class "Game" {
     end
   end;
   Update = function(self, dt)
+    if self.paused then return end
     for _, handle in pairs(self.timers) do
       handle:update(dt)
     end

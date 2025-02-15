@@ -134,6 +134,8 @@ class "Cafe" : extends "Screen" {
     end
   end;
   __enter = function(self)
+    stacked.seeds.cafe = math.random(1, 9e9)
+    math.randomseed(stacked.seeds.cafe)
     activeShelves = {}
     activeBorder.aux = 0
     coffeeShelf:Open()

@@ -11,7 +11,7 @@ stacked = {
   async = async,
   timer = timer,
   -- Game
-  seed = nil,
+  seeds = {},
   size = 16,
   colors = {
     -- Indexed colors
