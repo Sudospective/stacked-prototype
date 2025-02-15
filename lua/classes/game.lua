@@ -27,6 +27,8 @@ class "Game" {
   lastMove = 0;
   lastKick = 0;
   lastAction = 0;
+  infinity = false;
+  extendCounter = 0;
   repeatingAction = false;
   lastRotTest = {0, 0};
   levelInProgress = false;
@@ -36,6 +38,7 @@ class "Game" {
   dropTime = 1;
   timeSinceEvent = 0;
   timeUntilARR = 0;
+  timeUntilLock = 0;
   over = false;
   won = false;
   __init = function(self)
@@ -146,6 +149,7 @@ class "Game" {
     self.timesHeld = 0
     self.lastMove = 0
     self.lastRotTest = {0, 0}
+    self.infinity = stacked.gamestate.infinity
     self.dropTime = (0.8 - ((stacked.gamestate.level - 1) * 0.007)) ^ (stacked.gamestate.level - 1)
     self:PushNextPiece()
     self:StartRound()
@@ -270,7 +274,10 @@ class "Game" {
       return
     end
     self.lastMove = 1
-    self.timeUntilLock = self.lockTime
+    if self.infinity or self.extendCounter < 15 then
+      self.extendCounter = self.extendCounter + 1
+      self.timeUntilLock = self.lockTime
+    end
   end;
   MoveRight = function(self)
     self.curPiece:Move(0, 1)
@@ -279,7 +286,10 @@ class "Game" {
       return
     end
     self.lastMove = 1
-    self.timeUntilLock = self.lockTime
+    if self.infinity or self.extendCounter < 15 then
+      self.extendCounter = self.extendCounter + 1
+      self.timeUntilLock = self.lockTime
+    end
   end;
   Rotate = function(self, ccw)
     self.curPiece:Rotate(ccw)
@@ -302,7 +312,10 @@ class "Game" {
       self.lastMove = 2
       self.sounds.rotate:Play()
       self:CheckSpin(true)
-      self:ResetLock()
+      if self.infinity or self.extendCounter < 15 then
+        self.extendCounter = self.extendCounter + 1
+        self:ResetLock()
+      end
     end
   end;
   RotateCW = function(self)
@@ -387,6 +400,7 @@ class "Game" {
   end;
   ResetLock = function(self)
     self.readyToLock = false
+    self.extendCounter = 0
     self:ResetEventTimer()
   end;
   ARRTriggered = function(self, dt, interval)

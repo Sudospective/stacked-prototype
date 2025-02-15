@@ -49,6 +49,15 @@ return {
       stacked.gamestate.level = stacked.gamestate.level - 1
     end,
   },
+  {
+    name = "Cinnamon Bun",
+    description = function(self)
+    end,
+    image = "assets/pastries/bun.png",
+    effect = function(self)
+      stacked.gamestate.infinity = true
+    end,
+  },
   --[[
   {
     name = "Fruit Cake",

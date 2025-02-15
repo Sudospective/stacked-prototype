@@ -215,6 +215,7 @@ stacked = {
     height = 20,
     lineLength = 10,
     hold = 1,
+    infinity = false,
     brews = {},
     actions = {
       -- per row dropped
@@ -278,6 +279,7 @@ stacked = {
     height = 20,
     lineLength = 10,
     hold = 1,
+    infinity = false,
     brews = {},
     actions = {
       -- per row dropped
