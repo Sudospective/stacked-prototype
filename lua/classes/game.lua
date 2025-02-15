@@ -62,7 +62,7 @@ class "Game" {
       tspin = "assets/sounds/tspin.ogg",
       complete = "assets/sounds/complete.ogg",
       lines = "assets/sounds/lines.ogg",
-      countdown = "assets/sounds/countdown.ogg"
+      countdown = "assets/sounds/countdown.ogg",
     }
 
     for name, path in pairs(self.sounds) do
@@ -573,7 +573,7 @@ class "Game" {
     -- if all this is clear, the buffer is definitely clear
     for row = 0, self.matrix.h - 1 do
       for column = 0, self.matrix.w - 1 do
-        if not self.matrix:IsCellEmpty(row, column) then
+        if not self.matrix:IsRowFull(row) and not self.matrix:IsCellEmpty(row, column) then
           allclear = false
           break
         end
@@ -583,6 +583,8 @@ class "Game" {
   end;
   AwardPoints = function(self, action)
     action.rows = action.rows or 0
+    action.b2b = action.b2b or false
+    action.allclear = action.allclear or false
 
     local points = 0
     local actions = stacked.gamestate.actions
