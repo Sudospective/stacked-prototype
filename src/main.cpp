@@ -20,6 +20,7 @@ int handleUpdate(void*) {
       break;
     }
     Engine::GetInstance().Update();
+    Engine::GetInstance().Draw();
     SDL_UnlockMutex(mutex);
     SDL_Delay(0);
   }
@@ -50,7 +51,6 @@ int main(int argc, char* argv[]) {
       break;
     }
     Engine::GetInstance().HandleEvents();
-    Engine::GetInstance().Draw();
     SDL_UnlockMutex(mutex);
     SDL_Delay(0);
   }
