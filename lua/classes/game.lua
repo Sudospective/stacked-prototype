@@ -570,7 +570,8 @@ class "Game" {
   end;
   CheckAllClear = function(self)
     local allclear = true
-    for row = -self.matrix.buffer, self.matrix.h - 1 do
+    -- if all this is clear, the buffer is definitely clear
+    for row = 0, self.matrix.h - 1 do
       for column = 0, self.matrix.w - 1 do
         if not self.matrix:IsCellEmpty(row, column) then
           allclear = false
