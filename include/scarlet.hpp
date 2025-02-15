@@ -391,6 +391,8 @@ namespace Scarlet {
       SDL_RenderPresent(renderer);
     }
     static void DrawQuad(float x, float y, float w, float h, float rot, sol::table color) {
+      if (!renderer) return;
+
       SDL_FRect rect;
       rect.x = x;
       rect.y = y;

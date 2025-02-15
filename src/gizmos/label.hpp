@@ -87,6 +87,9 @@ class Label : public Gizmo {
     if (broken || !font || text.empty())
       return;
 
+    if (w == 0.0f || h == 0.0f)
+      return;
+
     SDL_FRect rect;
     float alignH = align["h"];
     float alignV = align["v"];
@@ -96,6 +99,8 @@ class Label : public Gizmo {
     rect.h = h;
 
     SDL_Renderer* renderer = Scarlet::Graphics::GetMainRenderer();
+
+    if (!renderer) return;
 
     SDL_Color newColor;
     newColor.r = static_cast<Uint8>(255u * static_cast<float>(color["r"]));

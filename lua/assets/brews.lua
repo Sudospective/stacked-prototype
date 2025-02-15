@@ -37,7 +37,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/cappuccino.png",
-    points = 150,
+    points = 300,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -72,7 +72,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/ristretto.png",
-    points = 10,
+    points = 25,
     ability = function(self, game, action)
       local mult = 0
       for _, brew in ipairs(game.matrix.brews) do
@@ -150,7 +150,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/doppio.png",
-    points = 200,
+    points = 400,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -165,7 +165,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/mocha.png",
-    points = 1.25,
+    points = 1.5,
     ability = function(self, game, action)
       return action.points * self.points
     end,

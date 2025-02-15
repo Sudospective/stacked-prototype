@@ -5,6 +5,7 @@ require "classes.tetromino"
 class "Game" {
   matrix = Matrix.new();
   fader = Quad.new();
+  smear = Quad.new();
   curPiece = Tetromino.new();
   nextPiece = {};
   heldPiece = Tetromino.new();
@@ -24,6 +25,7 @@ class "Game" {
   timesHeld = 0;
   hardDropping = false;
   dropDistance = 0;
+  freezeInput = false;
   lastMove = 0;
   lastKick = 0;
   lastAction = 0;
@@ -34,6 +36,7 @@ class "Game" {
   levelInProgress = false;
   readyToLock = false;
   clearType = 0;
+  spawnTime = 0.2;
   lockTime = 0.5;
   dropTime = 1;
   timeSinceEvent = 0;
@@ -348,6 +351,7 @@ class "Game" {
     self.curPiece.row.offset = self.ghostPiece.row.offset
     -- just in case
     self.curPiece.column.offset = self.ghostPiece.column.offset
+    
     self:LockToMatrix()
   end;
   Hold = function(self)
@@ -477,7 +481,9 @@ class "Game" {
       end
     )
 
-    self.callbacks.lock = stacked.timer.after(action.rows > 0 and 1 or 0, function()
+    self.freezeInput = true
+    self.callbacks.lock = stacked.timer.after(action.rows > 0 and 1 or self.spawnTime, function()
+      self.freezeInput = false
       self.callbacks.lock = nil
       self.curPiece.visible = true
       self.ghostPiece.visible = true
@@ -775,6 +781,7 @@ class "Game" {
     end)
   end;
   GameInput = function(self, event)
+    if self.freezeInput then return end
     local b = event.button
     local binds = stacked.controls[stacked.controls.active]
     -- Keyboard
