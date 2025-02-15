@@ -19,41 +19,11 @@ class Quad : public Gizmo {
     w = h = 0.0f;
   }
   void Draw() {
-    SDL_FRect rect;
-    rect.x = x - w / 2;
-    rect.y = y - h / 2;
-    rect.w = w;
-    rect.h = h;
-
-    SDL_Renderer* renderer = Scarlet::Graphics::GetMainRenderer();
-    SDL_Texture* texture = Scarlet::Graphics::GetDefaultTexture();
-
-    SDL_Color newColor;
-    newColor.r = static_cast<Uint8>(255u * static_cast<float>(color["r"]));
-    newColor.g = static_cast<Uint8>(255u * static_cast<float>(color["g"]));
-    newColor.b = static_cast<Uint8>(255u * static_cast<float>(color["b"]));
-    newColor.a = static_cast<Uint8>(255u * static_cast<float>(color["a"]));
-
-    SDL_Color oldColor;
-    SDL_BlendMode oldBlend;
-    SDL_GetTextureColorMod(texture, &oldColor.r, &oldColor.g, &oldColor.b);
-    SDL_GetTextureAlphaMod(texture, &oldColor.a);
-    SDL_GetTextureBlendMode(texture, &oldBlend);
-    SDL_SetTextureColorMod(texture, newColor.r, newColor.g, newColor.b);
-    SDL_SetTextureAlphaMod(texture, newColor.a);
-    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
-    SDL_RenderCopyExF(
-      renderer,
-      texture,
-      nullptr,
-      &rect,
-      rot,
-      nullptr,
-      SDL_FLIP_NONE
+    Scarlet::Graphics::DrawQuad(
+      x - w * 0.5, y - h * 0.5,
+      w, h,
+      rot, color
     );
-    SDL_SetTextureColorMod(texture, oldColor.r, oldColor.g, oldColor.b);
-    SDL_SetTextureAlphaMod(texture, oldColor.a);
-    SDL_SetTextureBlendMode(texture, oldBlend);
   };
 
  public:

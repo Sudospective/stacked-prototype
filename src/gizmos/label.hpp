@@ -15,11 +15,6 @@ class Label : public Gizmo {
     font = nullptr;
     texture = nullptr;
 
-    if (TTF_Init() < 0) {
-      Scarlet::Log::Error("Failed to initialize TTF: " + std::string(SDL_GetError()));
-      broken = true;
-    }
-
     sol::state* lua = Scarlet::Lua::GetInstance().GetState();
     color = lua->create_table_with(
       "r", 1.0f,
@@ -36,7 +31,6 @@ class Label : public Gizmo {
     if (texture)
       SDL_DestroyTexture(texture);
     TTF_CloseFont(font);
-    TTF_Quit();
   }
   void LoadFont(const char* path, int size = 12) {
     if (font)
@@ -44,6 +38,7 @@ class Label : public Gizmo {
     font = TTF_OpenFont(path, size);
     if (!font) {
       Scarlet::Log::Error("Unable to open font: " + std::string(TTF_GetError()));
+      broken = true;
     }
   }
   void SetText(const char* newText) {

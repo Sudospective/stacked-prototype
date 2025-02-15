@@ -8,6 +8,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 #include <sol/sol.hpp>
 
 /*
@@ -299,6 +300,11 @@ namespace Scarlet {
         return false;
       }
 
+      if (TTF_Init() < 0) {
+        Log::Error("Unable to initialize TTF: " + std::string(TTF_GetError()));
+        return false;
+      }
+
       int rendererIndex = -1;
       for (int i = 0; i < SDL_GetNumRenderDrivers(); i++) {
         SDL_RendererInfo info;
@@ -332,7 +338,7 @@ namespace Scarlet {
       SDL_GL_MakeCurrent(window, nullptr);
       */
 
-      renderer = SDL_CreateRenderer(window, rendererIndex, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+      renderer = SDL_CreateRenderer(window, rendererIndex, SDL_RENDERER_ACCELERATED);
       if (!renderer) {
         Log::Error("Unable to create SDL renderer: " + std::string(SDL_GetError()));
         return false;
@@ -385,6 +391,7 @@ namespace Scarlet {
     }
     static void Destroy() {
       Log::Info("Destroying graphics related objects...");
+      TTF_Quit();
       SDL_DestroyTexture(texture);
       SDL_DestroyRenderer(renderer);
       SDL_DestroyWindow(window);
