@@ -342,6 +342,14 @@ namespace Scarlet {
         return false;
       }
 
+      context = SDL_GL_CreateContext(window);
+      if (!context) {
+        Log::Error("Unable to create GL context: " + std::string(SDL_GetError()));
+        return false;
+      }
+
+      SDL_GL_SetSwapInterval(1);
+
       renderer = SDL_CreateRenderer(window, rendererIndex, SDL_RENDERER_ACCELERATED);
       if (!renderer) {
         Log::Error("Unable to create SDL renderer: " + std::string(SDL_GetError()));
@@ -396,6 +404,7 @@ namespace Scarlet {
       Log::Info("Destroying graphics related objects...");
       SDL_DestroyTexture(texture);
       SDL_DestroyRenderer(renderer);
+      SDL_GL_DeleteContext(context);
       SDL_DestroyWindow(window);
       SDL_Quit();
     }
@@ -454,6 +463,7 @@ namespace Scarlet {
     static SDL_Renderer* GetMainRenderer() { return renderer; }
     static SDL_Texture* GetDefaultTexture() { return texture; }
     static SDL_Window* GetMainWindow() { return window; }
+    static SDL_GLContext& GetGLContext() { return context; }
 
    private:
     Graphics();
@@ -463,6 +473,7 @@ namespace Scarlet {
     inline static SDL_Renderer* renderer = nullptr;
     inline static SDL_Texture* texture = nullptr;
     inline static SDL_Window* window = nullptr;
+    inline static SDL_GLContext context = nullptr;
   };
 
   class Engine {

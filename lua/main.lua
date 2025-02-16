@@ -26,7 +26,8 @@ stacked.screens = {
 }
 setmetatable(stacked.screens, stacked.screens)
 
-local debug = true
+local debugging = true
+local framerate = 0
 
 local fps = Label.new()
 
@@ -38,6 +39,13 @@ function init()
   fps.y = 4
   fps:LoadFont("assets/sport.otf", 16)
   fps.text = "FPS: 0"
+  
+
+  if debugging then
+    stacked.timer.every(1, function()
+      fps.text = "FPS: "..tostring(math.floor(framerate))
+    end)
+  end
 
   -- Final initialization
   stacked.screens.next = stacked.screens.first
@@ -63,6 +71,8 @@ function input(event)
 end
 
 function update(dt)
+  framerate = 1 / dt
+
   stacked.uptime = stacked.uptime + dt
 
   stacked.timer.update(dt)
@@ -70,10 +80,6 @@ function update(dt)
   stacked.screens.title:Update(dt)
   stacked.screens.gameplay:Update(dt)
   stacked.screens.cafe:Update(dt)
-
-  if debug then
-    fps.text = "FPS: "..tostring(math.floor(1 / dt))
-  end
 end
 
 function draw()
@@ -82,7 +88,7 @@ function draw()
   stacked.screens.cafe:Draw()
 
   -- Debug
-  if debug then
+  if debugging then
     fps:Draw()
   end
 end
