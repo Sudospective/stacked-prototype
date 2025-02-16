@@ -16,7 +16,7 @@ local stickerShelf = StickerShelf.new()
 local sounds = {
   switch = "assets/sounds/rotate.ogg",
   click = "assets/sounds/lock.ogg",
-  purchase = "assets/sounds/purchase.ogg",
+  purchase = "assets/sounds/clear.ogg",
 }
 
 local prompt = Label.new()

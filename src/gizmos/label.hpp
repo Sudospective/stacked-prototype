@@ -49,6 +49,9 @@ class Label : public Gizmo {
     }
   }
   void SetText(const char* newText) {
+    if (text == std::string(newText))
+      return;
+
     if (texture)
       SDL_DestroyTexture(texture);
 
