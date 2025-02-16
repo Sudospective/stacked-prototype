@@ -13,6 +13,12 @@ local pastryShelf = PastryShelf.new()
 local sodaShelf = SodaShelf.new()
 local stickerShelf = StickerShelf.new()
 
+local sounds = {
+  switch = "assets/sounds/rotate.ogg",
+  click = "assets/sounds/lock.ogg",
+  purchase = "assets/sounds/purchase.ogg",
+}
+
 local prompt = Label.new()
 
 class "Cafe" : extends "Screen" {
@@ -72,6 +78,12 @@ class "Cafe" : extends "Screen" {
     prompt.align.y = 0
     prompt:LoadFont("assets/sport.otf", 16)
     self:AddGizmo(prompt)
+
+    for name, path in pairs(sounds) do
+      sounds[name] = Sound.new()
+      sounds[name]:LoadSource(path)
+      sounds[name].volume = 0.5
+    end
   end;
   __update = function(self, dt)
     local localization = stacked.localization[stacked.controls.active]
@@ -95,27 +107,32 @@ class "Cafe" : extends "Screen" {
         while activeShelves[activeBorder.aux + 1].__closed do
           activeBorder.aux = (activeBorder.aux - 1) % #activeShelves
         end
+        sounds.switch:Play()
       elseif b == binds.Right then
         activeBorder.aux = (activeBorder.aux + 1) % #activeShelves
         while activeShelves[activeBorder.aux + 1].__closed do
           activeBorder.aux = (activeBorder.aux + 1) % #activeShelves
         end
+        sounds.switch:Play()
       elseif b == binds.Up then
         for _, shelf in ipairs(activeShelves) do
           if shelf.__enabled then
             shelf:Select(-1)
+            sounds.click:Play()
           end
         end
       elseif b == binds.Down then
         for _, shelf in ipairs(activeShelves) do
           if shelf.__enabled then
             shelf:Select(1)
+            sounds.click:Play()
           end
         end
       elseif b == binds.Confirm then
         for i, shelf in ipairs(activeShelves) do
           if shelf.__enabled then
             shelf:Purchase()
+            sounds.purchase:Play()
             local enabledItems = 0
             for _, item in ipairs(shelf.items) do
               if not item.__purchased then

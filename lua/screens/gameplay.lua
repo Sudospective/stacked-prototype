@@ -197,11 +197,14 @@ class "Gameplay" : extends "Screen" {
       elseif b == binds.MoveRight then
         game.controlStates.right = false
       elseif b == binds.Extra and game.paused then
+        game:Unpause()
         game:Initialize()
         game:ToTitle()
-      elseif b == binds.Pause and not game.freezeInput then
+      elseif b == binds.Pause then
         if not game.paused then
-          game:Pause()
+          if not game.freezeInput then
+            game:Pause()
+          end
         else
           game:Unpause()
         end

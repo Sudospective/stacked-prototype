@@ -8,6 +8,8 @@ local help = Label.new()
 local fader = Quad.new()
 local controls = Label.new()
 
+local start = Sound.new()
+
 class "Title" : extends "Screen" {
   title = "Title";
   __init = function(self)
@@ -59,6 +61,9 @@ class "Title" : extends "Screen" {
     controls:LoadFont("assets/sport.otf", 16)
     controls.color.a = 0
     self:AddGizmo(controls)
+
+    start:LoadSource("assets/sounds/clear.ogg")
+    start.volume = 0.5
   end;
   __update = function(self, dt)
     local localization = stacked.localization[stacked.controls.active]
@@ -94,6 +99,7 @@ class "Title" : extends "Screen" {
       elseif event.button == binds.Extra then
         -- this is ideally where the play can input a seed
       elseif event.button == binds.Confirm then
+        start:Play()
         stacked.screens.next = "gameplay"
         stacked.screens:goToNext()
       end
