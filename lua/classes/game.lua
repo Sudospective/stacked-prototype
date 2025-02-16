@@ -171,7 +171,21 @@ class "Game" {
     if self.boss then
       self.readyText.text = self.boss.description
     end
-    self.timers.ready:after(1, function()
+    self.matrix.y = stacked.scy + stacked.sh
+    local time = 0
+    local quint = stacked.timer.tween.quint
+    local piece = self.curPiece.y
+    local ghost = self.ghostPiece.y
+    self.timers.ready:during(1, function(dt)
+      time = time + dt
+      local ease = 1 - stacked.timer.tween.out(quint)(time)
+      self.matrix.y = stacked.scy + stacked.sh * ease
+      self.curPiece.y = piece + stacked.sh * ease
+      self.ghostPiece.y = ghost + stacked.sh * ease
+    end, function()
+      self.matrix.y = stacked.scy
+      self.curPiece.y = piece
+      self.ghostPiece.y = ghost
       self.sounds.countdown:Play()
     end)
     self.timers.ready:after(3, function()
@@ -183,10 +197,10 @@ class "Game" {
       self.levelInProgress = true
       self.timers.ready:during(1, function(dt)
         self.readyText.color.a = self.readyText.color.a - dt
+      end, function()
+        self.readyText.color.a = 0
+        self.readyText.text = ""
       end)
-    end)
-    self.timers.ready:after(5, function()
-      self.readyText.text = ""
     end)
   end;
   EndRound = function(self)
