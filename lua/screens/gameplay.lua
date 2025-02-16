@@ -199,7 +199,7 @@ class "Gameplay" : extends "Screen" {
       elseif b == binds.Extra and game.paused then
         game:Initialize()
         game:ToTitle()
-      elseif b == binds.Pause then
+      elseif b == binds.Pause and not game.matrix.freezeInput then
         if not game.paused then
           game:Pause()
         else

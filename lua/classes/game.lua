@@ -159,6 +159,7 @@ class "Game" {
     self:StartRound()
   end;
   StartRound = function(self)
+    self.freezeInput = true
     self.timers.ready:clear()
     self.fader.color.a = 0.5
     self.readyText.color.a = 1
@@ -195,6 +196,7 @@ class "Game" {
       self.fader.color.a = 0
       self.readyText.text = "GO!!"
       self.levelInProgress = true
+      self.freezeInput = false
       self.timers.ready:during(1, function(dt)
         self.readyText.color.a = self.readyText.color.a - dt
       end, function()

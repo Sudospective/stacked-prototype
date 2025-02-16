@@ -52,11 +52,9 @@ class Label : public Gizmo {
     if (texture)
       SDL_DestroyTexture(texture);
 
-    text = std::string(newText);
+    text = newText;
 
     if (!font) return;
-
-    SDL_Color c = {255u, 255u, 255u, 255u};
 
     float alignH = align["h"];
     TTF_SetFontWrappedAlign(
@@ -68,6 +66,7 @@ class Label : public Gizmo {
           : TTF_WRAPPED_ALIGN_CENTER
     );
 
+    SDL_Color c = {255u, 255u, 255u, 255u};
     SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped(font, text.c_str(), c, 0);
     if (!surface) {
       Scarlet::Log::Error("Unable to create surface: " + std::string(TTF_GetError()));
@@ -96,7 +95,7 @@ class Label : public Gizmo {
     return text;
   }
   void Draw() {
-    if (broken || !texture || text.empty())
+    if (broken || !font || text.empty())
       return;
     
     float alignH = align["h"];
