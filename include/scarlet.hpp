@@ -332,11 +332,19 @@ namespace Scarlet {
         return false;
       }
 
+#ifdef _WINDOWS
       window = SDL_CreateWindow(title,
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         width, height,
-        SDL_WINDOW_VULKAN
+        0
       );
+#else
+      window = SDL_CreateWindow(title,
+        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        width, height,
+        SDL_WINDOW_OPENGL
+      );
+#endif
       if (!window) {
         Log::Error("Unable to create SDL window: " + std::string(SDL_GetError()));
         return false;
