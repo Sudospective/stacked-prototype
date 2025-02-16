@@ -137,6 +137,10 @@ class "PastryShelf" : extends "Shelf" {
         while data.name == bite.name do
           index = math.random(1, #stacked.bites)
           data = stacked.bites[index]
+          while data.name == "Cinnamon Bun" and math.random(1, 20) ~= 1 do
+            index = math.random(1, #stacked.bites)
+            data = stacked.bites[index]
+          end
         end
       end
       pastry:Bake(data)

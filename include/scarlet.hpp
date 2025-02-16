@@ -135,6 +135,24 @@ namespace Scarlet {
       Log::Info("Controllers enumerated.");
       Log::Info(std::to_string(controllers.size()) + " controller(s) connected.");
     }
+    void AddController(int id) {
+      SDL_GameController* gamepad = SDL_GameControllerOpen(id);
+      Controller c;
+      c.gamepad = gamepad;
+      c.id = SDL_JoystickGetDeviceInstanceID(id);
+      c.type = SDL_GameControllerGetType(gamepad);
+      controllers[controllers.size() + 1] = c;
+    }
+    void RemoveController(int id) {
+      SDL_GameController* gamepad;
+      for (int i = 1; i < controllers.size() + 1; i++) {
+        if (static_cast<Controller>(controllers[i + 1]).id == id) {
+          SDL_GameControllerClose(static_cast<Controller>(controllers[i + 1]).gamepad);
+          controllers[i + 1] = nullptr;
+          break;
+        }
+      }
+    }
     sol::table GetControllers() const {
       return controllers;
     }
@@ -506,9 +524,11 @@ namespace Scarlet {
             break;
           }
           case SDL_CONTROLLERDEVICEADDED: {
+            Input::GetInstance().AddController(event.cdevice.which);
             break;
           }
           case SDL_CONTROLLERDEVICEREMOVED: {
+            Input::GetInstance().RemoveController(event.cdevice.which);
             break;
           }
           default: {

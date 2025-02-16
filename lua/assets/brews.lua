@@ -164,7 +164,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/mocha.png",
-    points = 1.5,
+    points = 2.5,
     ability = function(self, game, action)
       return action.points * self.points
     end,
@@ -179,7 +179,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/dalgona.png",
-    points = 20,
+    points = 50,
     ability = function(self, game, action)
       game.matrix.actions.single = game.matrix.actions.single + self.points
       game.matrix.actions.double = game.matrix.actions.double + self.points
@@ -211,7 +211,7 @@ return {
     end,
     rarity = "Uncommon",
     image = "assets/coffee/decaf.png",
-    points = 5,
+    points = 10,
     ability = function(self, game, action)
       return action.points + self.points * stacked.gamestate.actions.single
     end,
@@ -253,13 +253,13 @@ return {
   {
     name = "Tripplo",
     description = function(self)
-      return "x"..self.points.." points if clear\ncontains a triple"
+      return "+"..self.points.." points if clear\ncontains a triple"
     end,
     rarity = "Rare",
     image = "assets/coffee/cortado.png",
-    points = 1.5,
+    points = 1000,
     ability = function(self, game, action)
-      return action.points * self.points
+      return action.points + self.points
     end,
     condition = function(self, game, action)
       return not action.drop and action.rows >= 2
