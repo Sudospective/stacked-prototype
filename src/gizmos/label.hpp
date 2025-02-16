@@ -49,8 +49,6 @@ class Label : public Gizmo {
     }
   }
   void SetText(const char* newText) {
-    if (std::string(newText).empty()) return;
-
     if (texture)
       SDL_DestroyTexture(texture);
 
@@ -74,6 +72,7 @@ class Label : public Gizmo {
     if (!surface) {
       Scarlet::Log::Error("Unable to create surface: " + std::string(TTF_GetError()));
       broken = true;
+      return;
     }
 
     SDL_Renderer* renderer = Scarlet::Graphics::GetMainRenderer();
@@ -84,6 +83,7 @@ class Label : public Gizmo {
     if (!texture) {
       Scarlet::Log::Error("Unable to create texture: " + std::string(SDL_GetError()));
       broken = true;
+      return;
     }
 
     w = surface->w;

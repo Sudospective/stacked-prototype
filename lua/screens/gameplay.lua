@@ -214,8 +214,10 @@ class "Gameplay" : extends "Screen" {
   __enter = function(self)
     stacked.seeds.game = math.random(1, 9e9)
     math.randomseed(stacked.seeds.game)
+
     levelLabel.text = "LEVEL "..stacked.gamestate.level
     brewsText.text = ""
+
     local counts = {}
     for _, brew in ipairs(stacked.gamestate.brews) do
       counts[brew.name] = counts[brew.name] or 0
