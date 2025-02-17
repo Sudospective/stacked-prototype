@@ -196,6 +196,7 @@ stacked = {
   },
   gamestate = {
     level = 1,
+    limit = 40,
     score = 0,
     cache = 0,
     queue = 3,

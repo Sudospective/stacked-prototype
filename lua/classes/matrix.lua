@@ -49,12 +49,14 @@ class "Matrix" {
     self.actions = stacked.gamestate.actions
     self.bonuses = stacked.gamestate.bonuses
     self.brews = stacked.gamestate.brews
+    self.limit = stacked.gamestate.limit
   end;
   FillToGamestate = function(self)
     stacked.gamestate.stats = self.stats
     stacked.gamestate.actions = self.actions
     stacked.gamestate.bonuses = self.bonuses
     stacked.gamestate.brews = self.brews
+    stacked.gamestate.limit = self.limit
   end;
   SetCriteria = function(self)
     self.goal = math.floor(5000 * (2 ^ (stacked.gamestate.level - 1)))
