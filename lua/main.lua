@@ -33,8 +33,8 @@ stacked.screens = {
     local inQuint = stacked.timer.tween.quint
     local outQuint = stacked.timer.tween.out(inQuint)
 
-    stacked.timer.during(0.25, function(dt)
-      time = time + dt * 4
+    stacked.timer.during(0.5, function(dt)
+      time = time + dt * 2
       stacked.screens.curtain.x = -stacked.scx + (stacked.sw * inQuint(time))
     end, function()
       time = 0
@@ -45,8 +45,8 @@ stacked.screens = {
       self[self.next]:Enter()
       self.current = self.next
       self.next = nil
-      stacked.timer.during(0.25, function(dt)
-        time = time + dt * 4
+      stacked.timer.during(0.5, function(dt)
+        time = time + dt * 2
         stacked.screens.curtain.x = stacked.scx + (stacked.sw * outQuint(time));
       end, function()
         stacked.screens.curtain.x = -stacked.scx
