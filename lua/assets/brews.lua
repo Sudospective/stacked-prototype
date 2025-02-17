@@ -281,7 +281,7 @@ return {
       return points
     end,
     condition = function(self, game, action)
-      return true
+      return not action.drop and action.rows > 0
     end,
   },
   {
