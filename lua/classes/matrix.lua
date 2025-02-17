@@ -10,7 +10,6 @@ class "Matrix" {
   w = 10;
   h = 20;
   buffer = 10;
-  level = 1;
   lines = 0;
   limit = 40;
   score = 0;
@@ -39,7 +38,6 @@ class "Matrix" {
     self.h = 20;
     self.lines = 0
     self.score = 0
-    self.goal = stacked.goals[stacked.gamestate.level]
     self.combo = -1
     self:FillFromGamestate()
     self:ResetCells()
@@ -59,7 +57,7 @@ class "Matrix" {
     stacked.gamestate.brews = self.brews
   end;
   SetCriteria = function(self)
-    self.goal = stacked.goals[stacked.gamestate.level]
+    self.goal = math.floor(5000 * (2 ^ (stacked.gamestate.level - 1)))
   end;
   ResetCells = function(self)
     for j = -self.buffer, self.h - 1 do

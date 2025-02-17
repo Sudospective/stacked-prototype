@@ -153,18 +153,6 @@ stacked = {
     lime = "s", -- upgrade back-to-back
     cherry = "z", -- upgrade all-clear
   },
-  goals = {
-    5000,
-    10000,
-    20000,
-    40000,
-    80000,
-    160000,
-    320000,
-    640000,
-    1280000,
-    2560000,
-  },
   actions = {
     -- per row dropped
     -- multiply by drop distance

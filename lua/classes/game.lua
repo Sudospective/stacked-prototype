@@ -76,6 +76,9 @@ class "Game" {
     self:Initialize();
   end;
   Initialize = function(self)
+    self.won = false
+    self.over = false
+
     self.matrix:Initialize();
     self.matrix.x = stacked.scx
     self.matrix.y = stacked.scy
@@ -136,6 +139,7 @@ class "Game" {
   end;
   NewRound = function(self)
     self.over = false
+    self.freezeInput = false
 
     self.matrix.h = stacked.gamestate.height
     self.matrix.w = stacked.gamestate.width
@@ -165,8 +169,8 @@ class "Game" {
     self.readyText.color.a = 1
     self.readyText.text = (
       "Score\n"..
-      tostring(math.floor(self.matrix.goal)).." points\n"..
-      "in\n"..
+      tostring(math.floor(self.matrix.goal)).."\n"..
+      "points in\n"..
       tostring(self.matrix.limit).." lines"
     )
     if self.boss then
@@ -206,6 +210,7 @@ class "Game" {
     end)
   end;
   EndRound = function(self)
+    self.freezeInput = true
     self.timers.ready:clear()
     self.fader.color.a = 0.5
     self.readyText.color.a = 1
