@@ -58,6 +58,7 @@ class "Game" {
     self.clearText.color.a = 0
 
     self.sounds = {
+      move = "assets/sounds/move.ogg",
       rotate = "assets/sounds/rotate.ogg",
       lock = "assets/sounds/lock.ogg",
       clear = "assets/sounds/clear.ogg",
@@ -73,6 +74,7 @@ class "Game" {
       self.sounds[name].volume = 0.5
     end
 
+    self.sounds.move.volume = 0.1
     self.sounds.lines.volume = 1
 
     self:Initialize();
@@ -136,6 +138,7 @@ class "Game" {
     self.timers.clear = stacked.timer.new()
     self.timers.movement = stacked.timer.new()
 
+    -- dont ask.
     self.timers.movement:clear()
     self.timers.movement:after(0, function()
       self.x = 0
@@ -326,6 +329,7 @@ class "Game" {
       return
     end
     self.lastMove = 1
+    self.sounds.move:Play()
     if self.infinity or self.extendCounter < 15 then
       self.extendCounter = self.extendCounter + 1
       self.timeUntilLock = self.lockTime
@@ -349,6 +353,7 @@ class "Game" {
       return
     end
     self.lastMove = 1
+    self.sounds.move:Play()
     if self.infinity or self.extendCounter < 15 then
       self.extendCounter = self.extendCounter + 1
       self.timeUntilLock = self.lockTime
