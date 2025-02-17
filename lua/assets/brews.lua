@@ -149,7 +149,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/doppio.png",
-    points = 300,
+    points = 400,
     ability = function(self, game, action)
       return action.points + self.points
     end,

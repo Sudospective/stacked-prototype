@@ -59,6 +59,16 @@ return {
       stacked.gamestate.infinity = true
     end,
   },
+  {
+    name = "Croissant",
+    description = function(self)
+      return "+10 line limit"
+    end,
+    image = "assets/pastries/croissant.png",
+    effect = function(self)
+      stacked.gamestate.limit = stacked.gamestate.limit + 10
+    end,
+  },
   --[[
   {
     name = "Fruit Cake",
