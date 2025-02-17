@@ -5,9 +5,9 @@
 
 using namespace Scarlet;
 
-//SDL_mutex* mutex = nullptr;
+SDL_mutex* mutex = nullptr;
 
-/*
+//*
 int handleUpdate(void*) {
   while (true) {
     SDL_LockMutex(mutex);
@@ -15,12 +15,14 @@ int handleUpdate(void*) {
       SDL_UnlockMutex(mutex);
       break;
     }
+    Engine::GetInstance().Update();
+    Engine::GetInstance().Draw();
     SDL_UnlockMutex(mutex);
     SDL_Delay(1);
   }
   return 0;
 }
-*/
+//*/
 
 int main(int argc, char* argv[]) {
   std::cout << "----------------------" << std::endl;
@@ -35,25 +37,23 @@ int main(int argc, char* argv[]) {
     Engine::GetInstance().Start();
   }
 
-  //mutex = SDL_CreateMutex();
+  mutex = SDL_CreateMutex();
 
-  //SDL_Thread* updateThread = SDL_CreateThread(handleUpdate, "UpdateThread", nullptr);
+  SDL_Thread* updateThread = SDL_CreateThread(handleUpdate, "UpdateThread", nullptr);
 
   while (true) {
-    //SDL_LockMutex(mutex);
+    SDL_LockMutex(mutex);
     if (!Engine::GetInstance().IsRunning()) {
-      //SDL_UnlockMutex(mutex);
+      SDL_UnlockMutex(mutex);
       break;
     }
     Engine::GetInstance().HandleEvents();
-    Engine::GetInstance().Update();
-    Engine::GetInstance().Draw();
-    //SDL_UnlockMutex(mutex);
-    //SDL_Delay(1);
+    SDL_UnlockMutex(mutex);
+    SDL_Delay(1);
   }
 
-  //SDL_WaitThread(updateThread, nullptr);
-  //SDL_DestroyMutex(mutex);
+  SDL_WaitThread(updateThread, nullptr);
+  SDL_DestroyMutex(mutex);
 
   return 0;
 }

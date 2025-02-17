@@ -335,7 +335,7 @@ namespace Scarlet {
       window = SDL_CreateWindow(title,
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         width, height,
-        SDL_WINDOW_OPENGL
+        SDL_WINDOW_VULKAN
       );
 
       if (!window) {
@@ -371,6 +371,12 @@ namespace Scarlet {
       texture = SDL_CreateTextureFromSurface(renderer, surface);
       SDL_FreeSurface(surface);
 
+      Log::Info("Initializing TTF...");
+      if (TTF_Init() < 0) {
+        Log::Error("Unable to initialize TTF: " + std::string(TTF_GetError()));
+        return false;
+      }
+
       sol::state* lua = Lua::GetInstance().GetState();
 
       sol::table windowTable = lua->create_table_with(
@@ -381,7 +387,8 @@ namespace Scarlet {
       );
 
       sol::table graphicsTable = lua->create_table_with(
-        "drawQuad", &Graphics::DrawQuad
+        "drawQuad", &Graphics::DrawQuad,
+        "drawText", &Graphics::DrawText
       );
 
       (*lua)["scarlet"] = lua->create_table_with(
@@ -395,6 +402,7 @@ namespace Scarlet {
     }
     static void Destroy() {
       Log::Info("Destroying graphics related objects...");
+      TTF_Quit();
       SDL_DestroyTexture(texture);
       SDL_DestroyRenderer(renderer);
       SDL_DestroyWindow(window);
@@ -444,6 +452,75 @@ namespace Scarlet {
       SDL_SetTextureColorMod(texture, oldColor.r, oldColor.g, oldColor.b);
       SDL_SetTextureAlphaMod(texture, oldColor.a);
       SDL_SetTextureBlendMode(texture, oldBlend);
+    }
+    static void DrawText(float x, float y, const char* text, TTF_Font* font, sol::table align, float rot, sol::table color) {
+      if (!renderer || !font) return;
+
+      float alignH = align["h"];
+      float alignV = align["v"];
+
+      TTF_SetFontWrappedAlign(
+        font,
+        alignH == 0.0f
+          ? TTF_WRAPPED_ALIGN_LEFT
+          : alignH == 1.0f
+            ? TTF_WRAPPED_ALIGN_RIGHT
+            : TTF_WRAPPED_ALIGN_CENTER
+      );
+
+      SDL_Surface* surface = TTF_RenderUTF8_Blended_Wrapped(font, text, {255u, 255u, 255u, 255u}, 0);
+      if (!surface) {
+        Log::Error("Unable to create surface: " + std::string(TTF_GetError()));
+        SDL_FreeSurface(surface);
+        return;
+      }
+
+      SDL_Texture* tex = SDL_CreateTextureFromSurface(renderer, surface);
+      if (!tex) {
+        Log::Error("Unable to create texture: " + std::string(TTF_GetError()));
+        SDL_DestroyTexture(tex);
+        SDL_FreeSurface(surface);
+        return;
+      }
+
+      float w = surface->w;
+      float h = surface->h;
+
+      SDL_FRect rect;
+      rect.x = x - w * alignH;
+      rect.y = y - h * alignV;
+      rect.w = w;
+      rect.h = h;
+
+      SDL_Color newColor;
+      newColor.r = static_cast<Uint8>(255u * static_cast<float>(color["r"]));
+      newColor.g = static_cast<Uint8>(255u * static_cast<float>(color["g"]));
+      newColor.b = static_cast<Uint8>(255u * static_cast<float>(color["b"]));
+      newColor.a = static_cast<Uint8>(255u * static_cast<float>(color["a"]));
+  
+      SDL_Color oldColor;
+      SDL_BlendMode oldBlend;
+      SDL_GetTextureColorMod(tex, &oldColor.r, &oldColor.g, &oldColor.b);
+      SDL_GetTextureAlphaMod(tex, &oldColor.a);
+      SDL_GetTextureBlendMode(tex, &oldBlend);
+      SDL_SetTextureColorMod(tex, newColor.r, newColor.g, newColor.b);
+      SDL_SetTextureAlphaMod(tex, newColor.a);
+      SDL_SetTextureBlendMode(tex, SDL_BLENDMODE_BLEND);
+      SDL_RenderCopyExF(
+        renderer,
+        tex,
+        nullptr,
+        &rect,
+        rot,
+        nullptr,
+        SDL_FLIP_NONE
+      );
+      SDL_SetTextureColorMod(tex, oldColor.r, oldColor.g, oldColor.b);
+      SDL_SetTextureAlphaMod(tex, oldColor.a);
+      SDL_SetTextureBlendMode(tex, oldBlend);
+
+      SDL_DestroyTexture(tex);
+      SDL_FreeSurface(surface);
     }
     static void SetFullscreen(bool on) {
       fullscreen = on;
