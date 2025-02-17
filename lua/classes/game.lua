@@ -3,6 +3,8 @@ require "classes.matrix"
 require "classes.tetromino"
 
 class "Game" {
+  x = 0;
+  y = 0;
   matrix = Matrix.new();
   fader = Quad.new();
   smear = Quad.new();
@@ -79,6 +81,9 @@ class "Game" {
     self.won = false
     self.over = false
 
+    self.x = 0
+    self.y = 0
+
     self.matrix:Initialize();
     self.matrix.x = stacked.scx
     self.matrix.y = stacked.scy
@@ -129,6 +134,13 @@ class "Game" {
 
     self.timers.ready = stacked.timer.new()
     self.timers.clear = stacked.timer.new()
+    self.timers.movement = stacked.timer.new()
+
+    self.timers.movement:clear()
+    self.timers.movement:after(0, function()
+      self.x = 0
+      self.y = 0
+    end)
   end;
   NewGame = function(self)
     -- restore defaults
@@ -299,6 +311,18 @@ class "Game" {
     self.curPiece:Move(0, -1)
     if self:IsPieceOutside() or self:IsPieceColliding() then
       self.curPiece:Move(0, 1)
+      if self.freezeInput then return end
+      self.timers.movement:clear()
+      self.x = -4
+      self.y = 0
+      local quint = stacked.timer.tween.quint
+      local time = 0
+      self.timers.movement:during(0.25, function(dt)
+        time = time + dt * 4
+        self.x = (1 - stacked.timer.tween.out(quint)(time)) * -4
+      end, function()
+        self.x = 0
+      end)
       return
     end
     self.lastMove = 1
@@ -310,6 +334,17 @@ class "Game" {
   MoveRight = function(self)
     self.curPiece:Move(0, 1)
     if self:IsPieceOutside() or self:IsPieceColliding() then
+      self.timers.movement:clear()
+      self.x = 4
+      self.y = 0
+      local quint = stacked.timer.tween.quint
+      local time = 0
+      self.timers.movement:during(0.25, function(dt)
+        time = time + dt * 4
+        self.x = (1 - stacked.timer.tween.out(quint)(time)) * 4
+      end, function()
+        self.x = 0
+      end)
       self.curPiece:Move(0, -1)
       return
     end
@@ -378,6 +413,18 @@ class "Game" {
     self.curPiece.column.offset = self.ghostPiece.column.offset
 
     self:LockToMatrix()
+
+    self.timers.movement:clear()
+    self.x = 0
+    self.y = 4
+    local quint = stacked.timer.tween.quint
+    local time = 0
+    self.timers.movement:during(0.25, function(dt)
+      time = time + dt * 4
+      self.y = (1 - stacked.timer.tween.out(quint)(time)) * 4
+    end, function()
+      self.y = 0
+    end)
   end;
   Hold = function(self)
     if self.timesHeld >= stacked.gamestate.hold then return end
@@ -850,8 +897,8 @@ class "Game" {
       handle:update(dt)
     end
     
-    self.fader.x = self.matrix.x
-    self.fader.y = self.matrix.y
+    self.fader.x = self.matrix.x + self.x
+    self.fader.y = self.matrix.y + self.y
     self.fader.w = self.matrix.w * stacked.size
     self.fader.h = self.matrix.h * stacked.size
 
@@ -898,12 +945,15 @@ class "Game" {
       self.repeatingAction = false
       self.timeUntilARR = 0
     end
+    
+    self.matrix.offset.x = self.x
+    self.matrix.offset.y = self.y
   end;
   Draw = function(self)
     local offset = {
       current = {
-        x = stacked.scx - self.matrix.w * stacked.size * 0.5,
-        y = stacked.scy - self.matrix.h * stacked.size * 0.5,
+        x = stacked.scx - self.matrix.w * stacked.size * 0.5 + self.x,
+        y = stacked.scy - self.matrix.h * stacked.size * 0.5 + self.y,
       },
       next = {
         x = stacked.scx + 10 * 16 * 0.3,
@@ -914,6 +964,8 @@ class "Game" {
         y = stacked.scy - 20 * 16 * 0.25,
       }
     }
+    self.matrix.offset.x = self.x
+    self.matrix.offset.y = self.y
     self.matrix:Draw()
     self.fader:Draw()
     for i = self.nextPiece.n, 1, -1 do
