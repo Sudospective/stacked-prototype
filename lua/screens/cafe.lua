@@ -133,7 +133,7 @@ class "Cafe" : extends "Screen" {
         for i, shelf in ipairs(activeShelves) do
           if shelf.__enabled then
             local totalItems = 0
-            for _, item in ipairs(self.items) do
+            for _, item in ipairs(shelf.items) do
               if not item.__purchased then
                 totalItems = totalItems + 1
               end
