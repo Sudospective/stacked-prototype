@@ -12,16 +12,46 @@ stacked.screens = {
   gameplay = Gameplay.new(),
   cafe = Cafe.new(),
 
+  curtain = Quad.new(),
+
   first = "title",
   current = nil,
   next = nil,
-  goToNext = function(self)
+  snapToNext = function(self)
     if self.current then
       self[self.current]:Exit()
     end
     self[self.next]:Enter()
     self.current = self.next
     self.next = nil
+  end,
+  goToNext = function(self)
+    stacked.timer.clear()
+    stacked.screens.curtain.x = -stacked.scx
+
+    local time = 0
+    local inQuint = stacked.timer.tween.quint
+    local outQuint = stacked.timer.tween.out(inQuint)
+
+    stacked.timer.during(0.25, function(dt)
+      time = time + dt * 4
+      stacked.screens.curtain.x = -stacked.scx + (stacked.sw * inQuint(time))
+    end, function()
+      time = 0
+      stacked.screens.curtain.x = stacked.scx
+      if self.current then
+        self[self.current]:Exit()
+      end
+      self[self.next]:Enter()
+      self.current = self.next
+      self.next = nil
+      stacked.timer.during(0.25, function(dt)
+        time = time + dt * 4
+        stacked.screens.curtain.x = stacked.scx + (stacked.sw * outQuint(time));
+      end, function()
+        stacked.screens.curtain.x = -stacked.scx
+      end)
+    end)
   end,
 }
 setmetatable(stacked.screens, stacked.screens)
@@ -32,6 +62,17 @@ local framerate = 0
 local fps = Label.new()
 
 function init()
+  stacked.screens.curtain.x = -stacked.scx
+  stacked.screens.curtain.y = stacked.scy
+  stacked.screens.curtain.w = stacked.sw
+  stacked.screens.curtain.h = stacked.sh
+  stacked.screens.curtain.color = {
+    r = 0,
+    g = 0,
+    b = 0,
+    a = 1,
+  }
+
   -- Debug
   fps.align.v = 0
   fps.align.h = 0
@@ -39,7 +80,6 @@ function init()
   fps.y = 4
   fps:LoadFont("assets/sport.otf", 16)
   fps.text = "FPS: 0"
-  
 
   if debugging then
     stacked.timer.every(1, function()
@@ -49,7 +89,7 @@ function init()
 
   -- Final initialization
   stacked.screens.next = stacked.screens.first
-  stacked.screens:goToNext()
+  stacked.screens:snapToNext()
 end
 
 function input(event)
@@ -86,6 +126,8 @@ function draw()
   stacked.screens.title:Draw()
   stacked.screens.gameplay:Draw()
   stacked.screens.cafe:Draw()
+
+  stacked.screens.curtain:Draw()
 
   -- Debug
   if debugging then

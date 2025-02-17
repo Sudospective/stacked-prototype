@@ -199,7 +199,8 @@ class "Gameplay" : extends "Screen" {
       elseif b == binds.Extra and game.paused then
         game:Unpause()
         game:Initialize()
-        game:ToTitle()
+        stacked.screens.next = "title"
+        stacked.screens:snapToNext()
       elseif b == binds.Pause then
         if not game.paused then
           if not game.freezeInput then
