@@ -37,7 +37,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/cappuccino.png",
-    points = 300,
+    points = 150,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -72,7 +72,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/ristretto.png",
-    points = 25,
+    points = 10,
     ability = function(self, game, action)
       local mult = 0
       for _, brew in ipairs(game.matrix.brews) do
@@ -149,7 +149,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/doppio.png",
-    points = 400,
+    points = 300,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -179,7 +179,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/dalgona.png",
-    points = 50,
+    points = 25,
     ability = function(self, game, action)
       game.matrix.actions.single = game.matrix.actions.single + self.points
       game.matrix.actions.double = game.matrix.actions.double + self.points
@@ -257,12 +257,31 @@ return {
     end,
     rarity = "Rare",
     image = "assets/coffee/cortado.png",
-    points = 1000,
+    points = 750,
     ability = function(self, game, action)
       return action.points + self.points
     end,
     condition = function(self, game, action)
       return not action.drop and action.rows >= 2
+    end,
+  },
+  {
+    name = "Antoccino",
+    description = function(self)
+      return "+"..self.points.." points on clear,\n1 in 15 chance to\nreset clear score"
+    end,
+    rarity = "Rare",
+    image = "assets/coffee/antoccino.png",
+    points = 1500,
+    ability = function(self, game, action)
+      local points = action.points + self.points
+      if math.random(1, 15) == 1 then
+        points = 0
+      end
+      return points
+    end,
+    condition = function(self, game, action)
+      return true
     end,
   },
   {

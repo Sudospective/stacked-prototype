@@ -52,7 +52,7 @@ return {
   {
     name = "Cinnamon Bun",
     description = function(self)
-      return "Enable infinity placement"
+      return "Enable\ninfinity placement"
     end,
     image = "assets/pastries/bun.png",
     effect = function(self)
