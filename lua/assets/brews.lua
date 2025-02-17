@@ -164,7 +164,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/mocha.png",
-    points = 2.5,
+    points = 1.5,
     ability = function(self, game, action)
       return action.points * self.points
     end,
@@ -222,7 +222,7 @@ return {
   {
     name = "Espresso",
     description = function(self)
-      return "Gains +50 points for\neach tetra clear"
+      return "Gains +50 points for\neach tetra clear\nsince purchase"
     end,
     rarity = "Uncommon",
     image = "assets/coffee/espresso.png",

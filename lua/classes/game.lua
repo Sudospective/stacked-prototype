@@ -605,10 +605,9 @@ class "Game" {
     local points = 0
     local actions = stacked.gamestate.actions
     local bonuses = stacked.gamestate.bonuses
-    local lvl = stacked.gamestate.level
 
     if action.drop then
-      points = actions.drop[action.drop] * action.rows * lvl
+      points = actions.drop[action.drop] * action.rows
     else
       local base
       if action.spin then
@@ -617,49 +616,49 @@ class "Game" {
         base = actions
       end
       if action.spin and action.rows == 0 then
-        points = base.none * lvl
+        points = base.none
       elseif action.rows == 1 then
-        points = base.single * lvl
+        points = base.single
       elseif action.rows == 2 then
-        points = base.double * lvl
+        points = base.double
       elseif action.rows == 3 then
-        points = base.triple * lvl
+        points = base.triple
       elseif action.rows == 4 then
-        points = base.tetra * lvl
+        points = base.tetra
       end
 
       if self.matrix.combo > 0 then
-        points = points + 50 * self.matrix.combo * lvl
+        points = points + 50 * self.matrix.combo
       end
 
-      if not (action.spin or action.rows == 4) then
+      if not ((action.spin and action.rows > 0) or action.rows == 4) then
         action.b2b = false
       end
 
       if action.b2b then
         if action.spin then
           if action.rows == 1 then
-            points = points + base.single * lvl * bonuses.b2b
+            points = points + base.single * bonuses.b2b
           elseif action.rows == 2 then
-            points = points + base.double * lvl * bonuses.b2b
+            points = points + base.double * bonuses.b2b
           elseif action.rows == 3 then
-            points = points + base.triple * lvl * bonuses.b2b
+            points = points + base.triple * bonuses.b2b
           end
         elseif action.rows == 4 then
-          points = points + base.tetra * lvl * bonuses.b2b
+          points = points + base.tetra * bonuses.b2b
         end
       end
 
       if action.allclear then
         base = bonuses.allclear
         if action.rows == 1 then
-          points = points + base.single * lvl
+          points = points + base.single
         elseif action.rows == 2 then
-          points = points + base.double * lvl
+          points = points + base.double
         elseif action.rows == 3 then
-          points = points + base.triple * lvl
+          points = points + base.triple
         elseif action.rows == 4 then
-          points = points + base.tetra * (action.b2b and 1.6 or 1) * lvl
+          points = points + base.tetra * (action.b2b and 1.6 or 1)
         end
       end
 
@@ -675,11 +674,11 @@ class "Game" {
 
     for _, coffee in ipairs(stacked.gamestate.brews) do
       -- store points so far
-      action.points = points
+      action.points = points or 0
       points = (coffee:Sip(self, action) or points)
     end
 
-    points = math.floor(points)
+    points = math.floor(points) * stacked.gamestate.level
 
     local allclear = action.allclear and "PERFECT CLEAR\n" or ""
     local b2b = action.b2b and "BACK-TO-BACK\n" or ""
