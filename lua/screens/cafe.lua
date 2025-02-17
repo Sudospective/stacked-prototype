@@ -14,9 +14,10 @@ local sodaShelf = SodaShelf.new()
 local stickerShelf = StickerShelf.new()
 
 local sounds = {
-  switch = "assets/sounds/rotate.ogg",
+  switch = "assets/sounds/move.ogg",
   click = "assets/sounds/lock.ogg",
-  purchase = "assets/sounds/clear.ogg",
+  purchase = "assets/sounds/rotate.ogg",
+  exit = "assets/sounds/clear.ogg",
 }
 
 local prompt = Label.new()
@@ -131,13 +132,21 @@ class "Cafe" : extends "Screen" {
       elseif b == binds.Confirm then
         for i, shelf in ipairs(activeShelves) do
           if shelf.__enabled then
+            local totalItems = 0
+            for _, item in ipairs(self.items) do
+              if not item.__purchased then
+                totalItems = totalItems + 1
+              end
+            end
             shelf:Purchase()
-            sounds.purchase:Play()
             local enabledItems = 0
             for _, item in ipairs(shelf.items) do
               if not item.__purchased then
                 enabledItems = enabledItems + 1
               end
+            end
+            if enabledItems < totalItems then
+              sounds.purchase:Play()
             end
             if enabledItems < 1 then
               shelf:Close()
@@ -150,6 +159,7 @@ class "Cafe" : extends "Screen" {
       end
     elseif event.type == "KeyUp" or event.type == "GamepadUp" then
       if b == binds.Cancel then
+        sounds.exit:Play()
         stacked.screens.next = "gameplay"
         stacked.screens:goToNext()
       end
