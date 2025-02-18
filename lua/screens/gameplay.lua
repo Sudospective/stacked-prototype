@@ -180,7 +180,7 @@ class "Gameplay" : extends "Screen" {
     pause.title.color.a = game.paused and 1 or 0
     pause.quit.color.a = game.paused and 1 or 0
 
-    pause.quit.text = "Press "..stacked.localization[stacked.controls.active].Extra.." to quit to Title"
+    pause.quit.text = "Press "..stacked.localization[stacked.controls.active].Extra.." to quit to Title\n(Will delete current run)"
   end;
   __input = function(self, event)
     local b = event.button
@@ -198,6 +198,7 @@ class "Gameplay" : extends "Screen" {
         game.controlStates.right = false
       elseif b == binds.Extra and game.paused then
         game:Unpause()
+        stacked.gamestate = stacked.deepCopy(stacked.default)
         game:Initialize()
         stacked.screens.next = "title"
         stacked.screens:snapToNext()
