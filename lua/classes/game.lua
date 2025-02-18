@@ -875,14 +875,7 @@ class "Game" {
     else
       self.callbacks.title = stacked.timer.after(3, function()
         self.callbacks.title = nil
-        self.matrix:Initialize()
-        stacked.gamestate.level = 1
-        stacked.gamestate.score = 0
-        stacked.gamestate.cache = 0
-        stacked.gamestate.brews = {}
-        stacked.gamestate.actions = stacked.deepCopy(stacked.actions)
-        stacked.gamestate.bonuses = stacked.deepCopy(stacked.bonuses)
-        stacked.gamestate.stats = stacked.deepCopy(self.matrix.stats)
+        stacked.gamestate = stacked.deepCopy(stacked.default)
         self:ToTitle()
       end)
     end
