@@ -32,9 +32,7 @@ local game = Game.new()
 class "Gameplay" : extends "Screen" {
   title = "Gameplay";
   __init = function(self)
-    if stacked.gamestate.level == 1 then
-      game:Initialize()
-    end
+    game:Initialize()
 
     bg.x = stacked.scx
     bg.y = stacked.scy
@@ -176,7 +174,7 @@ class "Gameplay" : extends "Screen" {
     linesText.text = tostring(game.matrix.lines)
     linesLimit.text = tostring(game.matrix.limit)
 
-    pause.bg.color.a = game.paused and 1 or 0
+    pause.bg.color.a = game.paused and 0.75 or 0
     pause.title.color.a = game.paused and 1 or 0
     pause.quit.color.a = game.paused and 1 or 0
 
@@ -197,9 +195,9 @@ class "Gameplay" : extends "Screen" {
       elseif b == binds.MoveRight then
         game.controlStates.right = false
       elseif b == binds.Extra and game.paused then
+        game.sounds.hold:Play()
         game:Unpause()
         stacked.gamestate = stacked.deepCopy(stacked.default)
-        game:Initialize()
         stacked.screens.next = "title"
         stacked.screens:snapToNext()
       elseif b == binds.Pause then
@@ -217,6 +215,10 @@ class "Gameplay" : extends "Screen" {
     end
   end;
   __enter = function(self)
+    if stacked.gamestate.level == 1 then
+      game:Initialize()
+    end
+
     stacked.seeds.game = math.random(1, 9e9)
     math.randomseed(stacked.seeds.game)
 

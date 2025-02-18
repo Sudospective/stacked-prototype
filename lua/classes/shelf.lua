@@ -71,6 +71,9 @@ class "Shelf" {
     local item = self.items[self.items.index]
     item:Purchase()
   end;
+  GetCurrentItem = function(self)
+    return self.items[self.items.index]
+  end;
   Draw = function(self)
     self.label.x = self.x
     self.label.y = self.y

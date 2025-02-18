@@ -11,6 +11,7 @@ local controls = Label.new()
 local songCredit = Label.new()
 
 local start = Sound.new()
+local quit = Sound.new()
 
 class "Title" : extends "Screen" {
   title = "Title";
@@ -73,6 +74,8 @@ class "Title" : extends "Screen" {
 
     start:LoadSource("assets/sounds/clear.ogg")
     start.volume = 0.5
+
+    quit:LoadSource("assets/sounds/hold.ogg")
   end;
   __update = function(self, dt)
     local localization = stacked.localization[stacked.controls.active]

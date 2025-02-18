@@ -6,6 +6,7 @@ local sign = Label.new()
 
 local activeBorder = Quad.new()
 local activeShelves = {}
+local selection = Quad.new()
 
 local cacheCounter = Label.new()
 local coffeeShelf = CoffeeShelf.new()
@@ -19,6 +20,13 @@ local sounds = {
   purchase = "assets/sounds/clear.ogg",
   exit = "assets/sounds/hold.ogg",
 }
+
+local pause = {
+  bg = Quad.new(),
+  title = Label.new(),
+  quit = Label.new(),
+}
+local paused = false
 
 local prompt = Label.new()
 
@@ -80,6 +88,36 @@ class "Cafe" : extends "Screen" {
     prompt:LoadFont("assets/sport.otf", 16)
     self:AddGizmo(prompt)
 
+    selection.w = 4
+    selection.h = 4
+    selection.rot = 45
+    self:AddGizmo(selection)
+
+    pause.bg.x = stacked.scx
+    pause.bg.y = stacked.scy
+    pause.bg.w = stacked.sw
+    pause.bg.h = stacked.sh
+    pause.bg.color = {
+      r = 0,
+      g = 0,
+      b = 0,
+      a = 0,
+    }
+    self:AddGizmo(pause.bg)
+
+    pause.title.x = stacked.scx
+    pause.title.y = stacked.scy - 16
+    pause.title.align.v = 1
+    pause.title:LoadFont("assets/sport.otf", 32)
+    pause.title.text = "PAUSED"
+    self:AddGizmo(pause.title)
+
+    pause.quit.x = stacked.scx
+    pause.quit.y = stacked.scy + 16
+    pause.quit.align.v = 0
+    pause.quit:LoadFont("assets/sport.otf", 16)
+    self:AddGizmo(pause.quit)
+
     for name, path in pairs(sounds) do
       sounds[name] = Sound.new()
       sounds[name]:LoadSource(path)
@@ -100,6 +138,15 @@ class "Cafe" : extends "Screen" {
       end
     end
     cacheCounter.text = "Lines Available: "..stacked.gamestate.cache
+    local item = activeShelves[activeBorder.aux + 1]:GetCurrentItem()
+    selection.y = item.y + 2
+    selection.x = item.x - 72
+
+    pause.bg.color.a = paused and 0.75 or 0
+    pause.title.color.a = paused and 1 or 0
+    pause.quit.color.a = paused and 1 or 0
+
+    pause.quit.text = "Press "..stacked.localization[stacked.controls.active].Extra.." to quit to Title\n(Will delete current run)"
   end;
   __input = function(self, event)
     local binds = stacked.controls[stacked.controls.active]
@@ -160,10 +207,17 @@ class "Cafe" : extends "Screen" {
         end
       end
     elseif event.type == "KeyUp" or event.type == "GamepadUp" then
-      if b == binds.Cancel then
+      if b == binds.Cancel and not paused then
         sounds.exit:Play()
         stacked.screens.next = "gameplay"
         stacked.screens:goToNext()
+      elseif b == binds.Extra then
+        sounds.exit:Play()
+        stacked.gamestate = stacked.deepCopy(stacked.default)
+        stacked.screens.next = "title"
+        stacked.screens:snapToNext()
+      elseif b == binds.Pause then
+        paused = not paused
       end
     end
   end;

@@ -137,7 +137,7 @@ class "Matrix" {
     self.stats.lines = self.stats.lines + completed
     return completed
   end;
-  Draw = function(self)
+  Draw = function(self, paused)
     for j = 0, self.h - 1 do
       for i = 0, self.w - 1 do
         local cell = self.cells[j][i]
@@ -159,7 +159,7 @@ class "Matrix" {
           stacked.size - 1,
           stacked.size - 1,
           0,
-          stacked.colors[cell]
+          paused and stacked.colors.none or stacked.colors[cell]
         )
       end
     end

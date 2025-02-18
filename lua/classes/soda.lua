@@ -36,7 +36,13 @@ class "Soda" : extends "Item" {
       actions = stacked.gamestate.bonuses
     end
     if self.action ~= "mystery" then
-      actions[self.action] = actions[self.action] + self.points
+      if type(actions[self.action]) == "table" then
+        for k, v in pairs(actions[self.action]) do
+          actions[self.action][k] = v + self.points
+        end
+      else
+        actions[self.action] = actions[self.action] + self.points
+      end
     else
       for _, flavor in ipairs {
         Blueberry,
@@ -48,7 +54,13 @@ class "Soda" : extends "Item" {
         Cherry,
       } do
         local soda = flavor.new()
-        actions[soda.action] = actions[soda.action] + soda.points
+        if type(actions[soda.action]) == "table" then
+          for k, v in pairs(actions[soda.action]) do
+            actions[soda.action][k] = v + soda.points
+          end
+        else
+          actions[soda.action] = actions[soda.action] + soda.points
+        end
       end
     end
   end;

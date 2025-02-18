@@ -7,7 +7,6 @@ class "Game" {
   y = 0;
   matrix = Matrix.new();
   fader = Quad.new();
-  smear = Quad.new();
   curPiece = Tetromino.new();
   nextPiece = {};
   heldPiece = Tetromino.new();
@@ -899,7 +898,6 @@ class "Game" {
     stacked.seed = math.floor(stacked.uptime * 1000)
     self.callbacks.title = stacked.timer.after(4, function()
       self.callbacks.title = nil
-      self.matrix:Initialize()
       stacked.gamestate = stacked.deepCopy(stacked.default)
       self:ToTitle()
     end)
@@ -1014,16 +1012,17 @@ class "Game" {
     }
     self.matrix.offset.x = self.x
     self.matrix.offset.y = self.y
-    self.matrix:Draw()
-    self.smear:Draw()
-    for i = self.nextPiece.n, 1, -1 do
-      local nextOffset = stacked.deepCopy(offset.next)
-      nextOffset.y = nextOffset.y + (i - 1) * ((self.matrix.h * (stacked.size - 3) / self.nextPiece.n)) + stacked.size * 1.5
-      self.nextPiece[i]:Draw(nextOffset.x, nextOffset.y)
+    self.matrix:Draw(self.paused)
+    if not self.paused then
+      for i = self.nextPiece.n, 1, -1 do
+        local nextOffset = stacked.deepCopy(offset.next)
+        nextOffset.y = nextOffset.y + (i - 1) * ((self.matrix.h * (stacked.size - 3) / self.nextPiece.n)) + stacked.size * 1.5
+        self.nextPiece[i]:Draw(nextOffset.x, nextOffset.y)
+      end
+      self.heldPiece:Draw(offset.held.x, offset.held.y)
+      self.ghostPiece:Draw(offset.current.x, offset.current.y)
+      self.curPiece:Draw(offset.current.x, offset.current.y)
     end
-    self.heldPiece:Draw(offset.held.x, offset.held.y)
-    self.ghostPiece:Draw(offset.current.x, offset.current.y)
-    self.curPiece:Draw(offset.current.x, offset.current.y)
     
     self.fader:Draw()
 

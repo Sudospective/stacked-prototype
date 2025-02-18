@@ -6,7 +6,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/joe.png",
-    points = 50,
+    points = 25,
     ability = function(self, game, action)
       return action.points + self.points * action.rows
     end,
@@ -37,7 +37,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/cappuccino.png",
-    points = 150,
+    points = 100,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -72,7 +72,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/ristretto.png",
-    points = 10,
+    points = 25,
     ability = function(self, game, action)
       local mult = 0
       for _, brew in ipairs(game.matrix.brews) do
@@ -93,7 +93,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/latte.png",
-    points = 250,
+    points = 150,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -117,7 +117,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/americano.png",
-    points = 25,
+    points = 10,
     ability = function(self, game, action)
       local blocks = 0
       for j = game.matrix.h - 1, -game.matrix.buffer, -1 do
@@ -149,7 +149,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/doppio.png",
-    points = 400,
+    points = 200,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -179,7 +179,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/dalgona.png",
-    points = 25,
+    points = 20,
     ability = function(self, game, action)
       game.matrix.actions.single = game.matrix.actions.single + self.points
       game.matrix.actions.double = game.matrix.actions.double + self.points
@@ -222,17 +222,53 @@ return {
   {
     name = "Espresso",
     description = function(self)
-      return "Gains +50 points for\neach tetra clear\nsince purchase"
+      return "Gains +25 points for\neach tetra clear\nsince purchase"
     end,
     rarity = "Uncommon",
     image = "assets/coffee/espresso.png",
     points = 0,
     ability = function(self, game, action)
-      self.points = self.points + 50
+      self.points = self.points + 25
       return action.points + self.points
     end,
     condition = function(self, game, action)
       return not action.drop and action.rows == 4
+    end,
+  },
+  {
+    name = "Galão",
+    description = function(self)
+      return "x"..self.points.." points for each\ngreen block cleared"
+    end,
+    rarity = "Uncommon",
+    image = "assets/coffee/galao.png",
+    points = 1.25,
+    ability = function(self, game, action)
+      local blocks = 0
+      for j = game.matrix.h - 1, -game.matrix.buffer, -1 do
+        local prevBlocks = blocks
+        local clearCount = 0
+        for i = 0, game.matrix.w - 1 do
+          local cell = game.matrix.cells[j][i]
+          if cell ~= 0 then
+            clearCount = clearCount + 1
+          end
+          if cell == 6 then
+            blocks = blocks + 1
+          end
+        end
+        if clearCount < stacked.gamestate.lineLength then
+          blocks = prevBlocks
+        end
+      end
+      local points = action.points
+      for i = 1, blocks do
+        points = points * self.points
+      end
+      return points
+    end,
+    condition = function(self, game, action)
+      return not action.drop and action.rows > 0
     end,
   },
   {
@@ -257,7 +293,7 @@ return {
     end,
     rarity = "Rare",
     image = "assets/coffee/cortado.png",
-    points = 750,
+    points = 300,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -268,14 +304,14 @@ return {
   {
     name = "Antoccino",
     description = function(self)
-      return "+"..self.points.." points on clear,\n1 in 15 chance to\nreset clear score"
+      return "+"..self.points.." points on clear,\n1 in 20 chance to\nreset clear score"
     end,
     rarity = "Rare",
     image = "assets/coffee/antoccino.png",
-    points = 1500,
+    points = 500,
     ability = function(self, game, action)
       local points = action.points + self.points
-      if math.random(1, 15) == 1 then
+      if math.random(1, 20) == 1 then
         points = 0
       end
       return points
@@ -302,7 +338,7 @@ return {
   {
     name = "Affogato",
     description = function(self)
-      return "Multiply points by combo\nif combo is active"
+      return "Multiply clears by combo\nif combo is active"
     end,
     rarity = "Exotic",
     image = "assets/coffee/affogato.png",
@@ -310,7 +346,7 @@ return {
       return action.points * game.matrix.combo
     end,
     condition = function(self, game, action)
-      return game.matrix.combo > 0
+      return not action.drop and action.rows > 0 and game.matrix.combo > 0
     end,
   },
 }
