@@ -90,6 +90,8 @@ function init()
   -- Final initialization
   stacked.screens.next = stacked.screens.first
   stacked.screens:snapToNext()
+  scarlet.music.play("assets/music.mp3")
+  scarlet.music.volume(0.35)
 end
 
 function input(event)

@@ -14,10 +14,10 @@ local sodaShelf = SodaShelf.new()
 local stickerShelf = StickerShelf.new()
 
 local sounds = {
-  switch = "assets/sounds/move.ogg",
+  switch = "assets/sounds/rotate.ogg",
   click = "assets/sounds/lock.ogg",
-  purchase = "assets/sounds/rotate.ogg",
-  exit = "assets/sounds/clear.ogg",
+  purchase = "assets/sounds/clear.ogg",
+  exit = "assets/sounds/hold.ogg",
 }
 
 local prompt = Label.new()

@@ -60,6 +60,7 @@ class "Game" {
     self.sounds = {
       move = "assets/sounds/move.ogg",
       rotate = "assets/sounds/rotate.ogg",
+      hold = "assets/sounds/hold.ogg",
       lock = "assets/sounds/lock.ogg",
       clear = "assets/sounds/clear.ogg",
       tspin = "assets/sounds/tspin.ogg",
@@ -447,6 +448,8 @@ class "Game" {
     self.heldPiece.column.offset = 0
     self.heldPiece.rotState = 1
     self.readyToLock = false
+
+    self.sounds.hold:Play()
     
     self.timesHeld = self.timesHeld + 1
   end;
