@@ -68,6 +68,7 @@ class "Game" {
       lines = "assets/sounds/lines.ogg",
       countdown = "assets/sounds/countdown.ogg",
       gameover = "assets/sounds/glass.ogg",
+      win = "assets/sounds/win.ogg",
     }
 
     for name, path in pairs(self.sounds) do
@@ -77,7 +78,8 @@ class "Game" {
     end
 
     self.sounds.move.volume = 0.1
-    self.sounds.lines.volume = 1
+    self.sounds.lines.volume = 0.75
+    self.sounds.hold.volume = 1
 
     self:Initialize();
   end;
@@ -235,6 +237,7 @@ class "Game" {
     if stacked.gamestate.level > 10 and not self.won then
       self.won = true
       self.readyText.text = "YOU\nWIN!"
+      self.sounds.win:Play()
     end
 
     self.levelInProgress = false
@@ -897,13 +900,7 @@ class "Game" {
     self.callbacks.title = stacked.timer.after(4, function()
       self.callbacks.title = nil
       self.matrix:Initialize()
-      stacked.gamestate.level = 1
-      stacked.gamestate.score = 0
-      stacked.gamestate.cache = 0
-      stacked.gamestate.brews = {}
-      stacked.gamestate.actions = stacked.deepCopy(stacked.actions)
-      stacked.gamestate.bonuses = stacked.deepCopy(stacked.bonuses)
-      stacked.gamestate.stats = stacked.deepCopy(self.matrix.stats)
+      stacked.gamestate = stacked.deepCopy(stacked.default)
       self:ToTitle()
     end)
   end;

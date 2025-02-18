@@ -8,6 +8,8 @@ local help = Label.new()
 local fader = Quad.new()
 local controls = Label.new()
 
+local songCredit = Label.new()
+
 local start = Sound.new()
 
 class "Title" : extends "Screen" {
@@ -61,6 +63,13 @@ class "Title" : extends "Screen" {
     controls:LoadFont("assets/sport.otf", 16)
     controls.color.a = 0
     self:AddGizmo(controls)
+
+    songCredit.x = 4
+    songCredit.y = stacked.sh - 4
+    songCredit.align = {h = 0, v = 1}
+    songCredit:LoadFont("assets/sport.otf", 16)
+    songCredit.text = "Song: Blue Boi by LAKEY INSPIRED"
+    self:AddGizmo(songCredit)
 
     start:LoadSource("assets/sounds/clear.ogg")
     start.volume = 0.5

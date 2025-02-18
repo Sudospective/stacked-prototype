@@ -85,6 +85,8 @@ class "Cafe" : extends "Screen" {
       sounds[name]:LoadSource(path)
       sounds[name].volume = 0.5
     end
+
+    sounds.exit.volume = 1
   end;
   __update = function(self, dt)
     local localization = stacked.localization[stacked.controls.active]
