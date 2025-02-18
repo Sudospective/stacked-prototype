@@ -69,6 +69,12 @@ stacked = {
       b = 1,
       a = 1,
     },
+    { -- hard dropped
+      r = 1,
+      g = 1,
+      b = 1,
+      a = 1,
+    },
     -- Keyed colors
     none = {
       r = 0.2,

@@ -67,6 +67,7 @@ class "Game" {
       complete = "assets/sounds/complete.ogg",
       lines = "assets/sounds/lines.ogg",
       countdown = "assets/sounds/countdown.ogg",
+      gameover = "assets/sounds/glass.ogg",
     }
 
     for name, path in pairs(self.sounds) do
@@ -138,6 +139,7 @@ class "Game" {
     self.timers.ready = stacked.timer.new()
     self.timers.clear = stacked.timer.new()
     self.timers.movement = stacked.timer.new()
+    self.timers.smear = stacked.timer.new()
 
     -- dont ask.
     self.timers.movement:clear()
@@ -414,15 +416,35 @@ class "Game" {
       rows = self.dropDistance
     }
     if action.rows > 0 then self:AwardPoints(action) end
+
     self.curPiece.row.offset = self.ghostPiece.row.offset
     -- just in case
     self.curPiece.column.offset = self.ghostPiece.column.offset
+
+    local start = self.curPiece.column.start
+    local offset = self.curPiece.column.offset
+    local rowEnd = self.curPiece.row.start + self.curPiece.row.offset - 1
+    local cells = stacked.deepCopy(self.curPiece.cells[self.curPiece.rotState])
 
     self:LockToMatrix()
 
     self.timers.movement:clear()
     self.x = 0
     self.y = 4
+
+    stacked.colors[9].r = 1
+    stacked.colors[9].g = 1
+    stacked.colors[9].b = 1
+
+    -- we gotta get rid of that shit first
+    for row = 0, self.matrix.h - 1 do
+      for column = 0, self.matrix.w - 1 do
+        if self.matrix:IsCellEmpty(row, column) then
+          self.matrix.cells[row][column] = 0
+        end
+      end
+    end
+
     local quint = stacked.timer.tween.quint
     local time = 0
     self.timers.movement:during(0.25, function(dt)
@@ -430,6 +452,33 @@ class "Game" {
       self.y = (1 - stacked.timer.tween.out(quint)(time)) * 4
     end, function()
       self.y = 0
+    end)
+
+    local smearStart = start + offset + cells.offset
+    for column = smearStart, smearStart + cells.width - 1 do
+      for row = 0, rowEnd + cells.height do
+        if self.matrix.cells[row][column] == 0 then
+          self.matrix.cells[row][column] = 9
+        end
+      end
+    end
+    self.timers.smear:clear()
+    self.timers.smear:during(0.25, function(dt)
+      stacked.colors[9].r = stacked.colors[9].r - (dt * 4) * 0.8
+      stacked.colors[9].g = stacked.colors[9].g - (dt * 4) * 0.8
+      stacked.colors[9].b = stacked.colors[9].b - (dt * 4) * 0.8
+    end, function()
+      for column = smearStart, smearStart + cells.width - 1 do
+        for row = 0, rowEnd + cells.height do
+          if self.matrix:IsCellEmpty(row, column) then
+            self.matrix.cells[row][column] = 0
+          end
+        end
+      end
+
+      stacked.colors[9].r = 1
+      stacked.colors[9].g = 1
+      stacked.colors[9].b = 1
     end)
   end;
   Hold = function(self)
@@ -850,6 +899,7 @@ class "Game" {
     self.over = true
     self.readyText.text = "GAME\nOVER"
     self:EndRound()
+    self.sounds.gameover:Play()
     stacked.seed = math.floor(stacked.uptime * 1000)
     self.callbacks.title = stacked.timer.after(4, function()
       self.callbacks.title = nil
@@ -975,7 +1025,7 @@ class "Game" {
     self.matrix.offset.x = self.x
     self.matrix.offset.y = self.y
     self.matrix:Draw()
-    self.fader:Draw()
+    self.smear:Draw()
     for i = self.nextPiece.n, 1, -1 do
       local nextOffset = stacked.deepCopy(offset.next)
       nextOffset.y = nextOffset.y + (i - 1) * ((self.matrix.h * (stacked.size - 3) / self.nextPiece.n)) + stacked.size * 1.5
@@ -984,6 +1034,8 @@ class "Game" {
     self.heldPiece:Draw(offset.held.x, offset.held.y)
     self.ghostPiece:Draw(offset.current.x, offset.current.y)
     self.curPiece:Draw(offset.current.x, offset.current.y)
+    
+    self.fader:Draw()
 
     self.readyText:Draw()
     self.clearText:Draw()

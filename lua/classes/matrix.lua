@@ -82,10 +82,7 @@ class "Matrix" {
     )
   end;
   IsCellEmpty = function(self, row, column)
-    if row > self.h - 1 then
-      print(row)
-    end
-    return self.cells[row][column] == 0
+    return self.cells[row][column] == 0 or self.cells[row][column] == 9
   end;
   IsRowFull = function(self, row, numToClear)
     numToClear = numToClear or stacked.gamestate.lineLength

@@ -10,7 +10,12 @@ class "Tetromino" {
     start = 3,
     offset = 0,
   };
-  cells = { {}, {}, {}, {} };
+  cells = {
+    { width = 0, offset = 0, height = 0 },
+    { width = 0, offset = 0, height = 0 },
+    { width = 0, offset = 0, height = 0 },
+    { width = 0, offset = 0, height = 0 },
+  };
   kicks = {
     { [-1] = {}, [1] = {}, },
     { [-1] = {}, [1] = {}, },
@@ -33,7 +38,7 @@ class "Tetromino" {
   end;
   GetCellPositions = function(self)
     local res = {}
-    for _, cell in pairs(self.cells[self.rotState]) do
+    for _, cell in ipairs(self.cells[self.rotState]) do
       local newPos = {
         cell[1] + self.row.start + self.row.offset,
         cell[2] + self.column.start + self.column.offset,
@@ -46,7 +51,7 @@ class "Tetromino" {
     if not self.visible then return end
     local cells = self:GetCellPositions()
     local size = self.next and 16 or stacked.size
-    for _, cell in pairs(cells) do
+    for _, cell in ipairs(cells) do
       scarlet.graphics.drawQuad(
         self.x + cell[2] * stacked.size + x,
         self.y + cell[1] * stacked.size + y,
@@ -78,10 +83,10 @@ class "IPiece" : extends "Tetromino" {
     offset = 0,
   };
   cells = {
-    { {1, 0}, {1, 1}, {1, 2}, {1, 3}, },
-    { {0, 2}, {1, 2}, {2, 2}, {3, 2}, },
-    { {2, 0}, {2, 1}, {2, 2}, {2, 3}, },
-    { {0, 1}, {1, 1}, {2, 1}, {3, 1}, },
+    { {1, 0}, {1, 1}, {1, 2}, {1, 3}, width = 4, offset = 0, height = 1 },
+    { {0, 2}, {1, 2}, {2, 2}, {3, 2}, width = 1, offset = 2, height = 0 },
+    { {2, 0}, {2, 1}, {2, 2}, {2, 3}, width = 4, offset = 0, height = 2 },
+    { {0, 1}, {1, 1}, {2, 1}, {3, 1}, width = 1, offset = 1, height = 0 },
   };
   kicks = {
     { -- O
@@ -114,10 +119,10 @@ class "OPiece" : extends "Tetromino" {
     offset = 0,
   };
   cells = {
-    { {0, 0}, {0, 1}, {1, 0}, {1, 1}, },
-    { {0, 0}, {0, 1}, {1, 0}, {1, 1}, },
-    { {0, 0}, {0, 1}, {1, 0}, {1, 1}, },
-    { {0, 0}, {0, 1}, {1, 0}, {1, 1}, },
+    { {0, 0}, {0, 1}, {1, 0}, {1, 1}, width = 2, offset = 0, height = 0 },
+    { {0, 0}, {0, 1}, {1, 0}, {1, 1}, width = 2, offset = 0, height = 0 },
+    { {0, 0}, {0, 1}, {1, 0}, {1, 1}, width = 2, offset = 0, height = 0 },
+    { {0, 0}, {0, 1}, {1, 0}, {1, 1}, width = 2, offset = 0, height = 0 },
   };
   kicks = {
     {
@@ -150,10 +155,10 @@ class "TPiece" : extends "Tetromino" {
     offset = 0,
   };
   cells = {
-    { {0, 1}, {1, 0}, {1, 1}, {1, 2}, },
-    { {0, 1}, {1, 1}, {1, 2}, {2, 1}, },
-    { {1, 0}, {1, 1}, {1, 2}, {2, 1}, },
-    { {0, 1}, {1, 0}, {1, 1}, {2, 1}, },
+    { {0, 1}, {1, 0}, {1, 1}, {1, 2}, width = 3, offset = 0, height = 1 },
+    { {0, 1}, {1, 1}, {1, 2}, {2, 1}, width = 2, offset = 1, height = 1 },
+    { {1, 0}, {1, 1}, {1, 2}, {2, 1}, width = 3, offset = 0, height = 1 },
+    { {0, 1}, {1, 0}, {1, 1}, {2, 1}, width = 2, offset = 0, height = 1 },
   };
   kicks = {
     { -- O
@@ -186,10 +191,10 @@ class "JPiece" : extends "Tetromino" {
     offset = 0,
   };
   cells = {
-    { {0, 0}, {1, 0}, {1, 1}, {1, 2}, },
-    { {0, 1}, {0, 2}, {1, 1}, {2, 1}, },
-    { {1, 0}, {1, 1}, {1, 2}, {2, 2}, },
-    { {0, 1}, {1, 1}, {2, 0}, {2, 1}, },
+    { {0, 0}, {1, 0}, {1, 1}, {1, 2}, width = 3, offset = 0, height = 1 },
+    { {0, 1}, {0, 2}, {1, 1}, {2, 1}, width = 2, offset = 1, height = 0 },
+    { {1, 0}, {1, 1}, {1, 2}, {2, 2}, width = 3, offset = 0, height = 1 },
+    { {0, 1}, {1, 1}, {2, 0}, {2, 1}, width = 2, offset = 0, height = 2 },
   };
   kicks = {
     { -- O
@@ -222,10 +227,10 @@ class "LPiece" : extends "Tetromino" {
     offset = 0,
   };
   cells = {
-    { {0, 2}, {1, 0}, {1, 1}, {1, 2}, },
-    { {0, 1}, {1, 1}, {2, 1}, {2, 2}, },
-    { {1, 0}, {1, 1}, {1, 2}, {2, 0}, },
-    { {0, 0}, {0, 1}, {1, 1}, {2, 1}, },
+    { {0, 2}, {1, 0}, {1, 1}, {1, 2}, width = 3, offset = 0, height = 1 },
+    { {0, 1}, {1, 1}, {2, 1}, {2, 2}, width = 2, offset = 1, height = 2 },
+    { {1, 0}, {1, 1}, {1, 2}, {2, 0}, width = 3, offset = 0, height = 1 },
+    { {0, 0}, {0, 1}, {1, 1}, {2, 1}, width = 2, offset = 0, height = 0 },
   };
   kicks = {
     { -- O
@@ -258,10 +263,10 @@ class "SPiece" : extends "Tetromino" {
     offset = 0,
   };
   cells = {
-    { {0, 1}, {0, 2}, {1, 0}, {1, 1}, },
-    { {0, 1}, {1, 1}, {1, 2}, {2, 2}, },
-    { {1, 1}, {1, 2}, {2, 0}, {2, 1}, },
-    { {0, 0}, {1, 0}, {1, 1}, {2, 1}, },
+    { {0, 1}, {0, 2}, {1, 0}, {1, 1}, width = 3, offset = 0, height = 1 },
+    { {0, 1}, {1, 1}, {1, 2}, {2, 2}, width = 2, offset = 1, height = 1 },
+    { {1, 1}, {1, 2}, {2, 0}, {2, 1}, width = 3, offset = 0, height = 2 },
+    { {0, 0}, {1, 0}, {1, 1}, {2, 1}, width = 2, offset = 0, height = 1 },
   };
   kicks = {
     { -- O
@@ -294,10 +299,10 @@ class "ZPiece" : extends "Tetromino" {
     offset = 0,
   };
   cells = {
-    { {0, 0}, {0, 1}, {1, 1}, {1, 2}, },
-    { {0, 2}, {1, 1}, {1, 2}, {2, 1}, },
-    { {1, 0}, {1, 1}, {2, 1}, {2, 2}, },
-    { {0, 1}, {1, 0}, {1, 1}, {2, 0}, },
+    { {0, 0}, {0, 1}, {1, 1}, {1, 2}, width = 3, offset = 0, height = 1 },
+    { {0, 2}, {1, 1}, {1, 2}, {2, 1}, width = 2, offset = 1, height = 1 },
+    { {1, 0}, {1, 1}, {2, 1}, {2, 2}, width = 3, offset = 0, height = 2 },
+    { {0, 1}, {1, 0}, {1, 1}, {2, 0}, width = 2, offset = 0, height = 1 },
   };
   kicks = {
     { -- O

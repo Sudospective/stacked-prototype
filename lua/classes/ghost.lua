@@ -22,7 +22,7 @@ class "Ghost" : extends "Tetromino" {
       b = stacked.colors[self.id].b,
       a = 0.25
     }
-    for _, cell in pairs(cells) do
+    for _, cell in ipairs(cells) do
       scarlet.graphics.drawQuad(
         self.x + cell[2] * stacked.size + x,
         self.y + cell[1] * stacked.size + y,
