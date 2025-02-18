@@ -82,6 +82,8 @@ class "Title" : extends "Screen" {
       "Hold: "..localization.Hold.."\n"..
       "Extra Action: "..localization.Extra.."\n"
     )
+
+    title.rot = math.sin(stacked.uptime * 2) * 2
   end;
   __input = function(self, event)
     local binds = stacked.controls[stacked.controls.active]

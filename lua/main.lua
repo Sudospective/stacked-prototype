@@ -39,12 +39,7 @@ stacked.screens = {
     end, function()
       time = 0
       stacked.screens.curtain.x = stacked.scx
-      if self.current then
-        self[self.current]:Exit()
-      end
-      self[self.next]:Enter()
-      self.current = self.next
-      self.next = nil
+      self:snapToNext()
       stacked.timer.during(0.5, function(dt)
         time = time + dt * 2
         stacked.screens.curtain.x = stacked.scx + (stacked.sw * outQuint(time));
@@ -88,10 +83,10 @@ function init()
   end
 
   -- Final initialization
-  stacked.screens.next = stacked.screens.first
-  stacked.screens:snapToNext()
   scarlet.music.play("assets/music.mp3")
   scarlet.music.volume(0.25)
+  stacked.screens.next = stacked.screens.first
+  stacked.screens:snapToNext()
 end
 
 function input(event)
