@@ -138,9 +138,15 @@ class "Cafe" : extends "Screen" {
       end
     end
     cacheCounter.text = "Lines Available: "..stacked.gamestate.cache
+
     local item = activeShelves[activeBorder.aux + 1]:GetCurrentItem()
-    selection.y = item.y + 2
-    selection.x = item.x - 72
+    if item then
+      selection.y = item.y + 2
+      selection.x = item.x - 72
+    else
+      selection.x = stacked.scx
+      selection.y = stacked.scy
+    end
 
     pause.bg.color.a = paused and 0.75 or 0
     pause.title.color.a = paused and 1 or 0
