@@ -31,6 +31,21 @@ return {
     end,
   },
   {
+    name = "Macchiato",
+    description = function(self)
+      return "x"..self.points.." points on\nmini T-spin clear"
+    end,
+    rarity = "Common",
+    image = "assets/coffee/macchiato.png",
+    points = 1.5,
+    ability = function(self, game, action)
+      return action.points * self.points
+    end,
+    condition = function(self, game, action)
+      return action.spin == "mini"
+    end,
+  },
+  {
     name = "Cappuccino",
     description = function(self)
       return "+"..self.points.." points when\nclearing with an\nO tetromino"

@@ -121,17 +121,17 @@ class "Matrix" {
         self:ClearRow(row)
         completed = completed + 1
       elseif completed > 0 then
-        if completed == 1 then
-          self.stats.single = self.stats.single + 1
-        elseif completed == 2 then
-          self.stats.double = self.stats.double + 1
-        elseif completed == 3 then
-          self.stats.triple = self.stats.triple + 1
-        else
-          self.stats.tetra = self.stats.tetra + 1
-        end
         self:MoveRowDown(row, completed)
       end
+    end
+    if completed == 1 then
+      self.stats.single = self.stats.single + 1
+    elseif completed == 2 then
+      self.stats.double = self.stats.double + 1
+    elseif completed == 3 then
+      self.stats.triple = self.stats.triple + 1
+    elseif completed == 4 then
+      self.stats.tetra = self.stats.tetra + 1
     end
     self.lines = self.lines + completed
     self.stats.lines = self.stats.lines + completed

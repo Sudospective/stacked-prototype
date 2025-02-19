@@ -21,6 +21,9 @@ local levelLabel = Label.new()
 local brewsLabel = Label.new()
 local brewsText = Label.new()
 
+local statsLabel = Label.new()
+local statsText = Label.new()
+
 local pause = {
   bg = Quad.new(),
   title = Label.new(),
@@ -137,6 +140,19 @@ class "Gameplay" : extends "Screen" {
     brewsText:LoadFont("assets/sport.otf", 16)
     self:AddGizmo(brewsText)
 
+    statsLabel.x = stacked.scx + xOffset * 2 + 16
+    statsLabel.y = stacked.scy - yOffset
+    statsLabel.align = {h = 0, v = 0}
+    statsLabel:LoadFont("assets/sport.otf", 32)
+    statsLabel.text = "STATS"
+    self:AddGizmo(statsLabel)
+
+    statsText.x = stacked.scx + xOffset * 2 + 52
+    statsText.y = stacked.scy - yOffset + 32
+    statsText.align.v = 0
+    statsText:LoadFont("assets/sport.otf", 16)
+    self:AddGizmo(statsText)
+
     game.x = stacked.scx
     game.y = stacked.scy
     self:AddGizmo(game)
@@ -179,6 +195,18 @@ class "Gameplay" : extends "Screen" {
     pause.quit.color.a = game.paused and 1 or 0
 
     pause.quit.text = "Press "..stacked.localization[stacked.controls.active].Extra.." to quit to Title\n(Will delete current run)"
+
+    statsText.text = (
+      "Lines: "..game.matrix.stats.lines.."\n"..
+      "Single: "..game.matrix.stats.single.."\n"..
+      "Double: "..game.matrix.stats.double.."\n"..
+      "Triple: "..game.matrix.stats.triple.."\n"..
+      "Tetra: "..game.matrix.stats.tetra.."\n"..
+      "T-Spin: "..game.matrix.stats.tspin.."\n"..
+      "Mini T-Spin: "..game.matrix.stats.mini.."\n"..
+      "Back-to-Back: "..game.matrix.stats.b2b.."\n"..
+      "Perfect Clear: "..game.matrix.stats.allclear
+    )
   end;
   __input = function(self, event)
     local b = event.button

@@ -796,10 +796,19 @@ class "Game" {
     local spinType = ""
     local lineType = ""
 
+    if action.allclear then
+      self.matrix.stats.allclear = self.matrix.stats.allclear + 1
+    end
+    if action.b2b then
+      self.matrix.stats.b2b = self.matrix.stats.b2b + 1
+    end
+
     if action.spin == "full" then
       spinType = "T-SPIN\n"
+      self.matrix.stats.tspin = self.matrix.stats.tspin + 1
     elseif action.spin == "mini" then
       spinType = "MINI T-SPIN\n"
+      self.matrix.stats.mini = self.matrix.stats.mini + 1
     end
 
     if action.rows == 1 then
@@ -830,18 +839,6 @@ class "Game" {
         self.clearText.y = stacked.scy - 32
       end)
     end
-
-    local stats = {
-      tspin = spinType:lower():gsub("%s+", ""),
-      line = lineType:lower():gsub("%s+", ""),
-      b2b = action.b2b and "b2b" or "",
-      allclear = action.allclear and "allclear" or "",
-    }
-
-    for _, stat in ipairs(stats) do
-      self:IncrementStat(stat)
-    end
-
     self.matrix.score = self.matrix.score + points
   end;
   IncrementStat = function(self, stat)
