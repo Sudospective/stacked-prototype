@@ -17,6 +17,7 @@ stacked.screens = {
   first = "title",
   current = nil,
   next = nil,
+
   snapToNext = function(self)
     if self.current then
       self[self.current]:Exit()
