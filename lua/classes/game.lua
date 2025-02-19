@@ -855,8 +855,14 @@ class "Game" {
       realStat = "b2b"
     elseif stat:find("allclear") then
       realStat = "allclear"
+    else
+      realStat = stat
     end
-    base[realStat] = base[realStat] + 1
+    if not base[realStat] then
+      error("No stat named "..realStat)
+    else
+      base[realStat] = base[realStat] + 1
+    end
   end;
   RoundClear = function(self)
     stacked.gamestate.level = stacked.gamestate.level + 1

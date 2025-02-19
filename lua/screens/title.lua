@@ -47,6 +47,13 @@ class "Title" : extends "Screen" {
     help:LoadFont("assets/sport.otf", 32)
     self:AddGizmo(help)
 
+    credits.x = 4
+    credits.y = stacked.sh - 4
+    credits.align = {h = 0, v = 1}
+    credits:LoadFont("assets/sport.otf", 16)
+    credits.text = "Font by UkiyoMoji Fonts\nSound effects from Pixabay\nSong by LAKEY INSPIRED"
+    self:AddGizmo(credits)
+
     fader.x = stacked.scx
     fader.y = stacked.scy
     fader.w = stacked.sw
@@ -64,13 +71,6 @@ class "Title" : extends "Screen" {
     controls:LoadFont("assets/sport.otf", 16)
     controls.color.a = 0
     self:AddGizmo(controls)
-
-    credits.x = 4
-    credits.y = stacked.sh - 4
-    credits.align = {h = 0, v = 1}
-    credits:LoadFont("assets/sport.otf", 16)
-    credits.text = "Font by UkiyoMoji Fonts\nSound effects from Pixabay\nSong by LAKEY INSPIRED"
-    self:AddGizmo(credits)
 
     start:LoadSource("assets/sounds/clear.ogg")
     start.volume = 0.5

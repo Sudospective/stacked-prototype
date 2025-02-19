@@ -190,6 +190,21 @@ return {
     end,
   },
   {
+    name = "Irish Coffee",
+    description = function(self)
+      return "+"..self.points.." points when\nclearing a double\nwith an S tetromino"
+    end,
+    rarity = "Common",
+    image = "assets/coffee/irish.png",
+    points = 150,
+    ability = function(self, game, action)
+      return action.points + self.points
+    end,
+    condition = function(self, game, action)
+      return not action.drop and game.curPiece.id == 6 and action.rows == 2
+    end,
+  },
+  {
     name = "Cortado",
     description = function(self)
       return "+"..self.points.." points for\neach consecutive clear\nif combo is active"
@@ -238,7 +253,7 @@ return {
   {
     name = "Galão",
     description = function(self)
-      return "x"..self.points.." points for each\ngreen block cleared"
+      return "x"..self.points.." points for each\norange block cleared"
     end,
     rarity = "Uncommon",
     image = "assets/coffee/galao.png",
@@ -253,7 +268,7 @@ return {
           if cell ~= 0 then
             clearCount = clearCount + 1
           end
-          if cell == 6 then
+          if cell == 5 then
             blocks = blocks + 1
           end
         end

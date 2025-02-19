@@ -231,6 +231,8 @@ stacked = {
         mini = {
           none = 100,
           single = 200,
+          -- mini t-spin doubles are possible with donut
+          double = 400,
         },
         full = {
           none = 400,
@@ -296,6 +298,8 @@ stacked = {
         mini = {
           none = 100,
           single = 200,
+          -- mini t-spin doubles are possible with donut
+          double = 400,
         },
         full = {
           none = 400,
