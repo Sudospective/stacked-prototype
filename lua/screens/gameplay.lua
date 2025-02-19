@@ -236,6 +236,15 @@ class "Gameplay" : extends "Screen" {
         else
           game:Unpause()
         end
+      elseif (b == binds.Confirm and game.over) or (b == binds.Extra and game.won) then
+        stacked.gamestate = stacked.deepCopy(stacked.default)
+        game:ToTitle()
+      elseif b == binds.Confirm and (
+        game.won
+        and not game.levelInProgress
+        and stacked.gamestate.level == 10
+      ) then
+        game:ToCafe()
       end
     end
     if game.levelInProgress then

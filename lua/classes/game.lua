@@ -13,6 +13,7 @@ class "Game" {
   ghostPiece = Ghost.new();
   readyText = Label.new();
   clearText = Label.new();
+  clearSubtext = Label.new();
   levelText = Label.new();
   sounds = {};
   callbacks = {};
@@ -56,6 +57,11 @@ class "Game" {
     self.clearText:LoadFont("assets/sport.otf", 32)
     self.clearText.color.a = 0
 
+    self.clearSubtext.x = stacked.scx
+    self.clearSubtext.y = stacked.scy + 32
+    self.clearSubtext:LoadFont("assets/sport.otf", 16)
+    self.clearSubtext.color.a = 0
+
     self.sounds = {
       move = "assets/sounds/move.ogg",
       rotate = "assets/sounds/rotate.ogg",
@@ -66,7 +72,7 @@ class "Game" {
       complete = "assets/sounds/complete.ogg",
       lines = "assets/sounds/lines.ogg",
       countdown = "assets/sounds/countdown.ogg",
-      gameover = "assets/sounds/glass.ogg",
+      lose = "assets/sounds/lose.ogg",
       win = "assets/sounds/win.ogg",
     }
 
@@ -233,9 +239,10 @@ class "Game" {
     self.timers.ready:clear()
     self.fader.color.a = 0.5
     self.readyText.color.a = 1
-    if stacked.gamestate.level > 10 and not self.won then
+    if stacked.gamestate.level == 10 and not self.won then
       self.won = true
       self.readyText.text = "YOU\nWIN!"
+      self.clearSubtext.text = "Endless?"
       self.sounds.win:Play()
     end
 
@@ -865,8 +872,7 @@ class "Game" {
     stacked.gamestate.level = stacked.gamestate.level + 1
     self.readyText.text = "CLEAR!!"
     self:EndRound()
-    stacked.seed = math.floor(stacked.uptime * 1000)
-    if stacked.gamestate.level <= 10 and not self.over then
+    if (stacked.gamestate.level < 10 or stacked.gamestate.level > 10) and not self.over then
       self.sounds.complete:Play()
       self.callbacks.lines = stacked.timer.after(2, function()
         self.callbacks.lines = nil
@@ -876,12 +882,6 @@ class "Game" {
       self.callbacks.cafe = stacked.timer.after(5, function()
         self.callbacks.cafe = nil
         self:ToCafe()
-      end)
-    else
-      self.callbacks.title = stacked.timer.after(3, function()
-        self.callbacks.title = nil
-        stacked.gamestate = stacked.deepCopy(stacked.default)
-        self:ToTitle()
       end)
     end
   end;
@@ -897,13 +897,7 @@ class "Game" {
     self.over = true
     self.readyText.text = "GAME\nOVER"
     self:EndRound()
-    self.sounds.gameover:Play()
-    stacked.seed = math.floor(stacked.uptime * 1000)
-    self.callbacks.title = stacked.timer.after(4, function()
-      self.callbacks.title = nil
-      stacked.gamestate = stacked.deepCopy(stacked.default)
-      self:ToTitle()
-    end)
+    self.sounds.lose:Play()
   end;
   Pause = function(self)
     self.paused = true
