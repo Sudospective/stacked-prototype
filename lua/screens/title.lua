@@ -8,7 +8,7 @@ local help = Label.new()
 local fader = Quad.new()
 local controls = Label.new()
 
-local songCredit = Label.new()
+local credits = Label.new()
 
 local start = Sound.new()
 local quit = Sound.new()
@@ -65,12 +65,12 @@ class "Title" : extends "Screen" {
     controls.color.a = 0
     self:AddGizmo(controls)
 
-    songCredit.x = 4
-    songCredit.y = stacked.sh - 4
-    songCredit.align = {h = 0, v = 1}
-    songCredit:LoadFont("assets/sport.otf", 16)
-    songCredit.text = "Song: Blue Boi by LAKEY INSPIRED"
-    self:AddGizmo(songCredit)
+    credits.x = 4
+    credits.y = stacked.sh - 4
+    credits.align = {h = 0, v = 1}
+    credits:LoadFont("assets/sport.otf", 16)
+    credits.text = "Font by UkiyoMoji Fonts\nSound effects from Pixabay\nSong by LAKEY INSPIRED"
+    self:AddGizmo(credits)
 
     start:LoadSource("assets/sounds/clear.ogg")
     start.volume = 0.5
