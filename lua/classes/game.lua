@@ -790,13 +790,13 @@ class "Game" {
       end
     end
 
+    points = math.floor(points) * stacked.gamestate.level
+
     for _, coffee in ipairs(stacked.gamestate.brews) do
       -- store points so far
       action.points = points or 0
       points = (coffee:Sip(self, action) or points)
     end
-
-    points = math.floor(points) * stacked.gamestate.level
 
     local allclear = action.allclear and "PERFECT CLEAR\n" or ""
     local b2b = action.b2b and "BACK-TO-BACK\n" or ""

@@ -6,7 +6,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/joe.png",
-    points = 25,
+    points = 10,
     ability = function(self, game, action)
       return action.points + self.points * action.rows
     end,
@@ -37,7 +37,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/macchiato.png",
-    points = 1.5,
+    points = 1.1,
     ability = function(self, game, action)
       return action.points * self.points
     end,
@@ -52,7 +52,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/cappuccino.png",
-    points = 100,
+    points = 50,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -87,7 +87,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/ristretto.png",
-    points = 25,
+    points = 10,
     ability = function(self, game, action)
       local mult = 0
       for _, brew in ipairs(game.matrix.brews) do
@@ -108,7 +108,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/latte.png",
-    points = 150,
+    points = 100,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -128,11 +128,11 @@ return {
   {
     name = "Americano",
     description = function(self)
-      return "+"..self.points.." points for each\nred or blue\nblock cleared"
+      return "+"..self.points.." points for each\nZ or J\nblock cleared"
     end,
     rarity = "Common",
     image = "assets/coffee/americano.png",
-    points = 10,
+    points = 5,
     ability = function(self, game, action)
       local blocks = 0
       for j = game.matrix.h - 1, -game.matrix.buffer, -1 do
@@ -164,7 +164,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/doppio.png",
-    points = 200,
+    points = 100,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -179,7 +179,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/mocha.png",
-    points = 1.5,
+    points = 1.25,
     ability = function(self, game, action)
       return action.points * self.points
     end,
@@ -211,7 +211,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/irish.png",
-    points = 150,
+    points = 125,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -268,11 +268,11 @@ return {
   {
     name = "Galão",
     description = function(self)
-      return "x"..self.points.." points for each\norange block cleared"
+      return "x"..self.points.." points for each\nL block cleared"
     end,
     rarity = "Uncommon",
     image = "assets/coffee/galao.png",
-    points = 1.25,
+    points = 1.1,
     ability = function(self, game, action)
       local blocks = 0
       for j = game.matrix.h - 1, -game.matrix.buffer, -1 do
@@ -308,7 +308,7 @@ return {
     end,
     rarity = "Rare",
     image = "assets/coffee/vienna.png",
-    points = 3,
+    points = 2,
     ability = function(self, game, action)
       return action.points * self.points
     end,
@@ -323,7 +323,7 @@ return {
     end,
     rarity = "Rare",
     image = "assets/coffee/cortado.png",
-    points = 300,
+    points = 150,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -334,14 +334,14 @@ return {
   {
     name = "Antoccino",
     description = function(self)
-      return "+"..self.points.." points on clear,\n1 in 20 chance to\nreset clear score"
+      return "+"..self.points.." points on clear,\n1 in 10 chance to\nreset clear score"
     end,
     rarity = "Rare",
     image = "assets/coffee/antoccino.png",
-    points = 500,
+    points = 250,
     ability = function(self, game, action)
       local points = action.points + self.points
-      if math.random(1, 20) == 1 then
+      if math.random(1, 10) == 1 then
         points = 0
       end
       return points
@@ -357,7 +357,7 @@ return {
     end,
     rarity = "Exotic",
     image = "assets/coffee/nitro.png",
-    points = 2,
+    points = 1.5,
     ability = function(self, game, action)
       return action.points * self.points
     end,
