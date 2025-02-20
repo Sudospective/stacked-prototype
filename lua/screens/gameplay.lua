@@ -196,7 +196,10 @@ class "Gameplay" : extends "Screen" {
 
     local loc = stacked.localization[stacked.controls.active]
 
-    pause.quit.text = "Press "..loc.Pause.." to resume\nPress "..loc.Extra.." to quit to Title\n(Will delete current run)"
+    pause.quit.text = (
+      "Press "..loc.Pause.." to resume\n"..
+      "Press "..loc.Extra.." to quit to Title\n(Will delete current run)"
+    )
 
     statsText.text = (
       "Lines: "..game.matrix.stats.lines.."\n"..

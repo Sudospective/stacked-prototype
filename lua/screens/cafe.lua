@@ -152,7 +152,12 @@ class "Cafe" : extends "Screen" {
     pause.title.color.a = paused and 1 or 0
     pause.quit.color.a = paused and 1 or 0
 
-    pause.quit.text = "Press "..stacked.localization[stacked.controls.active].Extra.." to quit to Title\n(Will delete current run)"
+    local loc = stacked.localization[stacked.controls.active]
+
+    pause.quit.text = (
+      "Press "..loc.Pause.." to resume\n"..
+      "Press "..loc.Extra.." to quit to Title\n(Will delete current run)"
+    )
   end;
   __input = function(self, event)
     local binds = stacked.controls[stacked.controls.active]
