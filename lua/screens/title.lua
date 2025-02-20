@@ -106,7 +106,7 @@ class "Title" : extends "Screen" {
         controls.color.a = 1
       end
     elseif event.type:find("Up") then
-      print(event.controller)
+      print(event.controller and event.controller.type or nil)
       if event.button == binds.Cancel then
         scarlet.exit()
       elseif event.button == binds.Hold then
