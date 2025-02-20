@@ -186,12 +186,14 @@ namespace Scarlet {
           luaEvent["type"] = "GamepadDown";
           luaEvent["id"] = event->cdevice.which;
           luaEvent["button"] = SDL_GameControllerGetStringForButton(static_cast<SDL_GameControllerButton>(event->cbutton.button));
+          luaEvent["controller"] = controllers[event->cdevice.which + 1];
           break;
         }
         case SDL_CONTROLLERBUTTONUP: {
           luaEvent["type"] = "GamepadUp";
           luaEvent["id"] = event->cdevice.which;
           luaEvent["button"] = SDL_GameControllerGetStringForButton(static_cast<SDL_GameControllerButton>(event->cbutton.button));
+          luaEvent["controller"] = controllers[event->cdevice.which + 1];
           break;
         }
         case SDL_CONTROLLERAXISMOTION: {
@@ -199,6 +201,7 @@ namespace Scarlet {
           luaEvent["id"] = event->cdevice.which;
           luaEvent["axis"] = SDL_GameControllerGetStringForAxis(static_cast<SDL_GameControllerAxis>(event->caxis.axis));
           luaEvent["value"] = event->caxis.value;
+          luaEvent["controller"] = controllers[event->cdevice.which + 1];
           break;
         }
       }

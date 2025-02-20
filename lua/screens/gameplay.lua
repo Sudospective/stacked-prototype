@@ -194,7 +194,9 @@ class "Gameplay" : extends "Screen" {
     pause.title.color.a = game.paused and 1 or 0
     pause.quit.color.a = game.paused and 1 or 0
 
-    pause.quit.text = "Press "..stacked.localization[stacked.controls.active].Extra.." to quit to Title\n(Will delete current run)"
+    local loc = stacked.localization[stacked.controls.active]
+
+    pause.quit.text = "Press "..loc.Pause.." to resume\nPress "..loc.Extra.." to quit to Title\n(Will delete current run)"
 
     statsText.text = (
       "Lines: "..game.matrix.stats.lines.."\n"..

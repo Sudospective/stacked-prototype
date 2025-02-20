@@ -81,6 +81,7 @@ class "Title" : extends "Screen" {
     local localization = stacked.localization[stacked.controls.active]
     help.text = (
       "Press "..localization.Confirm.." to Play\n"..
+      "Press "..localization.Cancel.." to Exit\n"..
       "Hold "..localization.Hold.." for controls"
     )
 
@@ -105,7 +106,8 @@ class "Title" : extends "Screen" {
         controls.color.a = 1
       end
     elseif event.type:find("Up") then
-      if event.button == binds.Pause then
+      print(event.controller)
+      if event.button == binds.Cancel then
         scarlet.exit()
       elseif event.button == binds.Hold then
         fader.color.a = 0
