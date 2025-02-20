@@ -867,9 +867,9 @@ class "Game" {
     end
   end;
   RoundClear = function(self)
-    stacked.gamestate.level = stacked.gamestate.level + 1
     self.readyText.text = "CLEAR!!"
     self:EndRound()
+    stacked.gamestate.level = stacked.gamestate.level + 1
     if (stacked.gamestate.level < 10 or stacked.gamestate.level > 10) and not self.over then
       self.sounds.complete:Play()
       self.callbacks.lines = stacked.timer.after(2, function()
@@ -938,10 +938,12 @@ class "Game" {
   Update = function(self, dt)
     local loc = stacked.localization[stacked.controls.active]
 
-    if self.over then
-      self.readySubtext.text = "Press "..loc.Confirm.." to\nreturn to Title"
-    elseif self.won then
-      self.readySubtext.text = "Endless? ("..loc.Confirm..")"
+    if not self.levelInProgress then
+      if self.over then
+        self.readySubtext.text = "Press "..loc.Confirm.." to\nreturn to Title"
+      elseif self.won then
+        self.readySubtext.text = "Endless? ("..loc.Confirm..")"
+      end
     else
       self.readySubtext.text = ""
     end
