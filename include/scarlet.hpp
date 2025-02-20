@@ -121,26 +121,41 @@ namespace Scarlet {
       Log::Info("Detected " + std::to_string(SDL_NumJoysticks()) + " joysticks...");
 
       for (int i = 0; i < SDL_NumJoysticks(); i++) {
-        SDL_GameController* gamepad;
-        if (SDL_IsGameController(i)) {
-          gamepad = SDL_GameControllerOpen(i);
-        }
-        Controller c;
-        c.gamepad = gamepad;
-        c.id = SDL_JoystickGetDeviceInstanceID(i);
-        c.type = SDL_GameControllerGetType(gamepad);
-        controllers[i + 1] = c;
+        AddController(i);
       }
 
       Log::Info("Controllers enumerated.");
       Log::Info(std::to_string(controllers.size()) + " controller(s) connected.");
     }
     void AddController(int id) {
-      SDL_GameController* gamepad = SDL_GameControllerOpen(id);
+      SDL_GameController* gamepad;
+      if (SDL_IsGameController(id)) {
+        gamepad = SDL_GameControllerOpen(id);
+      }
       Controller c;
       c.gamepad = gamepad;
       c.id = SDL_JoystickGetDeviceInstanceID(id);
-      c.type = SDL_GameControllerGetType(gamepad);
+      switch (SDL_GameControllerGetType(gamepad)) {
+        case SDL_CONTROLLER_TYPE_XBOX360:
+        case SDL_CONTROLLER_TYPE_XBOXONE: {
+          c.type = "xbox";
+          break;
+        }
+        case SDL_CONTROLLER_TYPE_PS3:
+        case SDL_CONTROLLER_TYPE_PS4:
+        case SDL_CONTROLLER_TYPE_PS5: {
+          c.type = "playstation";
+          break;
+        }
+        case SDL_CONTROLLER_TYPE_NINTENDO_SWITCH_PRO: {
+          c.type = "nintendo";
+          break;
+        }
+        default: {
+          c.type = "generic";
+          break;
+        }
+      }
       controllers[controllers.size() + 1] = c;
     }
     void RemoveController(int id) {
