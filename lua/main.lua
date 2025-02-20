@@ -94,7 +94,7 @@ function input(event)
   if event.type:find("Key") then
     stacked.controls.active = "keyboard"
   elseif event.type:find("Gamepad") then
-    stacked.controls.active = "controller"
+    stacked.controls.active = event.controller.type
   end
 
   if event.type == "KeyUp" then
