@@ -14,7 +14,7 @@ stacked.screens = {
 
   curtain = Quad.new(),
 
-  first = "cafe",
+  first = "title",
   current = nil,
   next = nil,
 
