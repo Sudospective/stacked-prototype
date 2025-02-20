@@ -95,7 +95,7 @@ class "Game" {
     self.x = 0
     self.y = 0
 
-    self.matrix:Initialize();
+    self.matrix:Initialize()
     self.matrix.x = stacked.scx
     self.matrix.y = stacked.scy
     self.matrix.h = stacked.gamestate.height
@@ -163,7 +163,6 @@ class "Game" {
     self:NewRound()
   end;
   NewRound = function(self)
-    self.over = false
     self.freezeInput = false
 
     self.matrix.h = stacked.gamestate.height
@@ -196,7 +195,8 @@ class "Game" {
       "Score\n"..
       tostring(math.floor(self.matrix.goal)).."\n"..
       "points in\n"..
-      tostring(self.matrix.limit).." lines"
+      tostring(self.matrix.limit).." lines\n\n"..
+      tostring(0.5 + (stacked.gamestate.level - 1) * 0.125).." payout\nmultiplier"
     )
     if self.boss then
       self.readyText.text = self.boss.description
@@ -618,8 +618,8 @@ class "Game" {
 
     self.freezeInput = true
     self.callbacks.lock = stacked.timer.after(action.rows > 0 and 1 or self.spawnTime, function()
-      self.freezeInput = false
       self.callbacks.lock = nil
+      self.freezeInput = false
       self.curPiece.visible = true
       self.ghostPiece.visible = true
       self:PushNextPiece()

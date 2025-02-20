@@ -265,12 +265,14 @@ class "Gameplay" : extends "Screen" {
     end
   end;
   __enter = function(self)
-    if stacked.gamestate.level == 1 then
-      game:Initialize()
-    end
-
     stacked.seeds.game = math.random(1, 9e9)
     math.randomseed(stacked.seeds.game)
+    
+    if game.over then
+      game:NewGame()
+    else
+      game:NewRound()
+    end
 
     levelLabel.text = "LEVEL "..stacked.gamestate.level
     cacheLabel.text = "CACHE: "..stacked.gamestate.cache
@@ -288,11 +290,6 @@ class "Gameplay" : extends "Screen" {
 
     if #stacked.gamestate.brews == 0 then
       brewsText.text = "No brews"
-    end
-    if game.over then
-      game:NewGame()
-    else
-      game:NewRound()
     end
   end;
   __exit = function(self)
