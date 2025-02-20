@@ -98,6 +98,10 @@ class "Shelf" {
   GetCurrentItem = function(self)
     return self.items[self.items.index]
   end;
+  Reroll = function(self)
+    self:Close()
+    self:Open()
+  end;
   Draw = function(self)
     self.label.x = self.x
     self.label.y = self.y

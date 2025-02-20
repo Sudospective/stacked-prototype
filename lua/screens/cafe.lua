@@ -128,7 +128,10 @@ class "Cafe" : extends "Screen" {
   end;
   __update = function(self, dt)
     local localization = stacked.localization[stacked.controls.active]
-    prompt.text = "Press "..localization.Cancel.." to Leave"
+    prompt.text = (
+      "Press "..localization.Extra.." to reroll (3 lines)\n"..
+      "Press "..localization.Cancel.." to Leave"
+    )
     for i, shelf in ipairs(activeShelves) do
       if not shelf.__closed then
         shelf:Enable(not shelf.__closed and activeBorder.aux == i - 1)
@@ -189,6 +192,13 @@ class "Cafe" : extends "Screen" {
             sounds.click:Play()
           end
         end
+      elseif b == binds.Extra then
+        if stacked.gamestate.cache < 3 then return end
+        local shelf = activeShelves[activeBorder.aux + 1]
+        if shelf.__enabled then
+          shelf:Reroll()
+          stacked.gamestate.cache = stacked.gamestate.cache - 3
+        end
       elseif b == binds.Confirm then
         for i, shelf in ipairs(activeShelves) do
           if shelf.__enabled then
@@ -222,7 +232,7 @@ class "Cafe" : extends "Screen" {
         sounds.exit:Play()
         stacked.screens.next = "gameplay"
         stacked.screens:goToNext()
-      elseif b == binds.Extra then
+      elseif b == binds.Extra and paused then
         sounds.exit:Play()
         stacked.gamestate = stacked.deepCopy(stacked.default)
         stacked.screens.next = "title"

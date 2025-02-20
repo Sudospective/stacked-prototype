@@ -350,7 +350,7 @@ stacked = {
       RotateCW = "X",
       RotateCCW = "Z",
       Hold = "Space",
-      Extra = "Backspace",
+      Extra = "C",
       Pause = "Escape",
     },
     xbox = {
@@ -443,7 +443,7 @@ stacked = {
       RotateCW = "X",
       RotateCCW = "Z",
       Hold = "Space",
-      Extra = "Backspace",
+      Extra = "C",
       Pause = "Escape",
     },
     -- these strings are from sdl not me
