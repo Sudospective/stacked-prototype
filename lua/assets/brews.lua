@@ -33,7 +33,7 @@ return {
   {
     name = "Macchiato",
     description = function(self)
-      return "x"..self.points.." points on\nmini T-spin clear"
+      return "x"..self.points.." points on\nmini T-spin"
     end,
     rarity = "Common",
     image = "assets/coffee/macchiato.png",

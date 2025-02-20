@@ -62,11 +62,11 @@ return {
   {
     name = "Croissant",
     description = function(self)
-      return "+10 line limit"
+      return "+5 line limit"
     end,
     image = "assets/pastries/croissant.png",
     effect = function(self)
-      stacked.gamestate.limit = stacked.gamestate.limit + 10
+      stacked.gamestate.limit = stacked.gamestate.limit + 5
     end,
   },
   --[[

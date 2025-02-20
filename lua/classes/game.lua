@@ -12,8 +12,8 @@ class "Game" {
   heldPiece = Tetromino.new();
   ghostPiece = Ghost.new();
   readyText = Label.new();
+  readySubtext = Label.new();
   clearText = Label.new();
-  clearSubtext = Label.new();
   levelText = Label.new();
   sounds = {};
   callbacks = {};
@@ -49,18 +49,18 @@ class "Game" {
   paused = false;
   __init = function(self)
     self.readyText.x = stacked.scx
-    self.readyText.y = stacked.scy
+    self.readyText.y = stacked.scy - 16
     self.readyText:LoadFont("assets/sport.otf", 32)
+
+    self.readySubtext.x = stacked.scx
+    self.readySubtext.y = stacked.scy + 48
+    self.readySubtext:LoadFont("assets/sport.otf", 16)
+    --self.readySubtext.color.a = 0
 
     self.clearText.x = stacked.scx
     self.clearText.y = stacked.scy - 32
     self.clearText:LoadFont("assets/sport.otf", 32)
     self.clearText.color.a = 0
-
-    self.clearSubtext.x = stacked.scx
-    self.clearSubtext.y = stacked.scy + 32
-    self.clearSubtext:LoadFont("assets/sport.otf", 16)
-    self.clearSubtext.color.a = 0
 
     self.sounds = {
       move = "assets/sounds/move.ogg",
@@ -242,14 +242,9 @@ class "Game" {
     if stacked.gamestate.level == 10 and not self.won then
       self.won = true
       self.readyText.text = "YOU\nWIN!"
-      self.clearSubtext.text = "Endless?"
       self.sounds.win:Play()
     end
-
     self.levelInProgress = false
-    local deposit = self.matrix.limit - self.matrix.lines
-    stacked.gamestate.cache = stacked.gamestate.cache + deposit
-
     self.matrix:FillToGamestate()
   end;
   GetRandomPiece = function(self)
@@ -790,13 +785,16 @@ class "Game" {
       end
     end
 
-    points = math.floor(points) * stacked.gamestate.level
+    points = points * stacked.gamestate.level
 
     for _, coffee in ipairs(stacked.gamestate.brews) do
       -- store points so far
       action.points = points or 0
       points = (coffee:Sip(self, action) or points)
     end
+
+    -- FLOOR IT MISS PUFF??????
+    points = math.floor(points)
 
     local allclear = action.allclear and "PERFECT CLEAR\n" or ""
     local b2b = action.b2b and "BACK-TO-BACK\n" or ""
@@ -877,7 +875,10 @@ class "Game" {
       self.callbacks.lines = stacked.timer.after(2, function()
         self.callbacks.lines = nil
         self.sounds.lines:Play()
-        self.readyText.text = tostring(self.matrix.limit - self.matrix.lines).." LINES\nAWARDED"
+        local deposit = (self.matrix.limit - self.matrix.lines) * (0.5 + (stacked.gamestate.level - 2) * 0.125)
+        deposit = math.floor(deposit)
+        stacked.gamestate.cache = stacked.gamestate.cache + deposit
+        self.readyText.text = tostring(deposit).." LINES\nAWARDED"
       end)
       self.callbacks.cafe = stacked.timer.after(5, function()
         self.callbacks.cafe = nil
@@ -935,6 +936,16 @@ class "Game" {
     end
   end;
   Update = function(self, dt)
+    local loc = stacked.localization[stacked.controls.active]
+
+    if self.over then
+      self.readySubtext.text = "Press "..loc.Confirm.." to\nreturn to Title"
+    elseif self.won then
+      self.readySubtext.text = "Endless? ("..loc.Confirm..")"
+    else
+      self.readySubtext.text = ""
+    end
+
     if self.paused then return end
     for _, handle in pairs(self.timers) do
       handle:update(dt)
@@ -1024,6 +1035,7 @@ class "Game" {
     self.fader:Draw()
 
     self.readyText:Draw()
+    self.readySubtext:Draw()
     self.clearText:Draw()
   end;
 }

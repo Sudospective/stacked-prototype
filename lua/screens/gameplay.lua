@@ -17,6 +17,7 @@ local linesDivider = Quad.new()
 local linesLimit = Label.new()
 
 local levelLabel = Label.new()
+local cacheLabel = Label.new()
 
 local brewsLabel = Label.new()
 local brewsText = Label.new()
@@ -126,6 +127,13 @@ class "Gameplay" : extends "Screen" {
     levelLabel:LoadFont("assets/sport.otf", 32)
     levelLabel.text = "LEVEL 0"
     self:AddGizmo(levelLabel)
+
+    cacheLabel.x = stacked.scx + xOffset
+    cacheLabel.y = stacked.scy + yOffset - 8
+    cacheLabel.align = {h = 0, v = 1}
+    cacheLabel:LoadFont("assets/sport.otf", 32)
+    cacheLabel.text = "CACHE: 5"
+    self:AddGizmo(cacheLabel)
 
     brewsLabel.x = stacked.scx - xOffset * 2 - 16
     brewsLabel.y = stacked.scy - yOffset
@@ -265,6 +273,7 @@ class "Gameplay" : extends "Screen" {
     math.randomseed(stacked.seeds.game)
 
     levelLabel.text = "LEVEL "..stacked.gamestate.level
+    cacheLabel.text = "CACHE: "..stacked.gamestate.cache
     brewsText.text = ""
 
     local counts = {}
