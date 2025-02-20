@@ -88,7 +88,7 @@ class "Matrix" {
     numToClear = numToClear or stacked.gamestate.lineLength
     local count = 0
     for column = 0, self.w - 1 do
-      if self.cells[row][column] ~= 0 then
+      if not self:IsCellEmpty(row, column) then
         count = count + 1
       end
     end
