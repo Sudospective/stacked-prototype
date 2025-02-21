@@ -1,6 +1,8 @@
 return {
   {"Back-to-Back", "n.", "The action of performing two tetras,\nT-spin clears, or a mix of the two\none after the other"},
   {"Block", "n.", "A small square that occupies one of the\ncells of the matrix"},
+  {"Brew", "n.", "A coffee obtained by the player"},
+  {"Bite", "n.", "A pastry obtained by the player"},
   {"Cache", "n.", "The total amount of lines available for\nthe player to spend at the Hard Drop Café"},
   {"Cell", "n.", "A small square that resides within the\nmatrix"},
   {"Clear", "n., v.", "The action of completing at least one line\nof blocks on the matrix"},
