@@ -15,6 +15,7 @@ class "Game" {
   readySubtext = Label.new();
   clearText = Label.new();
   levelText = Label.new();
+  comboText = Label.new();
   sounds = {};
   callbacks = {};
   timers = {};
@@ -62,6 +63,11 @@ class "Game" {
     self.clearText.y = stacked.scy - 32
     self.clearText:LoadFont("assets/sport.otf", 32)
     self.clearText.color.a = 0
+
+    self.comboText.x = stacked.scx
+    self.comboText.y = stacked.scy - (self.matrix.h * stacked.size * 0.5) + 4
+    self.comboText.align.v = 0
+    self.comboText:LoadFont("assets/sport.otf", 16)
 
     self.sounds = {
       move = "assets/sounds/move.ogg",
@@ -364,7 +370,7 @@ class "Game" {
     end
     self.lastMove = 1
     self.sounds.move:Play()
-    if self.infinity or self.extendCounter < 15 then
+    if self.readyToLock and (self.infinity or self.extendCounter < 15) then
       self.extendCounter = self.extendCounter + 1
       self.timeUntilLock = self.lockTime
     end
@@ -390,9 +396,9 @@ class "Game" {
       self.lastMove = 2
       self.sounds.rotate:Play()
       self:CheckSpin(true)
-      if self.infinity or self.extendCounter < 15 then
+      if self.readyToLock and (self.infinity or self.extendCounter < 15) then
         self.extendCounter = self.extendCounter + 1
-        self:ResetLock()
+        self.timeUntilLock = self.lockTime
       end
     end
   end;
@@ -573,6 +579,7 @@ class "Game" {
   end;
   LockToMatrix = function(self)
     if self.callbacks.lock then return end
+    self.curPiece.row.offset = self.ghostPiece.row.offset
     local cells = self.curPiece:GetCellPositions()
     for _, cell in pairs(cells) do
       self.matrix.cells[cell[1]][cell[2]] = self.curPiece.id
@@ -946,9 +953,17 @@ class "Game" {
         self.readySubtext.text = "Press "..loc.Confirm.." to\nreturn to Title"
       elseif self.won then
         self.readySubtext.text = "Endless? ("..loc.Confirm..")"
+      else
+        self.readySubtext.text = ""
       end
     else
       self.readySubtext.text = ""
+    end
+
+    if self.matrix.combo > 0 then
+      self.comboText.text = self.matrix.combo.."-COMBO"
+    else
+      self.comboText.text = ""
     end
 
     if self.paused then return end
@@ -1042,5 +1057,7 @@ class "Game" {
     self.readyText:Draw()
     self.readySubtext:Draw()
     self.clearText:Draw()
+
+    self.comboText:Draw()
   end;
 }
