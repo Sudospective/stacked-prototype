@@ -164,6 +164,7 @@ class "Cafe" : extends "Screen" {
     )
   end;
   __input = function(self, event)
+    if stacked.glossary.enabled then return end
     local binds = stacked.controls[stacked.controls.active]
     local b = event.button
     if event.type == "KeyDown" or event.type == "GamepadDown" then

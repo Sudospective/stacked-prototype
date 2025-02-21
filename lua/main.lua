@@ -65,14 +65,18 @@ stacked.screens = {
 }
 setmetatable(stacked.screens, stacked.screens)
 
-local glossary = {
+stacked.glossary = {
+  __index = stacked.glossary,
+
   enabled = false,
   index = 0,
+
   bg = Quad.new(),
   title = Label.new(),
   terms1 = Label.new(),
   terms2 = Label.new(),
   controls = Label.new(),
+
   Initialize = function(self)
     self.bg.x = stacked.scx
     self.bg.y = stacked.scy
@@ -132,8 +136,7 @@ local glossary = {
     self.controls:Draw()
   end,
 }
-glossary.__index = glossary
-setmetatable(glossary, glossary)
+setmetatable(stacked.glossary, stacked.glossary)
 
 local debugging = true
 local framerate = 0

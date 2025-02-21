@@ -222,6 +222,7 @@ class "Gameplay" : extends "Screen" {
     )
   end;
   __input = function(self, event)
+    if stacked.glossary.enabled then return end
     local b = event.button
     local binds = stacked.controls[stacked.controls.active]
     if event.type == "KeyDown" or event.type == "GamepadDown" then

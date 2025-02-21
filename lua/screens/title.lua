@@ -94,12 +94,13 @@ class "Title" : extends "Screen" {
       "Rotate Right: "..localization.RotateCW.."\n"..
       "Hold: "..localization.Hold.."\n"..
       "Extra Action: "..localization.Extra.."\n"..
-      "Glossary: "..localization.Glossary.."\n"
+      "Glossary: "..localization.Glossary.." (Hold)\n"
     )
 
     title.rot = math.sin(stacked.uptime * 2) * 2
   end;
   __input = function(self, event)
+    if stacked.glossary.enabled then return end
     local binds = stacked.controls[stacked.controls.active]
     if event.type:find("Down") then
       if event.button == binds.Hold then
