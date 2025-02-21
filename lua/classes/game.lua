@@ -44,6 +44,7 @@ class "Game" {
   timeSinceEvent = 0;
   timeUntilARR = 0;
   timeUntilLock = 0;
+  payoutMult = 0;
   over = false;
   won = false;
   paused = false;
@@ -191,12 +192,13 @@ class "Game" {
     self.timers.ready:clear()
     self.fader.color.a = 0.5
     self.readyText.color.a = 1
+    self.payoutMult = 0.5 + (stacked.gamestate.level - 1) * 0.125
     self.readyText.text = (
       "Score\n"..
       tostring(math.floor(self.matrix.goal)).."\n"..
       "points in\n"..
       tostring(self.matrix.limit).." lines\n\n"..
-      tostring(0.5 + (stacked.gamestate.level - 1) * 0.125).." payout\nmultiplier"
+      tostring(self.payoutMult).." payout\nmultiplier"
     )
     if self.boss then
       self.readyText.text = self.boss.description
@@ -875,7 +877,7 @@ class "Game" {
       self.callbacks.lines = stacked.timer.after(2, function()
         self.callbacks.lines = nil
         self.sounds.lines:Play()
-        local deposit = (self.matrix.limit - self.matrix.lines) * (0.5 + (stacked.gamestate.level - 1) * 0.125)
+        local deposit = (self.matrix.limit - self.matrix.lines) * self.payoutMult
         deposit = math.floor(deposit + 0.5)
         stacked.gamestate.cache = stacked.gamestate.cache + deposit
         self.readyText.text = tostring(deposit).." LINES\nAWARDED"
