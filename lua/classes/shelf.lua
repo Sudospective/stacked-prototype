@@ -28,7 +28,8 @@ class "Shelf" {
 
     self.description = Label.new()
     self.description.x = self.x
-    self.description.y = stacked.sh - 96
+    self.description.y = stacked.sh - 16
+    self.description.align.v = 1
     self.description:LoadFont("assets/sport.otf", 16)
 
     if self.__ready then
@@ -124,7 +125,7 @@ class "Shelf" {
     end
     if self.__enabled then
       self.description.x = self.x
-      self.description.y = stacked.sh - 64
+      self.description.y = stacked.sh - 16
       self.description:Draw()
     end
   end;

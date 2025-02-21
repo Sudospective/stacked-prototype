@@ -5,6 +5,19 @@ require "screens.title"
 require "screens.gameplay"
 require "screens.cafe"
 
+local function cmp(a, b)
+  a = tostring(a[1])
+  b = tostring(b[1])
+  local patt = "^(.-)%s*(%d+)$"
+  local _,_, col1, num1 = a:find(patt)
+  local _,_, col2, num2 = b:find(patt)
+  if (col1 and col2) and col1 == col2 then
+     return tonumber(num1) < tonumber(num2)
+  end
+  return a < b
+end
+table.sort(stacked.terms, cmp)
+
 stacked.screens = {
   __index = stacked.screens,
 
@@ -28,7 +41,7 @@ stacked.screens = {
   end,
   goToNext = function(self)
     stacked.timer.clear()
-    stacked.screens.curtain.x = -stacked.scx
+    self.curtain.x = -stacked.scx
 
     local time = 0
     local inQuint = stacked.timer.tween.quint
@@ -36,21 +49,83 @@ stacked.screens = {
 
     stacked.timer.during(0.5, function(dt)
       time = time + dt * 2
-      stacked.screens.curtain.x = -stacked.scx + (stacked.sw * inQuint(time))
+      self.curtain.x = -stacked.scx + (stacked.sw * inQuint(time))
     end, function()
       time = 0
-      stacked.screens.curtain.x = stacked.scx
+      self.curtain.x = stacked.scx
       self:snapToNext()
       stacked.timer.during(0.5, function(dt)
         time = time + dt * 2
-        stacked.screens.curtain.x = stacked.scx + (stacked.sw * outQuint(time));
+        self.curtain.x = stacked.scx + (stacked.sw * outQuint(time));
       end, function()
-        stacked.screens.curtain.x = -stacked.scx
+        self.curtain.x = -stacked.scx
       end)
     end)
   end,
 }
 setmetatable(stacked.screens, stacked.screens)
+
+local glossary = {
+  enabled = false,
+  index = 0,
+  bg = Quad.new(),
+  title = Label.new(),
+  terms1 = Label.new(),
+  terms2 = Label.new(),
+  Initialize = function(self)
+    self.bg.x = stacked.scx
+    self.bg.y = stacked.scy
+    self.bg.w = stacked.sw
+    self.bg.h = stacked.sh
+    self.bg.color = {
+      r = 0,
+      g = 0,
+      b = 0,
+      a = 0.75,
+    }
+
+    self.title.x = stacked.scx
+    self.title.y = stacked.scy - 64
+    self.title.align.v = 1
+    self.title:LoadFont("assets/sport.otf", 32)
+    self.title.text = "GLOSSARY"
+
+    self.terms1.x = stacked.scx
+    self.terms1.y = stacked.scy - 2
+    self.terms1.align.v = 1
+    self.terms1:LoadFont("assets/sport.otf", 16)
+
+    self.terms2.x = stacked.scx
+    self.terms2.y = stacked.scy + 2
+    self.terms2.align.v = 0
+    self.terms2:LoadFont("assets/sport.otf", 16)
+  end,
+  HandleInput = function(self, event)
+    if not self.enabled then return end
+    local binds = stacked.controls[stacked.controls.active]
+    if event.type:find("Down") then
+      if event.button == binds.Left then
+        self.index = (self.index - 1) % #stacked.terms
+      elseif event.button == binds.Right then
+        self.index = (self.index + 1) % #stacked.terms
+      end
+    end
+  end,
+  Update = function(self, dt)
+    local term = stacked.terms[self.index + 1]
+    self.terms1.text = term[1].."\n("..term[2]..")"
+    self.terms2.text = term[3]
+  end,
+  Draw = function(self)
+    if not self.enabled then return end
+    self.bg:Draw()
+    self.title:Draw()
+    self.terms1:Draw()
+    self.terms2:Draw()
+  end,
+}
+glossary.__index = glossary
+setmetatable(glossary, glossary)
 
 local debugging = true
 local framerate = 0
@@ -88,6 +163,8 @@ function init()
   scarlet.music.volume(0.25)
   stacked.screens.next = stacked.screens.first
   stacked.screens:snapToNext()
+
+  glossary:Initialize()
 end
 
 function input(event)
@@ -103,9 +180,23 @@ function input(event)
     end
   end
 
+  local binds = stacked.controls[stacked.controls.active]
+
+  if event.type:find("Down") then
+    if event.button == binds.Glossary then
+      glossary.enabled = true
+    end
+  elseif event.type:find("Up") then
+    if event.button == binds.Glossary then
+      glossary.enabled = false
+    end
+  end
+
   stacked.screens.title:HandleInput(event)
   stacked.screens.gameplay:HandleInput(event)
   stacked.screens.cafe:HandleInput(event)
+
+  glossary:HandleInput(event)
 end
 
 function update(dt)
@@ -118,12 +209,16 @@ function update(dt)
   stacked.screens.title:Update(dt)
   stacked.screens.gameplay:Update(dt)
   stacked.screens.cafe:Update(dt)
+
+  glossary:Update(dt)
 end
 
 function draw()
   stacked.screens.title:Draw()
   stacked.screens.gameplay:Draw()
   stacked.screens.cafe:Draw()
+
+  glossary:Draw()
 
   stacked.screens.curtain:Draw()
 

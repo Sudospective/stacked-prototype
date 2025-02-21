@@ -345,6 +345,8 @@ class "Game" {
   MoveRight = function(self)
     self.curPiece:Move(0, 1)
     if self:IsPieceOutside() or self:IsPieceColliding() then
+      self.curPiece:Move(0, -1)
+      if self.freezeInput then return end
       self.timers.movement:clear()
       self.x = 4
       self.y = 0
@@ -356,7 +358,6 @@ class "Game" {
       end, function()
         self.x = 0
       end)
-      self.curPiece:Move(0, -1)
       return
     end
     self.lastMove = 1
@@ -876,7 +877,7 @@ class "Game" {
         self.callbacks.lines = nil
         self.sounds.lines:Play()
         local deposit = (self.matrix.limit - self.matrix.lines) * (0.5 + (stacked.gamestate.level - 2) * 0.125)
-        deposit = math.floor(deposit)
+        deposit = math.floor(deposit + 0.5)
         stacked.gamestate.cache = stacked.gamestate.cache + deposit
         self.readyText.text = tostring(deposit).." LINES\nAWARDED"
       end)

@@ -352,6 +352,7 @@ stacked = {
       Hold = "Space",
       Extra = "C",
       Pause = "Escape",
+      Glossary = "G",
     },
     xbox = {
       Left = "D-Left",
@@ -370,6 +371,7 @@ stacked = {
       Hold = "RB",
       Extra = "X",
       Pause = "Start",
+      Glossary = "LB",
     },
     playstation = {
       Left = "D-Left",
@@ -388,6 +390,7 @@ stacked = {
       Hold = "R1",
       Extra = "Square",
       Pause = "Start",
+      Glossary = "L1",
     },
     nintendo = {
       Left = "D-Left",
@@ -403,9 +406,10 @@ stacked = {
       HardDrop = "D-Up",
       RotateCW = "A",
       RotateCCW = "B",
-      Hold = "RB",
+      Hold = "R",
       Extra = "Y",
       Pause = "Start",
+      Glossary = "L",
     },
     generic = {
       Left = "D-Left",
@@ -424,6 +428,7 @@ stacked = {
       Hold = "R-Top",
       Extra = "B-Left",
       Pause = "Start",
+      Glossary = "L-Top",
     },
   },
   controls = {
@@ -445,6 +450,7 @@ stacked = {
       Hold = "Space",
       Extra = "C",
       Pause = "Escape",
+      Glossary = "G",
     },
     -- these strings are from sdl not me
     xbox = {
@@ -464,6 +470,7 @@ stacked = {
       Hold = "rightshoulder",
       Extra = "x",
       Pause = "start",
+      Glossary = "leftshoulder",
     },
     playstation = {
       Left = "dpleft",
@@ -482,6 +489,7 @@ stacked = {
       Hold = "rightshoulder",
       Extra = "x",
       Pause = "start",
+      Glossary = "leftshoulder",
     },
     nintendo = {
       Left = "dpleft",
@@ -500,6 +508,7 @@ stacked = {
       Hold = "rightshoulder",
       Extra = "x",
       Pause = "start",
+      Glossary = "leftshoulder",
     },
     generic = {
       Left = "dpleft",
@@ -518,10 +527,12 @@ stacked = {
       Hold = "rightshoulder",
       Extra = "x",
       Pause = "start",
+      Glossary = "leftshoulder",
     },
   },
   brews = loadfile("assets/brews.lua")(),
   bites = loadfile("assets/bites.lua")(),
+  terms = loadfile("assets/terms.lua")(),
 }
 
 function stacked.deepCopy(t)

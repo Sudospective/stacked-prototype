@@ -18,6 +18,7 @@ local sounds = {
   switch = "assets/sounds/rotate.ogg",
   click = "assets/sounds/lock.ogg",
   purchase = "assets/sounds/clear.ogg",
+  reroll = "assets/sounds/purchase.ogg",
   exit = "assets/sounds/hold.ogg",
 }
 
@@ -192,11 +193,12 @@ class "Cafe" : extends "Screen" {
             sounds.click:Play()
           end
         end
-      elseif b == binds.Extra then
+      elseif b == binds.Extra and not paused then
         if stacked.gamestate.cache < 3 then return end
         local shelf = activeShelves[activeBorder.aux + 1]
         if shelf.__enabled then
           shelf:Reroll()
+          sounds.reroll:Play()
           stacked.gamestate.cache = stacked.gamestate.cache - 3
         end
       elseif b == binds.Confirm then
