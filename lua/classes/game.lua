@@ -875,7 +875,7 @@ class "Game" {
       self.callbacks.lines = stacked.timer.after(2, function()
         self.callbacks.lines = nil
         self.sounds.lines:Play()
-        local deposit = (self.matrix.limit - self.matrix.lines) * (0.5 + (stacked.gamestate.level - 1) * 0.25)
+        local deposit = (self.matrix.limit - self.matrix.lines) * (0.5 + (stacked.gamestate.level - 1) * 0.125)
         deposit = math.floor(deposit + 0.5)
         stacked.gamestate.cache = stacked.gamestate.cache + deposit
         self.readyText.text = tostring(deposit).." LINES\nAWARDED"
