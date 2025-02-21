@@ -31,6 +31,21 @@ return {
     end,
   },
   {
+    name = "Lungo",
+    description = function(self)
+      return "x"..self.points.." points on\nsingle clear"
+    end,
+    rarity = "Common",
+    image = "assets/coffee/lungo.png",
+    points = 1.25,
+    ability = function(self, game, action)
+      return action.points * self.points
+    end,
+    condition = function(self, game, action)
+      return not action.drop and action.rows == 1
+    end,
+  },
+  {
     name = "Macchiato",
     description = function(self)
       return "x"..self.points.." points on\nmini T-spin"
