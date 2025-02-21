@@ -175,7 +175,7 @@ function init()
   stacked.screens.next = stacked.screens.first
   stacked.screens:snapToNext()
 
-  glossary:Initialize()
+  stacked.glossary:Initialize()
 end
 
 function input(event)
@@ -195,11 +195,11 @@ function input(event)
 
   if event.type:find("Down") then
     if event.button == binds.Glossary then
-      glossary.enabled = true
+      stacked.glossary.enabled = true
     end
   elseif event.type:find("Up") then
     if event.button == binds.Glossary then
-      glossary.enabled = false
+      stacked.glossary.enabled = false
     end
   end
 
@@ -207,7 +207,7 @@ function input(event)
   stacked.screens.gameplay:HandleInput(event)
   stacked.screens.cafe:HandleInput(event)
 
-  glossary:HandleInput(event)
+  stacked.glossary:HandleInput(event)
 end
 
 function update(dt)
@@ -221,7 +221,7 @@ function update(dt)
   stacked.screens.gameplay:Update(dt)
   stacked.screens.cafe:Update(dt)
 
-  glossary:Update(dt)
+  stacked.glossary:Update(dt)
 end
 
 function draw()
@@ -229,7 +229,7 @@ function draw()
   stacked.screens.gameplay:Draw()
   stacked.screens.cafe:Draw()
 
-  glossary:Draw()
+  stacked.glossary:Draw()
 
   stacked.screens.curtain:Draw()
 
