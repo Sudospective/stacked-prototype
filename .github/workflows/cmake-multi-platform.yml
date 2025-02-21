@@ -49,8 +49,8 @@ jobs:
 
     - name: Install libraries
       run: |
-        sudo apt-get -y update
-        sudo apt-get -y install libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev liblua5.4-dev
+        apt-get -y update
+        apt-get -y install libsdl2-dev libsdl2-ttf-dev libsdl2-mixer-dev liblua5.4-dev
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
       id: strings
