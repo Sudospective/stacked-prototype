@@ -197,6 +197,8 @@ class "Gameplay" : extends "Screen" {
     scoreLimit.text = tostring(game.matrix.goal)
     linesText.text = tostring(game.matrix.lines)
     linesLimit.text = tostring(game.matrix.limit)
+    
+    cacheLabel.text = "CACHE: "..stacked.gamestate.cache
 
     pause.bg.color.a = game.paused and 0.75 or 0
     pause.title.color.a = game.paused and 1 or 0
