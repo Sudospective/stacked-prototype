@@ -870,13 +870,12 @@ class "Game" {
   RoundClear = function(self)
     self.readyText.text = "CLEAR!!"
     self:EndRound()
-    stacked.gamestate.level = stacked.gamestate.level + 1
     if (stacked.gamestate.level < 10 or stacked.gamestate.level > 10) and not self.over then
       self.sounds.complete:Play()
       self.callbacks.lines = stacked.timer.after(2, function()
         self.callbacks.lines = nil
         self.sounds.lines:Play()
-        local deposit = (self.matrix.limit - self.matrix.lines) * (0.5 + (stacked.gamestate.level - 2) * 0.125)
+        local deposit = (self.matrix.limit - self.matrix.lines) * (0.5 + (stacked.gamestate.level - 1) * 0.25)
         deposit = math.floor(deposit + 0.5)
         stacked.gamestate.cache = stacked.gamestate.cache + deposit
         self.readyText.text = tostring(deposit).." LINES\nAWARDED"
@@ -886,6 +885,7 @@ class "Game" {
         self:ToCafe()
       end)
     end
+    stacked.gamestate.level = stacked.gamestate.level + 1
   end;
   ToCafe = function(self)
     stacked.screens.next = "cafe"
