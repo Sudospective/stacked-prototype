@@ -72,6 +72,7 @@ local glossary = {
   title = Label.new(),
   terms1 = Label.new(),
   terms2 = Label.new(),
+  controls = Label.new(),
   Initialize = function(self)
     self.bg.x = stacked.scx
     self.bg.y = stacked.scy
@@ -99,6 +100,12 @@ local glossary = {
     self.terms2.y = stacked.scy + 2
     self.terms2.align.v = 0
     self.terms2:LoadFont("assets/sport.otf", 16)
+
+    self.controls.x = stacked.scx
+    self.controls.y = stacked.sh - 64
+    self.controls.align.v = 1
+    self.controls:LoadFont("assets/sport.otf", 32)
+    self.controls.text = "<     >"
   end,
   HandleInput = function(self, event)
     if not self.enabled then return end
@@ -122,6 +129,7 @@ local glossary = {
     self.title:Draw()
     self.terms1:Draw()
     self.terms2:Draw()
+    self.controls:Draw()
   end,
 }
 glossary.__index = glossary

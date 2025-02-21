@@ -93,7 +93,8 @@ class "Title" : extends "Screen" {
       "Rotate Left: "..localization.RotateCCW.."\n"..
       "Rotate Right: "..localization.RotateCW.."\n"..
       "Hold: "..localization.Hold.."\n"..
-      "Extra Action: "..localization.Extra.."\n"
+      "Extra Action: "..localization.Extra.."\n"..
+      "Glossary: "..localization.Glossary.."\n"
     )
 
     title.rot = math.sin(stacked.uptime * 2) * 2
