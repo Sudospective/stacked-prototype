@@ -317,6 +317,21 @@ return {
     end,
   },
   {
+    name = "Guillermo",
+    description = function(self)
+      return "+"..self.points.." points on clear\nwhen holding a\nJ tetromino"
+    end,
+    rarity = "Uncommon",
+    image = "assets/coffee/guillermo.png",
+    points = 200,
+    ability = function(self, game, action)
+      return action.points + self.points
+    end,
+    condition = function(self, game, action)
+      return not action.drop and action.rows > 0 and game.heldPiece.id == 4
+    end,
+  },
+  {
     name = "Vienna",
     description = function(self)
       return "x"..self.points.." points when\n clearing a single\nwith an I tetromino"
