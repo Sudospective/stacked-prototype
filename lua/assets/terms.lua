@@ -6,6 +6,7 @@ return {
   {"Cache", "n.", "The total amount of lines available for\nthe player to spend at the Hard Drop Café"},
   {"Cell", "n.", "A small square that resides within the\nmatrix"},
   {"Clear", "n., v.", "The action of completing at least one line\nof blocks on the matrix"},
+  {"Combo", "n., v.", "Two or more consecutive line clears in a row"},
   {"Double", "n.", "A two-line clear"},
   {"Hard Drop", "n., v.", "The action of dropping a tetromino\nimmediately onto the board, locking it\nfrom any further movement"},
   {"Hold", "n., v.", "The action of storing a tetromino\nfor later use, bringing out the\npreviously saved tetromino, or the\nnext tetromino if none were saved"},
