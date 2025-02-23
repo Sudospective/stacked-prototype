@@ -885,7 +885,7 @@ class "Game" {
         self.callbacks.lines = nil
         self.sounds.lines:Play()
         local deposit = (self.matrix.limit - self.matrix.lines) * self.payoutMult
-        deposit = math.floor(deposit + 0.5)
+        deposit = math.max(0, math.floor(deposit + 0.5))
         stacked.gamestate.cache = stacked.gamestate.cache + deposit
         self.readyText.text = tostring(deposit).." LINES\nAWARDED"
       end)
