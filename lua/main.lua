@@ -140,6 +140,7 @@ setmetatable(stacked.glossary, stacked.glossary)
 
 local debugging = true
 local framerate = 0
+local musicVol = 0.25
 
 local fps = Label.new()
 
@@ -200,6 +201,8 @@ function input(event)
   elseif event.type:find("Up") then
     if event.button == binds.Glossary then
       stacked.glossary.enabled = false
+    elseif event.button == binds.MuteMusic then
+      scarlet.music.volume(musicVol - scarlet.music.volume())
     end
   end
 

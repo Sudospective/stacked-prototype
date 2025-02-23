@@ -353,6 +353,7 @@ stacked = {
       Extra = "C",
       Pause = "Escape",
       Glossary = "G",
+      MuteMusic = "M",
     },
     xbox = {
       Left = "D-Left",
@@ -372,6 +373,7 @@ stacked = {
       Extra = "X",
       Pause = "Start",
       Glossary = "LB",
+      MuteMusic = "Y",
     },
     playstation = {
       Left = "D-Left",
@@ -391,6 +393,7 @@ stacked = {
       Extra = "Square",
       Pause = "Start",
       Glossary = "L1",
+      MuteMusic = "Triangle",
     },
     nintendo = {
       Left = "D-Left",
@@ -410,6 +413,7 @@ stacked = {
       Extra = "Y",
       Pause = "Start",
       Glossary = "L",
+      MuteMusic = "X",
     },
     generic = {
       Left = "D-Left",
@@ -429,6 +433,7 @@ stacked = {
       Extra = "B-Left",
       Pause = "Start",
       Glossary = "L-Top",
+      MuteMusic = "B-Up",
     },
   },
   controls = {
@@ -451,6 +456,7 @@ stacked = {
       Extra = "C",
       Pause = "Escape",
       Glossary = "G",
+      MuteMusic = "M",
     },
     -- these strings are from sdl not me
     xbox = {
@@ -471,6 +477,7 @@ stacked = {
       Extra = "x",
       Pause = "start",
       Glossary = "leftshoulder",
+      MuteMusic = "y",
     },
     playstation = {
       Left = "dpleft",
@@ -490,6 +497,7 @@ stacked = {
       Extra = "x",
       Pause = "start",
       Glossary = "leftshoulder",
+      MuteMusic = "y",
     },
     nintendo = {
       Left = "dpleft",
@@ -509,6 +517,7 @@ stacked = {
       Extra = "x",
       Pause = "start",
       Glossary = "leftshoulder",
+      MuteMusic = "y",
     },
     generic = {
       Left = "dpleft",
@@ -528,6 +537,7 @@ stacked = {
       Extra = "x",
       Pause = "start",
       Glossary = "leftshoulder",
+      MuteMusic = "y",
     },
   },
   brews = loadfile("assets/brews.lua")(),
