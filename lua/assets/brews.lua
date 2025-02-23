@@ -332,6 +332,26 @@ return {
     end,
   },
   {
+    name = "Mazagran",
+    description = function(self)
+      return "Gains x0.1 multiplier\nfor every Back-to-Back\ntetra, resets on break"
+    end,
+    rarity = "Uncommon",
+    image = "assets/coffee/mazagran.png",
+    points = 1,
+    ability = function(self, game, action)
+      if action.b2b and action.rows == 4 then
+        self.points = self.points + 0.1
+      else
+        self.points = 1
+      end
+      return action.points * self.points
+    end,
+    condition = function(self, game, action)
+      return true
+    end,
+  },
+  {
     name = "Vienna",
     description = function(self)
       return "x"..self.points.." points when\n clearing a single\nwith an I tetromino"
