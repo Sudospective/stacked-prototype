@@ -222,7 +222,7 @@ return {
   {
     name = "Irish Coffee",
     description = function(self)
-      return "+"..self.points.." points when\nclearing a double\nwith an S tetromino"
+      return "+"..self.points.." points when\nclearing with an\nS tetromino"
     end,
     rarity = "Common",
     image = "assets/coffee/irish.png",
@@ -231,7 +231,7 @@ return {
       return action.points + self.points
     end,
     condition = function(self, game, action)
-      return not action.drop and game.curPiece.id == 6 and action.rows == 2
+      return not action.drop and game.curPiece.id == 6 and action.rows > 0
     end,
   },
   {
