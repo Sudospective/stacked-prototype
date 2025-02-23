@@ -3,6 +3,7 @@ require "classes.item"
 class "Coffee" : extends "Item" {
   rarity = "Common";
   points = 0;
+  preMult = false;
   Brew = function(self, params)
     for k, v in pairs(params) do
       self[k] = v

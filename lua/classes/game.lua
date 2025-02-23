@@ -726,6 +726,8 @@ class "Game" {
     action.allclear = action.allclear or false
 
     local points = 0
+
+    local points = 0
     local actions = stacked.gamestate.actions
     local bonuses = stacked.gamestate.bonuses
 
@@ -794,13 +796,21 @@ class "Game" {
         self.lastAction = 1
       end
     end
+    
+    for _, coffee in ipairs(stacked.gamestate.brews) do
+      if coffee.preMult then
+        action.points = points or 0
+        points = (coffee:Sip(self, action) or points)
+      end
+    end
 
     points = points * stacked.gamestate.level
 
     for _, coffee in ipairs(stacked.gamestate.brews) do
-      -- store points so far
-      action.points = points or 0
-      points = (coffee:Sip(self, action) or points)
+      if not coffee.preMult then
+        action.points = points or 0
+        points = (coffee:Sip(self, action) or points)
+      end
     end
 
     -- FLOOR IT MISS PUFF??????

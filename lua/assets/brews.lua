@@ -7,6 +7,7 @@ return {
     rarity = "Common",
     image = "assets/coffee/joe.png",
     points = 10,
+    preMult = true,
     ability = function(self, game, action)
       return action.points + self.points * action.rows
     end,
@@ -22,6 +23,7 @@ return {
     rarity = "Common",
     image = "assets/coffee/manilo.png",
     points = 1,
+    preMult = false,
     ability = function(self, game, action)
       stacked.gamestate.cache = stacked.gamestate.cache + self.points
       return action.points
@@ -38,6 +40,7 @@ return {
     rarity = "Common",
     image = "assets/coffee/lungo.png",
     points = 1.5,
+    preMult = false,
     ability = function(self, game, action)
       return action.points * self.points
     end,
@@ -53,6 +56,7 @@ return {
     rarity = "Common",
     image = "assets/coffee/macchiato.png",
     points = 1.25,
+    preMult = false,
     ability = function(self, game, action)
       return action.points * self.points
     end,
@@ -68,6 +72,7 @@ return {
     rarity = "Common",
     image = "assets/coffee/cappuccino.png",
     points = 100,
+    preMult = true,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -83,6 +88,7 @@ return {
     rarity = "Common",
     image = "assets/coffee/frappe.png",
     points = 0,
+    preMult = true,
     ability = function(self, game, action)
       if action.drop == "soft" then
         self.points = 0
@@ -103,6 +109,7 @@ return {
     rarity = "Common",
     image = "assets/coffee/ristretto.png",
     points = 25,
+    preMult = true,
     ability = function(self, game, action)
       local mult = 0
       for _, brew in ipairs(game.matrix.brews) do
@@ -124,6 +131,7 @@ return {
     rarity = "Common",
     image = "assets/coffee/latte.png",
     points = 100,
+    preMult = true,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -148,6 +156,7 @@ return {
     rarity = "Common",
     image = "assets/coffee/americano.png",
     points = 10,
+    preMult = true,
     ability = function(self, game, action)
       local blocks = 0
       for j = game.matrix.h - 1, -game.matrix.buffer, -1 do
@@ -180,6 +189,7 @@ return {
     rarity = "Common",
     image = "assets/coffee/doppio.png",
     points = 200,
+    preMult = true,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -195,6 +205,7 @@ return {
     rarity = "Common",
     image = "assets/coffee/mocha.png",
     points = 1.5,
+    preMult = false,
     ability = function(self, game, action)
       return action.points * self.points
     end,
@@ -210,6 +221,7 @@ return {
     rarity = "Common",
     image = "assets/coffee/dalgona.png",
     points = 25,
+    preMult = true,
     ability = function(self, game, action)
       game.matrix.actions.single = game.matrix.actions.single + self.points
       game.matrix.actions.double = game.matrix.actions.double + self.points
@@ -227,6 +239,7 @@ return {
     rarity = "Common",
     image = "assets/coffee/irish.png",
     points = 150,
+    preMult = false,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -242,6 +255,7 @@ return {
     rarity = "Uncommon",
     image = "assets/coffee/cortado.png",
     points = 25,
+    preMult = true,
     ability = function(self, game, action)
       return action.points + self.points * game.matrix.combo
     end,
@@ -257,6 +271,7 @@ return {
     rarity = "Uncommon",
     image = "assets/coffee/decaf.png",
     points = 25,
+    preMult = true,
     ability = function(self, game, action)
       return action.points + self.points * stacked.gamestate.actions.single
     end,
@@ -272,6 +287,7 @@ return {
     rarity = "Uncommon",
     image = "assets/coffee/espresso.png",
     points = 0,
+    preMult = true,
     ability = function(self, game, action)
       self.points = self.points + 25
       return action.points + self.points
@@ -288,6 +304,7 @@ return {
     rarity = "Uncommon",
     image = "assets/coffee/galao.png",
     points = 1.25,
+    preMult = false,
     ability = function(self, game, action)
       local blocks = 0
       for j = game.matrix.h - 1, -game.matrix.buffer, -1 do
@@ -324,6 +341,7 @@ return {
     rarity = "Uncommon",
     image = "assets/coffee/guillermo.png",
     points = 200,
+    preMult = true,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -339,6 +357,7 @@ return {
     rarity = "Uncommon",
     image = "assets/coffee/mazagran.png",
     points = 1,
+    preMult = false,
     ability = function(self, game, action)
       if action.b2b and action.rows == 4 then
         self.points = self.points + 0.1
@@ -359,6 +378,7 @@ return {
     rarity = "Rare",
     image = "assets/coffee/vienna.png",
     points = 2,
+    preMult = false,
     ability = function(self, game, action)
       return action.points * self.points
     end,
@@ -373,7 +393,8 @@ return {
     end,
     rarity = "Rare",
     image = "assets/coffee/cortado.png",
-    points = 150,
+    points = 200,
+    preMult = true,
     ability = function(self, game, action)
       return action.points + self.points
     end,
@@ -388,7 +409,8 @@ return {
     end,
     rarity = "Rare",
     image = "assets/coffee/antoccino.png",
-    points = 250,
+    points = 300,
+    preMult = true,
     ability = function(self, game, action)
       local points = action.points + self.points
       if math.random(1, 20) == 1 then
@@ -408,6 +430,7 @@ return {
     rarity = "Exotic",
     image = "assets/coffee/nitro.png",
     points = 1.5,
+    preMult = false,
     ability = function(self, game, action)
       return action.points * self.points
     end,
@@ -422,6 +445,7 @@ return {
     end,
     rarity = "Exotic",
     image = "assets/coffee/affogato.png",
+    preMult = false,
     ability = function(self, game, action)
       return action.points * game.matrix.combo
     end,
