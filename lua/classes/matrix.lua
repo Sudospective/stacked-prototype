@@ -72,6 +72,7 @@ class "Matrix" {
   ResetScore = function(self)
     self.lines = 0
     self.score = 0
+    self.combo = -1
   end;
   IsCellOutside = function(self, row, column)
     return not (
