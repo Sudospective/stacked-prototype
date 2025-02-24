@@ -138,11 +138,12 @@ stacked.glossary = {
 }
 setmetatable(stacked.glossary, stacked.glossary)
 
-local debugging = true
+local debugging = false
 local framerate = 0
 local musicVol = 0.25
 
 local fps = Label.new()
+local version = Label.new()
 
 function init()
   stacked.screens.curtain.x = -stacked.scx
@@ -163,6 +164,13 @@ function init()
   fps.y = 4
   fps:LoadFont("assets/sport.otf", 16)
   fps.text = "FPS: 0"
+
+  version.align.v = 0
+  version.align.h = 1
+  version.x = stacked.sw - 4
+  version.y = 4
+  version:LoadFont("assets/sport.otf", 16)
+  version.text = "Prototype v0.1.0"
 
   if debugging then
     stacked.timer.every(1, function()
@@ -239,5 +247,9 @@ function draw()
   -- Debug
   if debugging then
     fps:Draw()
+  end
+
+  if stacked.screens.current == "title" then
+    version:Draw()
   end
 end

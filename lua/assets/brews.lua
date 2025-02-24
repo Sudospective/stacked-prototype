@@ -6,7 +6,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/joe.png",
-    points = 10,
+    points = 25,
     preMult = true,
     ability = function(self, game, action)
       return action.points + self.points * action.rows
