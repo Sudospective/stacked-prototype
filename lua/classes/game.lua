@@ -94,7 +94,7 @@ class "Game" {
     self.sounds.lines.volume = 0.75
     self.sounds.hold.volume = 1
 
-    self:Initialize();
+    self:Initialize()
   end;
   Initialize = function(self)
     self.won = false
@@ -960,9 +960,8 @@ class "Game" {
     local loc = stacked.localization[stacked.controls.active]
 
     if not self.levelInProgress then
-      self.readySubtext.text = "Press "..loc.Confirm.." to\nreturn to Title"
-      if self.won then
-        self.readySubtext.text = self.readySubtext.text.."\nEndless? ("..loc.Extra..")"
+      if self.won and stacked.gamestate.level == self.endLevel then
+        self.readySubtext.text = "\nEndless? ("..loc.Extra..")"
       else
         self.readySubtext.text = ""
       end
