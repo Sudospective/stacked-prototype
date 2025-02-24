@@ -260,7 +260,17 @@ class "Gameplay" : extends "Screen" {
         and not game.levelInProgress
         and stacked.gamestate.level - 1 == game.endLevel
       ) then
-        game:ToCafe()
+        game.callbacks.lines = nil
+        game.sounds.lines:Play()
+        local deposit = (game.matrix.limit - game.matrix.lines) * self.payoutMult
+        deposit = math.max(0, math.floor(deposit + 0.5))
+        stacked.gamestate.cache = stacked.gamestate.cache + deposit
+        game.readyText.text = tostring(deposit).." LINES\nAWARDED"
+        game.callbacks.cafe = stacked.timer.after(3, function()
+          game.callbacks.cafe = nil
+          game:ToCafe()
+        end)
+        stacked.gamestate.level = stacked.gamestate.level + 1
       end
     end
     if game.levelInProgress then

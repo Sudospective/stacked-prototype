@@ -6,7 +6,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/joe.png",
-    points = 25,
+    points = 10,
     preMult = true,
     ability = function(self, game, action)
       return action.points + self.points * action.rows
@@ -71,7 +71,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/cappuccino.png",
-    points = 100,
+    points = 50,
     preMult = true,
     ability = function(self, game, action)
       return action.points + self.points
@@ -83,7 +83,7 @@ return {
   {
     name = "Frappé",
     description = function(self)
-      return "Gains +5 points for\neach hard drop,\nresets on soft drop"
+      return "Gains +2 points for\neach hard drop,\nresets on soft drop"
     end,
     rarity = "Common",
     image = "assets/coffee/frappe.png",
@@ -93,7 +93,7 @@ return {
       if action.drop == "soft" then
         self.points = 0
       elseif action.drop == "hard" then
-        self.points = self.points + 5
+        self.points = self.points + 2
       end
       return action.points + self.points
     end,
@@ -108,7 +108,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/ristretto.png",
-    points = 25,
+    points = 10,
     preMult = true,
     ability = function(self, game, action)
       local mult = 0
@@ -130,7 +130,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/latte.png",
-    points = 100,
+    points = 50,
     preMult = true,
     ability = function(self, game, action)
       return action.points + self.points
@@ -188,7 +188,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/doppio.png",
-    points = 200,
+    points = 100,
     preMult = true,
     ability = function(self, game, action)
       return action.points + self.points
@@ -204,7 +204,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/mocha.png",
-    points = 1.5,
+    points = 1.25,
     preMult = false,
     ability = function(self, game, action)
       return action.points * self.points
@@ -220,7 +220,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/dalgona.png",
-    points = 25,
+    points = 10,
     preMult = true,
     ability = function(self, game, action)
       game.matrix.actions.single = game.matrix.actions.single + self.points
@@ -238,7 +238,7 @@ return {
     end,
     rarity = "Common",
     image = "assets/coffee/irish.png",
-    points = 150,
+    points = 100,
     preMult = false,
     ability = function(self, game, action)
       return action.points + self.points
@@ -254,7 +254,7 @@ return {
     end,
     rarity = "Uncommon",
     image = "assets/coffee/cortado.png",
-    points = 25,
+    points = 10,
     preMult = true,
     ability = function(self, game, action)
       return action.points + self.points * game.matrix.combo
@@ -270,7 +270,7 @@ return {
     end,
     rarity = "Uncommon",
     image = "assets/coffee/decaf.png",
-    points = 25,
+    points = 10,
     preMult = true,
     ability = function(self, game, action)
       return action.points + self.points * stacked.gamestate.actions.single
@@ -282,14 +282,14 @@ return {
   {
     name = "Espresso",
     description = function(self)
-      return "Gains +25 points for\neach tetra clear\nsince purchase"
+      return "Gains +15 points for\neach tetra clear\nsince purchase"
     end,
     rarity = "Uncommon",
     image = "assets/coffee/espresso.png",
     points = 0,
     preMult = true,
     ability = function(self, game, action)
-      self.points = self.points + 25
+      self.points = self.points + 15
       return action.points + self.points
     end,
     condition = function(self, game, action)
@@ -303,7 +303,7 @@ return {
     end,
     rarity = "Uncommon",
     image = "assets/coffee/galao.png",
-    points = 1.25,
+    points = 1.1,
     preMult = false,
     ability = function(self, game, action)
       local blocks = 0
@@ -340,7 +340,7 @@ return {
     end,
     rarity = "Uncommon",
     image = "assets/coffee/guillermo.png",
-    points = 200,
+    points = 100,
     preMult = true,
     ability = function(self, game, action)
       return action.points + self.points
@@ -393,7 +393,7 @@ return {
     end,
     rarity = "Rare",
     image = "assets/coffee/cortado.png",
-    points = 200,
+    points = 150,
     preMult = true,
     ability = function(self, game, action)
       return action.points + self.points
@@ -409,7 +409,7 @@ return {
     end,
     rarity = "Rare",
     image = "assets/coffee/antoccino.png",
-    points = 300,
+    points = 200,
     preMult = true,
     ability = function(self, game, action)
       local points = action.points + self.points
