@@ -46,6 +46,7 @@ class "Game" {
   timeUntilARR = 0;
   timeUntilLock = 0;
   payoutMult = 0;
+  endLevel = 10;
   over = false;
   won = false;
   paused = false;
@@ -247,7 +248,7 @@ class "Game" {
     self.timers.ready:clear()
     self.fader.color.a = 0.5
     self.readyText.color.a = 1
-    if stacked.gamestate.level == 10 and not self.won then
+    if stacked.gamestate.level == self.endLevel and not self.won then
       self.won = true
       self.readyText.text = "YOU\nWIN!"
       self.sounds.win:Play()
@@ -889,7 +890,7 @@ class "Game" {
   RoundClear = function(self)
     self.readyText.text = "CLEAR!!"
     self:EndRound()
-    if (stacked.gamestate.level < 10 or stacked.gamestate.level > 10) and not self.over then
+    if (stacked.gamestate.level < self.endLevel or stacked.gamestate.level > self.endLevel) and not self.over then
       self.sounds.complete:Play()
       self.callbacks.lines = stacked.timer.after(2, function()
         self.callbacks.lines = nil
@@ -959,10 +960,9 @@ class "Game" {
     local loc = stacked.localization[stacked.controls.active]
 
     if not self.levelInProgress then
-      if self.over then
-        self.readySubtext.text = "Press "..loc.Confirm.." to\nreturn to Title"
-      elseif self.won then
-        self.readySubtext.text = "Endless? ("..loc.Confirm..")"
+      self.readySubtext.text = "Press "..loc.Confirm.." to\nreturn to Title"
+      if self.won then
+        self.readySubtext.text = self.readySubtext.text.."\nEndless? ("..loc.Extra..")"
       else
         self.readySubtext.text = ""
       end

@@ -252,13 +252,13 @@ class "Gameplay" : extends "Screen" {
         else
           game:Unpause()
         end
-      elseif (b == binds.Confirm and game.over) or (b == binds.Extra and game.won) then
+      elseif b == binds.Confirm and (game.over or game.won) then
         stacked.gamestate = stacked.deepCopy(stacked.default)
         game:ToTitle()
-      elseif b == binds.Confirm and (
+      elseif b == binds.Extra and (
         game.won
         and not game.levelInProgress
-        and stacked.gamestate.level == 10
+        and stacked.gamestate.level - 1 == game.endLevel
       ) then
         game:ToCafe()
       end
