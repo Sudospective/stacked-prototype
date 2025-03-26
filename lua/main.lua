@@ -1,6 +1,7 @@
 require "packages.class"
 require "packages.stacked"
 
+require "screens.splash"
 require "screens.title"
 require "screens.gameplay"
 require "screens.cafe"
@@ -21,13 +22,14 @@ table.sort(stacked.terms, cmp)
 stacked.screens = {
   __index = stacked.screens,
 
+  splash = Splash.new(),
   title = Title.new(),
   gameplay = Gameplay.new(),
   cafe = Cafe.new(),
 
   curtain = Quad.new(),
 
-  first = "title",
+  first = "splash",
   current = nil,
   next = nil,
 
@@ -214,9 +216,7 @@ function input(event)
     end
   end
 
-  stacked.screens.title:HandleInput(event)
-  stacked.screens.gameplay:HandleInput(event)
-  stacked.screens.cafe:HandleInput(event)
+  stacked.screens[stacked.screens.current]:HandleInput(event)
 
   stacked.glossary:HandleInput(event)
 end
@@ -228,17 +228,13 @@ function update(dt)
 
   stacked.timer.update(dt)
 
-  stacked.screens.title:Update(dt)
-  stacked.screens.gameplay:Update(dt)
-  stacked.screens.cafe:Update(dt)
+  stacked.screens[stacked.screens.current]:Update(dt)
 
   stacked.glossary:Update(dt)
 end
 
 function draw()
-  stacked.screens.title:Draw()
-  stacked.screens.gameplay:Draw()
-  stacked.screens.cafe:Draw()
+  stacked.screens[stacked.screens.current]:Draw()
 
   stacked.glossary:Draw()
 

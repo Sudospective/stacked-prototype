@@ -5,7 +5,7 @@
 
 #include "gizmos/label.hpp"
 #include "gizmos/sound.hpp"
-//#include "gizmos/sprite.hpp"
+#include "gizmos/sprite.hpp"
 #include "gizmos/quad.hpp"
 
 void registerGizmos(sol::state* lua) {
@@ -37,7 +37,6 @@ void registerGizmos(sol::state* lua) {
   luaSound["SetPosition"] = &Sound::SetPosition;
   luaSound["volume"] = sol::property(&Sound::GetVolume, &Sound::SetVolume);
 
-  /*
   sol::usertype<Sprite> luaSprite = lua->new_usertype<Sprite>("Sprite");
   luaSprite["name"] = &Sprite::name;
   luaSprite["aux"] = &Sprite::aux;
@@ -49,7 +48,6 @@ void registerGizmos(sol::state* lua) {
   luaSprite["rot"] = &Sprite::rot;
   luaSprite["Draw"] = &Sprite::Draw;
   luaSprite["LoadTexture"] = &Sprite::LoadTexture;
-  */
 
   sol::usertype<Label> luaLabel = lua->new_usertype<Label>("Label");
   luaLabel["name"] = &Label::name;
