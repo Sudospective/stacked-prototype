@@ -547,17 +547,17 @@ stacked = {
 
 function stacked.deepCopy(t)
   if type(t) ~= "table" then return t end
-    local meta = getmetatable(t)
-    local target = {}
-    for k, v in pairs(t) do
-        if type(v) == "table" then
-            target[k] = stacked.deepCopy(v)
-        else
-            target[k] = v
-        end
+  local meta = getmetatable(t)
+  local target = {}
+  for k, v in pairs(t) do
+    if type(v) == "table" then
+      target[k] = stacked.deepCopy(v)
+    else
+      target[k] = v
     end
-    setmetatable(target, meta)
-    return target
+  end
+  setmetatable(target, meta)
+  return target
 end
 
 return stacked

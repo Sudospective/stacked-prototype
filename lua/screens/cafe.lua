@@ -223,9 +223,10 @@ class "Cafe" : extends "Screen" {
             end
             if enabledItems < 1 then
               shelf:Close()
-              table.remove(activeShelves, i)
-              i = i - 1
-              activeBorder.aux = activeBorder.aux % #activeShelves
+              --table.remove(activeShelves, i)
+              --i = i - 1
+              --activeBorder.aux = activeBorder.aux % #activeShelves
+              shelf:Open()
             end
           end
         end
