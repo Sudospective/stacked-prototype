@@ -1,6 +1,6 @@
 require "classes.screen"
 
-local bg = Quad.new()
+local bg = Sprite.new()
 
 local banner = Sprite.new()
 
@@ -9,14 +9,9 @@ class "Splash" : extends "Screen" {
   __init = function(self)
     bg.x = stacked.scx
     bg.y = stacked.scy
+    bg:LoadTexture("assets/bg.png")
     bg.w = stacked.sw
     bg.h = stacked.sh
-    bg.color = {
-      r = 0.0,
-      g = 0.0,
-      b = 0.0,
-      a = 1.0,
-    }
     self:AddGizmo(bg)
 
     banner.x = stacked.scx
