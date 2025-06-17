@@ -248,11 +248,13 @@ class "Game" {
     self.timers.ready:clear()
     self.fader.color.a = 0.5
     self.readyText.color.a = 1
+    --[[
     if stacked.gamestate.level == self.endLevel and not self.won then
       self.won = true
       self.readyText.text = "YOU\nWIN!"
       self.sounds.win:Play()
     end
+    --]]
     self.levelInProgress = false
     self.matrix:FillToGamestate()
   end;
@@ -638,7 +640,11 @@ class "Game" {
       self.matrix:ClearFullRows()
       self:ResetLock()
       if self.matrix.score >= self.matrix.goal then
-        self:RoundClear()
+        if stacked.gamestate.level == self.endLevel then
+          self:YouWin()
+        else
+          self:RoundClear()
+        end
       elseif self.matrix.lines >= self.matrix.limit or self:IsPieceColliding() then
         self:GameOver()
       end
@@ -917,9 +923,17 @@ class "Game" {
   end;
   GameOver = function(self)
     self.over = true
+    self.won = false
     self.readyText.text = "GAME\nOVER"
     self:EndRound()
     self.sounds.lose:Play()
+  end;
+  YouWin = function(self)
+    self.over = true
+    self.won = true
+    self.readyText.text = "YOU\nWIN!"
+    self:EndRound()
+    self.sounds.win:Play()
   end;
   Pause = function(self)
     self.paused = true
